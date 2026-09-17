@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特定技能2号 建設 対策テスト（職長・安全管理編）</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning-bg: #fffbeb;
+      --warning-border: #fef3c7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
+    .container { max-width: 680px; margin: 0 auto; }
+    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
+    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .nav-btn { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .nav-btn.answered { background: #e2e8f0; color: #475569; }
+    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #93c5fd; }
+    .card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
+    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 8px; font-weight: 600; }
+    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; line-height: 1.8; }
+    ruby rt { font-size: 0.65em; color: #475569; }
+    .hints-group { display: flex; gap: 8px; margin-bottom: 16px; }
+    .btn-hint { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }
+    .hint-box { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; color: #92400e; margin-bottom: 16px; display: none; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
+    .option-btn:hover { border-color: #cbd5e1; background: #f1f5f9; }
+    .option-btn.selected { border-color: var(--primary); background: #eff6ff; color: var(--primary); font-weight: 600; }
+    .btn-group { display: flex; gap: 10px; }
+    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    #result-view { display: none; }
+    .score-card { text-align: center; padding: 24px; background: #eff6ff; border-radius: 12px; border: 1px solid #bfdbfe; margin-bottom: 20px; }
+    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+    .review-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .review-item:last-child { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-ok { background: #dcfce7; color: var(--success); }
+    .badge-ng { background: #fee2e2; color: var(--danger); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="quiz-view">
+    <header>
+      <h1>特定技能2号 建設 対策テスト（職長・安全管理）</h1>
+      <div class="status-bar">
+        <span>進捗: <strong id="current-num">1</strong> / 10 問</span>
+        <span id="answered-count">解答済: 0 問</span>
+      </div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </header>
+
+    <div class="card">
+      <div class="q-meta" id="q-category"></div>
+      <div class="q-text" id="q-text"></div>
+
+      <div class="hints-group">
+        <button class="btn-hint" onclick="toggleHint('id')">💡 インドネシア語ヒント</button>
+        <button class="btn-hint" onclick="toggleHint('ne')">💡 ネパール語ヒント</button>
+      </div>
+      <div class="hint-box" id="hint-id"></div>
+      <div class="hint-box" id="hint-ne"></div>
+
+      <div class="options" id="options-box"></div>
+
+      <div class="btn-group">
+        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
+        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
+        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-view">
+    <div class="score-card">
+      <h2>採点結果</h2>
+      <div class="score-num" id="score-text"></div>
+      <p id="pass-msg"></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 16px;">正否・解説一覧</h3>
+      <div id="review-box"></div>
+      <button class="btn-nav btn-primary" style="width: 100%; margin-top: 20px;" onclick="location.reload()">もう一度解く</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1,
+    cat: "職長・安全管理 (朝礼での指示伝達)",
+    q: "朝礼（ちょうれい）で、<ruby>現場監督<rt>げんばかんとく</rt></ruby>から <ruby>作業方法<rt>さぎょうほうほう</rt></ruby>の <ruby>変更<rt>へんこう</rt></ruby>が 伝えられました。<ruby>職長<rt>しょくちょう</rt></ruby>は どうしますか。",
+    options: [
+      "自分だけが変更内容をメモして、そのまま作業を始めさせる。",
+      "作業員に変更内容を分かりやすく伝え、正しく理解したか確認する。",
+      "作業がすべて終わった後の夕方に、作業員へ変更を伝える。",
+      "変更は気にせず、前日と同じやり方で作業を続けさせる。"
+    ],
+    answer: 1,
+    hintId: "Sampaikan perubahan kepada pekerja dan pastikan mereka benar-benar memahaminya.",
+    hintNe: "कामदारहरूलाई परिवर्तनबारे स्पष्ट बताउनुहोस् र उनीहरूले राम्ररी बुझेका छन् कि छैनन् निश्चित गर्नुहोस्।",
+    exp: "現場監督からの連絡や変更事項は、作業員に分かりやすく伝えた上で「相手が正しく理解したか」を確認することが職長の重要な役割です（テキストp.1, 9）。"
+  },
+  {
+    id: 2,
+    cat: "職長・安全管理 (騒音現場での連絡)",
+    q: "機械の音が うるさい場所で、<ruby>作業員<rt>さぎょういん</rt></ruby>に 急な指示（しじ）を 伝えます。<ruby>職長<rt>しょくちょう</rt></ruby>は どうしますか。",
+    options: [
+      "離れた場所から大声で叫び、作業員が振り向いたら作業を続けさせる。",
+      "相手に声がしっかり届く場所へ行き、内容を理解できたか確認する。",
+      "手を振る合図だけをして、作業員がうなずいたら伝わったと判断する。",
+      "次の日の朝礼まで、作業員への連絡を後回しにする。"
+    ],
+    answer: 1,
+    hintId: "Dekati pekerja di tempat yang suaranya terdengar jelas dan periksa pemahamannya.",
+    hintNe: "आवाज प्रष्ट सुनिने ठाउँमा गएर कुरा गर्नुहोस् र कामदारले बुझेको निश्चित गर्नुहोस्।",
+    exp: "現場が騒がしいときは、確実に声が届く場所を選んで簡潔に伝え、必ず相手の理解を確認する必要があります（テキストp.10）。"
+  },
+  {
+    id: 3,
+    cat: "現場管理・原価 (材料不足と手待ち)",
+    q: "取り付ける材料が まだ現場に 届いておらず、<ruby>作業員<rt>さぎょういん</rt></ruby>の手が 止まっています。この「手待ち（てまち）」について、<ruby>職長<rt>しょくちょう</rt></ruby>の 対応として **適切なもの**は どれですか。",
+    options: [
+      "手待ち時間は休憩になるため、特に何の手配もせずそのまま待たせる。",
+      "材料の納入先へすぐに連絡して納期を確認し、作業の段取りを組み直す。",
+      "遅れを取り戻すため、関係のない別の危険エリアへ作業員を勝手に入らせる。",
+      "手待ちはコストに影響しないため、日報には記録を残さない。"
+    ],
+    answer: 1,
+    hintId: "\"Temachi\" (menunggu) membuang biaya. Segera hubungi pemasok dan atur ulang jadwal.",
+    hintNe: "\"तेमाची\" (पर्खाइ) ले लागत बढाउँछ। तुरुन्तै आपूर्तिकर्तालाई सम्पर्क गरी कार्यतालिका मिलाउनुहोस्।",
+    exp: "資機材不足による「手待ち」は工期遅れや人件費（コスト）のムダにつながるため、早急に納入会社へ確認して作業手順を調整します（テキストp.26, 48）。"
+  },
+  {
+    id: 4,
+    cat: "現場管理・品質 (手順抜けと手戻り)",
+    q: "<ruby>作業員<rt>さぎょういん</rt></ruby>が 決められた手順の検査を せずに、次の作業を 進めてしまいました。<ruby>職長<rt>しょくちょう</rt></ruby>は どう指示しますか。",
+    options: [
+      "「手戻り（てもどり）」になるが、抜けた工程まで戻って正しくやり直させる。",
+      "見た目が綺麗にできていれば、検査手順は飛ばしたまま工事を完了させる。",
+      "次の日の作業日報に「検査完了」と嘘の記録を書かせる。",
+      "後戻りすると時間がもったいないので、そのまま次の作業を急がせる。"
+    ],
+    answer: 0,
+    hintId: "Jangan lewati langkah. Kembali ke proses yang terlewat untuk memperbaikinya (Temodori).",
+    hintNe: "कुनै चरण नछोड्नुहोस्। गल्ती सच्याउन छुटेको प्रक्रियामा फर्कनुहोस् (तेमोदोरी)।",
+    exp: "手順を飛ばしたまま進めると重大な施工不良につながるため、必要な工程まで戻ってやり直す（手戻り）指示を出します（テキストp.27）。"
+  },
+  {
+    id: 5,
+    cat: "工程管理 (遅れと人員調整)",
+    q: "遅れると 全体の完成日に 影響する大事な作業が、半日 遅れそうです。<ruby>職長<rt>しょくちょう</rt></ruby>の 判断として **最も適切なもの**は どれですか。",
+    options: [
+      "日程に余裕がある別の作業から人を回し、遅れそうな作業に応援を入れる。",
+      "保護具の着用や安全点検を省略して、作業スピードを2倍に上げる。",
+      "現場監督には知らせず、工事が終わった後に遅れを報告する。",
+      "遅れを取り戻すのは諦めて、職長が独断で完成日を延期する。"
+    ],
+    answer: 0,
+    hintId: "Alihkan pekerja dari tugas yang memiliki waktu luang untuk membantu pekerjaan yang tertunda.",
+    hintNe: "ढिलाइ भएको मुख्य काममा मद्दत गर्न समय बाँकी रहेको अर्को कामबाट कामदार सार्नुहोस्।",
+    exp: "全体工期に影響する作業が遅れそうなときは、日程に余裕のある作業から人員を割り振るなどして柔軟に調整します（テキストp.46）。"
+  },
+  {
+    id: 6,
+    cat: "品質管理 (不具合と3現主義)",
+    q: "取り付けた部材が 図面と違って 曲がっていると <ruby>作業員<rt>さぎょういん</rt></ruby>から 報告が ありました。<ruby>職長<rt>しょくちょう</rt></ruby>が **最初にする行動**は どれですか。",
+    options: [
+      "現場に行かず、事務所で作業員を怒鳴りつけてやり直させる。",
+      "すぐに「現地」へ行き、「現物」を見て、「現実」に何が起きているか確認する。",
+      "自分の勘だけで「材料の不良だ」と決めつけ、メーカーに電話する。",
+      "検査で見つからなければ問題ないので、そのまま上からカバーをして隠す。"
+    ],
+    answer: 1,
+    hintId: "Praktikkan \"Sangenshugi\": Langsung cek lokasi kerja (Genchi), barangnya (Gembutsu), dan situasinya (Genjitsu).",
+    hintNe: "\"सान्गेन सिद्धान्त\": तुरुन्तै कार्यस्थल (गेन्ची), सामान (गेम्बुत्सु), र अवस्था (गेन्जित्सु) आफैँ गएर हेर्नुहोस्।",
+    exp: "品質不具合が起きたときは、先入観を捨て「現地・現物・現実」を自分の目で確かめる「3現主義」が問題解決の基本です（テキストp.54）。"
+  },
+  {
+    id: 7,
+    cat: "労働衛生 (熱中症対策・暑さ指数)",
+    q: "夏の現場で 計測器を 見ると、暑さ指数（WBGT値）が **31**を 超えていました。<ruby>職長<rt>しょくちょう</rt></ruby>は どう指示しますか。",
+    options: [
+      "熱中症の危険が極めて高いため、原則として可能な限り作業を中断する。",
+      "気温には関係ないので、普段通りのペースで残業まで続けさせる。",
+      "喉が渇いたと言った作業員だけ、5分間だけ日陰に行かせる。",
+      "水分をとると汗をかいてバテるので、水を飲まないように伝える。"
+    ],
+    answer: 0,
+    hintId: "Jika WBGT mencapai 31 atau lebih, hentikan pekerjaan sebisa mungkin untuk mencegah heatstroke.",
+    hintNe: "WBGT ३१ भन्दा माथि पुगेमा, उच्च गर्मीको जोखिमबाट बच्न सकेसम्म काम रोक्नुहोस्।",
+    exp: "暑さ指数（WBGT）が31以上は「危険」レベルであり、熱中症を防ぐため原則として作業中断などの措置をとります（テキストp.66）。"
+  },
+  {
+    id: 8,
+    cat: "安全衛生 (重機災害の防止・隔離)",
+    q: "現場で クレーンが 重い鉄骨を 吊り上げて 旋回（せんかい）しています。<ruby>作業員<rt>さぎょういん</rt></ruby>が 近づいて 挟まれないようにする「隔離（かくり）」の 対応は どれですか。",
+    options: [
+      "作業員に「上をよく見ながら素早く通り抜けるように」と注意する。",
+      "クレーンの旋回エリアにカラーコーンや柵を置き、立ち入り禁止にする。",
+      "クレーンの警報ブザーの音を止めて作業に集中させる。",
+      "危険だが人が足りないので、旋回範囲のすぐ下で別の片付け作業をさせる。"
+    ],
+    answer: 1,
+    hintId: "Pasang pagar pembatas untuk mencegah orang masuk ke area putaran derek (Isolasi).",
+    hintNe: "क्रेन घुम्ने क्षेत्रमा मानिसहरू जान नदिन बार लगाएर रोक्नुहोस् (अलगाव/आइसोलेसन)।",
+    exp: "重機との接触事故を防ぐ「隔離」とは、立ち入り禁止柵や誘導員を配置して、危険な場所に人が物理的に近づけないようにすることです（テキストp.78）。"
+  },
+  {
+    id: 9,
+    cat: "安全活動 (KYT 4ラウンド法)",
+    q: "作業を 始める前に、みんなで <ruby>危険予知訓練<rt>きけんよちくんれん</rt></ruby>（KYT 4ラウンド法）を 行います。**第1ラウンド（1R）**で 問いかける内容は どれですか。",
+    options: [
+      "「この作業で、どんな危険がひそんでいるか？」を全員で出し合う。",
+      "「今日守るチーム行動目標」を決めて、みんなで指差し唱和する。",
+      "「一番危ないポイントはどこか？」を決めて二重丸をつける。",
+      "「危ない作業をやめるための予算」をいくらにするか話し合う。"
+    ],
+    answer: 0,
+    hintId: "Ronde 1 (1R): Cari tahu bersama \"Bahaya apa yang tersembunyi dalam pekerjaan ini?\".",
+    hintNe: "पहिलो चरण (1R): \"यो काममा कस्तो खतरा लुकेको छ?\" भनी सबै मिलेर पत्ता लगाउनुहोस्।",
+    exp: "KYTの第1ラウンド（1R）は「現状把握」であり、イラスト等を見て「どんな危険が潜んでいるか」を自由に洗い出します（テキストp.93）。"
+  },
+  {
+    id: 10,
+    cat: "安全活動 (ヒヤリ・ハット報告)",
+    q: "<ruby>作業員<rt>さぎょういん</rt></ruby>が「脚立の上で ドライバーを 落としそうになって ヒヤリとした」と 報告してきました。<ruby>職長<rt>しょくちょう</rt></ruby>の 対応として **最も適切なもの**は どれですか。",
+    options: [
+      "「落とすヤツが悪い」とみんなの前で叱り、ペナルティを与える。",
+      "報告してくれたことを褒め、落下防止ワイヤーの装着など全員で対策を話し合う。",
+      "ケガ人は出なかったので、何も対応せず話を聞き流す。",
+      "面倒な報告が増えると作業が遅れるので、今後は報告を禁止する。"
+    ],
+    answer: 1,
+    hintId: "Jangan marahi orang yang melapor. Puji kejujurannya dan diskusikan pencegahannya bersama tim.",
+    hintNe: "रिपोर्ट गर्नेलाई गाली नगर्नुहोस्। उनीहरूको प्रशंसा गर्दै टोलीसँग मिलेर समाधान खोज्नुहोस्।",
+    exp: "ヒヤリ・ハット報告では報告者を責めないことが基本です。報告を歓迎し、全員で共有して原因と対策を打つことが重大事故防止につながります（テキストp.96）。"
+  }
+];
+
+let currentIndex = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+function renderNav() {
+  const grid = document.getElementById("nav-grid");
+  grid.innerHTML = "";
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
+    btn.textContent = i + 1;
+    btn.onclick = () => { currentIndex = i; loadQuestion(); };
+    grid.appendChild(btn);
+  });
+  document.getElementById("current-num").textContent = currentIndex + 1;
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
+}
+
+function loadQuestion() {
+  renderNav();
+  const q = questions[currentIndex];
+  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
+  document.getElementById("q-text").innerHTML = q.q;
+
+  document.getElementById("hint-id").textContent = q.hintId;
+  document.getElementById("hint-id").style.display = "none";
+  document.getElementById("hint-ne").textContent = q.hintNe;
+  document.getElementById("hint-ne").style.display = "none";
+
+  const optBox = document.getElementById("options-box");
+  optBox.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `option-btn ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
+    btn.innerHTML = `<strong>${idx + 1}.</strong> <span>${opt}</span>`;
+    btn.onclick = () => selectOption(idx);
+    optBox.appendChild(btn);
+  });
+
+  document.getElementById("btn-prev").disabled = currentIndex === 0;
+  const isLast = currentIndex === questions.length - 1;
+  const btnNext = document.getElementById("btn-next");
+  btnNext.textContent = isLast ? "採点する" : "次へ";
+}
+
+function selectOption(idx) {
+  userAnswers[currentIndex] = idx;
+  loadQuestion();
+}
+
+function toggleHint(lang) {
+  const el = document.getElementById(`hint-${lang}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
+}
+
+function nextQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function skipQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    const firstUnanswered = userAnswers.findIndex(a => a === null);
+    if (firstUnanswered !== -1) {
+      currentIndex = firstUnanswered;
+      loadQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+}
+
+function finishQuiz() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
+      const firstUnanswered = userAnswers.findIndex(a => a === null);
+      if (firstUnanswered !== -1) {
+        currentIndex = firstUnanswered;
+        loadQuestion();
+      }
+      return;
+    }
+  }
+
+  document.getElementById("quiz-view").style.display = "none";
+  document.getElementById("result-view").style.display = "block";
+
+  let score = 0;
+  const reviewBox = document.getElementById("review-box");
+  reviewBox.innerHTML = "";
+
+  questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.answer;
+    if (isCorrect) score++;
+
+    const item = document.createElement("div");
+    item.className = "review-item";
+    item.innerHTML = `
+      <div style="margin-bottom: 6px;">
+        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
+        <strong style="margin-left: 8px;">問 ${i + 1}</strong>
+      </div>
+      <div style="font-size: 0.95rem; margin-bottom: 8px;">${q.q}</div>
+      <div style="font-size: 0.9rem; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+        あなたの解答: ${userAnswers[i] !== null ? (userAnswers[i] + 1) + '. ' + q.options[userAnswers[i]] : '未解答'}
+      </div>
+      ${!isCorrect ? `<div style="font-size: 0.9rem; color: var(--success); font-weight: 600;">正解: ${q.answer + 1}. ${q.options[q.answer]}</div>` : ''}
+      <div style="font-size: 0.85rem; color: var(--text-sub); background: #f8fafc; padding: 8px; border-radius: 6px; margin-top: 8px;">
+        💡 <strong>解説:</strong> ${q.exp}
+      </div>
+    `;
+    reviewBox.appendChild(item);
+  });
+
+  const percentage = Math.round((score / questions.length) * 100);
+  document.getElementById("score-text").textContent = `${score} / ${questions.length} 点 (${percentage}%)`;
+  const passMsg = document.getElementById("pass-msg");
+  if (percentage >= 75) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準（75%以上）達成！素晴らしいです！</strong>";
+  } else {
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。解説を読んで復習しましょう！</strong>";
+  }
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
