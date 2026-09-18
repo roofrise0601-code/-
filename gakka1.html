@@ -1,4 +1,227 @@
-{
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特定技能2号 学科対策（テキスト1：現場基本・法令編）</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-sub: #64748b;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
+    .container { max-width: 740px; margin: 0 auto; }
+    
+    /* テキスト切り替えナビゲーション */
+    .menu-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+    .menu-link { flex: 1; text-align: center; padding: 10px; background: #e2e8f0; color: #334155; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; transition: all 0.2s; border: 1px solid var(--border); }
+    .menu-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
+    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .nav-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .nav-btn.answered { background: #e2e8f0; color: #475569; }
+    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #7dd3fc; }
+    .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
+    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
+    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 2.1; }
+    ruby { ruby-position: over; }
+    ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
+    .hints-group { display: flex; gap: 8px; margin-bottom: 18px; }
+    .btn-hint { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }
+    .hint-box { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; color: #92400e; margin-bottom: 16px; display: none; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.96rem; cursor: pointer; transition: all 0.2s; line-height: 1.9; }
+    .option-btn:hover { border-color: #94a3b8; background: #f8fafc; }
+    .option-btn.selected { border-color: var(--primary); background: #f0f9ff; color: var(--primary); font-weight: 600; }
+    .btn-group { display: flex; gap: 10px; }
+    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    #result-view { display: none; }
+    .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
+    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+    .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .review-item:last-child { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-ok { background: #dcfce7; color: var(--success); }
+    .badge-ng { background: #fee2e2; color: var(--danger); }
+    .review-ans { font-size: 0.95rem; margin-top: 6px; line-height: 1.9; }
+    .review-exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 0.9rem; line-height: 1.9; }
+    .review-multi-exp { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 教材切り替えボタン -->
+  <div class="menu-bar">
+    <a href="index.html" class="menu-link">職長・安全管理</a>
+    <a href="gakka1.html" class="menu-link active">学科テキスト1（現場・法令）</a>
+  </div>
+
+  <div id="quiz-view">
+    <header>
+      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>（テキスト1：<ruby>現場基本<rt>げんばきほん</rt></ruby>・<ruby>法令編<rt>ほうれいへん</rt></ruby>）</h1>
+      <div class="status-bar">
+        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">13</span> <ruby>問<rt>もん</rt></ruby></span>
+        <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
+      </div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </header>
+
+    <div class="card">
+      <div class="q-meta" id="q-category"></div>
+      <div class="q-text" id="q-text"></div>
+
+      <div class="hints-group">
+        <button class="btn-hint" onclick="toggleHint('id')">💡 インドネシア語ヒント</button>
+        <button class="btn-hint" onclick="toggleHint('ne')">💡 ネパール語ヒント</button>
+      </div>
+      <div class="hint-box" id="hint-id"></div>
+      <div class="hint-box" id="hint-ne"></div>
+
+      <div class="options" id="options-box"></div>
+
+      <div class="btn-group">
+        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
+        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
+        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-view">
+    <div class="score-card">
+      <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
+      <div class="score-num" id="score-text"></div>
+      <p id="pass-msg"></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
+      <div id="review-box"></div>
+      <button class="btn-nav btn-primary" style="width: 100%; margin-top: 20px;" onclick="location.reload()">もう一度解く</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1,
+    cat: "第1章：1.1 チームワーク (p.1)",
+    q: "<ruby>複数<rt>ふくすう</rt></ruby>の <ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>が <ruby>同<rt>おな</rt></ruby>じ<ruby>現場<rt>げんば</rt></ruby>で <ruby>工事<rt>こうじ</rt></ruby>を <ruby>進<rt>すす</rt></ruby>めています。<ruby>工事<rt>こうじ</rt></ruby>を スムーズに <ruby>安全<rt>あんぜん</rt></ruby>に <ruby>進<rt>すす</rt></ruby>めるための <ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>行動<rt>こうどう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+    options: [
+      "<ruby>現場監督<rt>げんばかんとく</rt></ruby>と<ruby>綿密<rt>めんみつ</rt></ruby>に<ruby>打合<rt>うちあわ</rt></ruby>せをし、<ruby>次<rt>つぎ</rt></ruby>の<ruby>工程<rt>こうてい</rt></ruby>の<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>とも<ruby>連携<rt>れんけい</rt></ruby>して<ruby>技能者<rt>ぎのうしゃ</rt></ruby>に<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>す。",
+      "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>工種<rt>こうしゅ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>スピードだけを<ruby>優先<rt>ゆうせん</rt></ruby>し、<ruby>他<rt>ほか</rt></ruby>の<ruby>業者<rt>ぎょうしゃ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>エリアを<ruby>先<rt>さき</rt></ruby>に<ruby>塞<rt>ふさ</rt></ruby>いで<ruby>施工<rt>せこう</rt></ruby>する。",
+      "<ruby>経験<rt>けいけん</rt></ruby>の<ruby>少<rt>すく</rt></ruby>ない<ruby>後輩<rt>こうはい</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>には<ruby>何<rt>なに</rt></ruby>もアドバイスせず、<ruby>失敗<rt>しっぱい</rt></ruby>して<ruby>自分<rt>じぶん</rt></ruby>で<ruby>覚<rt>おぼ</rt></ruby>えるまで<ruby>放置<rt>ほうち</rt></ruby>する。",
+      "<ruby>現場監督<rt>げんばかんとく</rt></ruby>からの<ruby>指示<rt>しじ</rt></ruby>は<ruby>聞<rt>き</rt></ruby>かず、<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>長年<rt>ながねん</rt></ruby>の<ruby>勘<rt>かん</rt></ruby>だけで<ruby>勝手<rt>かって</rt></ruby>に<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を<ruby>決<rt>き</rt></ruby>める。"
+    ],
+    answer: 0,
+    hintId: "Kerja sama antar-subkontraktor dan koordinasi dengan pengawas lapangan (Genba Kantoku) adalah kunci kelancaran proyek.",
+    hintNe: "विभिन्न ठेकेदारहरू बीचको टिमवर्क र सुपरभाइजरसँगको छलफल नै काम सुरक्षित तरिकाले अघि बढाउने मुख्य आधार हो।",
+    expJa: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>工事<rt>こうじ</rt></ruby>は<ruby>多<rt>おお</rt></ruby>くの<ruby>工程<rt>こうてい</rt></ruby>がつながっています。<ruby>現場監督<rt>げんばかんとく</rt></ruby>との<ruby>打合<rt>うちあわ</rt></ruby>せや<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby><ruby>間<rt>かん</rt></ruby>のチームワークを<ruby>大切<rt>たいせつ</rt></ruby>にし、<ruby>後輩<rt>こうはい</rt></ruby>へアドバイスしながら<ruby>進<rt>すす</rt></ruby>めます（テキストp.1）。",
+    expId: "Proyek konstruksi terdiri dari banyak tahapan yang saling berhubungan. Mandor harus berkoordinasi dengan pengawas dan menjaga kerja sama antartim serta membimbing bawahan.",
+    expNe: "निर्माण कार्य धेरै चरणहरूमा जोडिएको हुन्छ। सुपरभाइजरसँग नियमित छलफल र अन्य टोलीसँगको सहकार्य गर्दै जुनियरलाई सिकाउनु नै कार्यनेताको काम हो।"
+  },
+  {
+    id: 2,
+    cat: "第1章：1.2 施工体制 (p.1-2)",
+    q: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>における「<ruby>監理者<rt>かんりしゃ</rt></ruby>」の **<ruby>正<rt>ただ</rt></ruby>しい<ruby>役割<rt>やくわり</rt></ruby>**は どれですか。",
+    options: [
+      "<ruby>工事<rt>こうじ</rt></ruby>が <ruby>設計<rt>せっけい</rt></ruby><ruby>図書<rt>としょ</rt></ruby>（<ruby>図面<rt>ずめん</rt></ruby>）の<ruby>通<rt>とお</rt></ruby>りに <ruby>正<rt>ただ</rt></ruby>しく<ruby>行<rt>おこな</rt></ruby>われているかを <ruby>確認<rt>かくにん</rt></ruby>する。",
+      "<ruby>工事<rt>こうじ</rt></ruby>を<ruby>建設<rt>けんせつ</rt></ruby><ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>注文<rt>ちゅうもん</rt></ruby>し、<ruby>費用<rt>ひよう</rt></ruby>を<ruby>支払<rt>しはら</rt></ruby>う（<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>）。",
+      "<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>の<ruby>希望<rt>きぼう</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>建物<rt>たてもの</rt></ruby>の<ruby>設計<rt>せっけい</rt></ruby><ruby>図面<rt>ずめん</rt></ruby>を<ruby>描<rt>か</rt></ruby>く（<ruby>設計者<rt>せっけいしゃ</rt></ruby>）。",
+      "<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>手元<rt>てもと</rt></ruby>で<ruby>道具<rt>どうぐ</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>を<ruby>教<rt>おし</rt></ruby>える（<ruby>職長<rt>しょくちょう</rt></ruby>）。"
+    ],
+    answer: 0,
+    hintId: "'Kanrisha' (Pengawas Konstruksi) bertugas memeriksa apakah pekerjaan di lapangan sudah sesuai dengan gambar rencana.",
+    hintNe: "'कान्रिशा' (सुपरभाइजिङ इन्जिनियर) को काम निर्माण कार्य नक्सा र डिजाइन अनुसार भएको छ कि छैन भनी जाँच्नु हो।",
+    expJa: "監理者（かんりしゃ）は、工事が設計図書（図面）通りに適正に行われているかを確認する独立した立場の技術者です（テキストp.2）。",
+    expId: "Kanrisha adalah teknisi yang bertugas memeriksa kesesuaian antara pekerjaan nyata di lapangan dengan gambar arsitektur yang telah dibuat.",
+    expNe: "कान्रिशा भनेको काम नक्सा वा डिजाइन बमोजिम सही ढङ्गले भइरहेको छ कि छैन भनेर निरीक्षण गर्ने प्राविधिक हो।"
+  },
+  {
+    id: 3,
+    cat: "第1章：1.3 建設キャリアアップシステム (p.2-3)",
+    q: "<ruby>建設<rt>けんせつ</rt></ruby>キャリアアップシステム（CCUS）の カードの<ruby>色<rt>いろ</rt></ruby>について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+    options: [
+      "「レベル1（<ruby>初級<rt>しょきゅう</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>・<ruby>見習<rt>みなら</rt></ruby>い）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ブルー** である。",
+      "「レベル2（<ruby>中堅<rt>ちゅうけん</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>・<ruby>一人前<rt>いちにんまえ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ブルー** である。",
+      "「レベル3（<ruby>職長<rt>しょくちょう</rt></ruby>として<ruby>現場<rt>げんば</rt></ruby>に<ruby>従事<rt>じゅうじ</rt></ruby>できる<ruby>技能者<rt>ぎのうしゃ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **シルバー** である。",
+      "「レベル4（<ruby>高度<rt>こうど</rt></ruby>なマネジメント<ruby>能力<rt>のうりょく</rt></ruby>を<ruby>有<rt>ゆう</rt></ruby>する<ruby>技能者<rt>ぎのうしゃ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ゴールド** である。"
+    ],
+    answer: 0,
+    hintId: "Level 1 untuk pemula warnanya PUTIH (White), bukan biru. Level 2 baru Biru (Blue).",
+    hintNe: "तह १ (सुरुवाती कामदार) को कार्डको रङ सेतो (ह्व़ाइट) हुन्छ, नीलो होइन। तह २ चाहिँ नीलो हुन्छ।",
+    expJa: "レベル1（初級技能者）は「ホワイト」です。登録後3年以上の就業実績等でレベル2「ブルー」、職長レベルでレベル3「シルバー」、基幹技能者等でレベル4「ゴールド」となります（テキストp.2-3）。",
+    expId: "Tingkat kartu CCUS: Level 1 (Putih/Pemula), Level 2 (Biru/Mandiri), Level 3 (Perak/Mandor), Level 4 (Emas/Manajemen Tinggi). Jadi pilihan Level 1 Blue adalah salah.",
+    expNe: "CCUS कार्डका रङहरू: तह १ (सेतो/प्रशिक्षार्थी), तह २ (नीलो/सिपालु), तह ३ (चाँदी/कार्यनेता), तह ४ (सुनौलो/उच्च व्यवस्थापक) हुन्।"
+  },
+  {
+    id: 4,
+    cat: "第1章：1.4 現場のあいさつ (p.3)",
+    q: "<ruby>日本<rt>にほん</rt></ruby>の <ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>で「あいさつ」を <ruby>毎日<rt>まいにち</rt></ruby> <ruby>徹底<rt>てってい</rt></ruby>する **<ruby>最<rt>もっと</rt></ruby>も<ruby>大<rt>おお</rt></ruby>きな<ruby>目的<rt>もくてき</rt></ruby>**は どれですか。",
+    options: [
+      "<ruby>作業員<rt>さぎょういん</rt></ruby>どうしのコミュニケーションと<ruby>一体感<rt>いったいかん</rt></ruby>を<ruby>生<rt>う</rt></ruby>み、<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>での「<ruby>事故<rt>じこ</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐ」ため。",
+      "<ruby>声<rt>こえ</rt></ruby>の<ruby>大<rt>おお</rt></ruby>きさを<ruby>競<rt>きそ</rt></ruby>い<ruby>合<rt>あ</rt></ruby>って、<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>序列<rt>じょれつ</rt></ruby>や<ruby>上下<rt>じょうげ</rt></ruby><ruby>関係<rt>かんけい</rt></ruby>をはっきりさせるため。",
+      "<ruby>元請<rt>もとうけ</rt></ruby>の<ruby>監督<rt>かんとく</rt></ruby>に<ruby>怒<rt>おこ</rt></ruby>られないよう、<ruby>形<rt>かたち</rt></ruby>だけのマナーとして<ruby>義務<rt>ぎむ</rt></ruby>づけられているため。",
+      "<ruby>他<rt>ほか</rt></ruby>の<ruby>業者<rt>ぎょうしゃ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しかけられないように、あらかじめ<ruby>先手<rt>せんて</rt></ruby>を<ruby>打<rt>う</rt></ruby>ってあいさつで<ruby>切<rt>き</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げるため。"
+    ],
+    answer: 0,
+    hintId: "Tujuan utama salam di lokasi kerja bukan sekadar formalitas, melainkan membangun rasa kebersamaan demi 'Mencegah Kecelakaan Kerja'.",
+    hintNe: "अभिवादनको मुख्य उद्देश्य औपचारिकता मात्र नभई टोलीमा एकता ल्याएर 'दुर्घटना हुनबाट रोक्नु' हो।",
+    expJa: "現場であいさつを交わす一番の目的は「現場での事故を防ぐこと」です。異なる職種間でも声を掛け合える一体感を作ることが安全施工につながります（テキストp.3）。",
+    expId: "Tujuan terpenting dari saling menyapa di proyek adalah mencegah kecelakaan. Komunikasi yang terbuka antar-pekerja menciptakan lingkungan kerja yang aman dan solid.",
+    expNe: "कार्यस्थलमा अभिवादन गर्नुको मुख्य उद्देश्य 'दुर्घटना रोक्नु' हो। आपसमा बोलचाल गर्दा कामदारहरू बीच तालमेल मिल्छ र दुर्घटनाबाट बच्न सकिन्छ।"
+  },
+  {
+    id: 5,
+    cat: "第1章：1.5.1 全体朝礼 (p.4-5)",
+    q: "<ruby>朝<rt>あさ</rt></ruby>の「<ruby>全体<rt>ぜんたい</rt></ruby><ruby>朝礼<rt>ちょうれい</rt></ruby>」で、<ruby>各社<rt>かくしゃ</rt></ruby>の <ruby>職長<rt>しょくちょう</rt></ruby>が <ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>向<rt>む</rt></ruby>けて <ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>や <ruby>人員<rt>じんいん</rt></ruby>を <ruby>発表<rt>はっぴょう</rt></ruby>します。この<ruby>理由<rt>りゆう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+    options: [
+      "<ruby>他<rt>ほか</rt></ruby>の<ruby>職種<rt>しょくしゅ</rt></ruby>が どんな<ruby>作業<rt>さぎょう</rt></ruby>をするかを<ruby>知<rt>し</rt></ruby>ることで、お<ruby>互<rt>たが</rt></ruby>いの<ruby>危険<rt>きけん</rt></ruby>や<ruby>自分<rt>じぶん</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>への<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐため。",
+      "<ruby>他<rt>ほか</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>よりも<ruby>多<rt>おお</rt></ruby>くの<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>連<rt>つ</rt></ruby>れてきていることを<ruby>見<rt>み</rt></ruby>せつけてアピールするため。",
+      "<ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>を<ruby>発表<rt>はっぴょう</rt></ruby>しておけば、<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順書<rt>てじゅんしょ</rt></ruby>の<ruby>作成<rt>さくせい</rt></ruby>や<ruby>安全<rt>あんぜん</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>を<ruby>省略<rt>しょうりゃく</rt></ruby>できるため。",
+      "<ruby>現場監督<rt>げんばかんとく</rt></ruby>の<ruby>代<rt>か</rt></ruby>わりに、<ruby>職長<rt>しょくちょう</rt></ruby>が<ruby>工事<rt>こうじ</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>責任<rt>せきにん</rt></ruby>をすべて<ruby>引<rt>ひ</rt></ruby>き<ruby>受<rt>う</rt></ruby>けることを<ruby>宣言<rt>せんげん</rt></ruby>するため。"
+    ],
+    answer: 0,
+    hintId: "Mengetahui apa yang dikerjakan oleh tim lain sangat penting untuk menghindari bahaya tabrakan atau gangguan kerja antar-spesialisasi.",
+    hintNe: "अन्य टोलीले के काम गर्दैछन् भनी थाहा पाउँदा एकअर्काको काममा पर्ने असर र सम्भावित खतराबाट जोगिन सकिन्छ।",
+    expJa: "異なる工種の作業内容を知ることで、「上部で鉄骨を吊っている下に立ち入らない」など、お互いの作業干渉や危険の発生を未然に防ぐことができます（テキストp.4）。",
+    expId: "Dengan saling mengetahui apa yang dikerjakan tim lain hari itu, pekerja bisa mengantisipasi bahaya silang (seperti kerja di atas-bawah secara bersamaan).",
+    expNe: "अन्य क्षेत्रका कामदारको कार्यतालिका बुझ्दा एकै ठाउँमा जुधेर हुनसक्ने दुर्घटना र खतरालाई पहिले नै रोक्न मद्दत पुग्छ।"
+  },
+  {
+    id: 6,
+    cat: "第1章：1.5.2 職種ごとの朝礼とKY活動 (p.6-7)",
+    q: "<ruby>職種<rt>しょくしゅ</rt></ruby>ごとの <ruby>朝礼<rt>ちょうれい</rt></ruby>で <ruby>行<rt>おこな</rt></ruby>う「KY<ruby>活動<rt>かつどう</rt></ruby>（<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>）」の **<ruby>正<rt>ただ</rt></ruby>しい<ruby>手順<rt>てじゅん</rt></ruby>**は どれですか。",
+    options: [
+      "【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】➔【<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>で かけ<ruby>声<rt>ごえ</rt></ruby>】",
+      "【かけ<ruby>声<rt>ごえ</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】",
+      "【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【タッチアンドコール】",
+      "【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】"
+    ],
+    answer: 0,
+    hintId: "Urutan KYK yang benar: Temukan Bahaya -> Bahas Solusi -> Tentukan Target Tim -> Teriakkan Slogan (Yubi-sashi Shouwa).",
+    hintNe: "KY गतिविधिको सही क्रम: खतरा पत्ता लगाउने -> समाधान छलफल गर्ने -> टोलीको लक्ष्य तय गर्ने -> औंलाले देखाउँदै नारा लगाउने।",
+    expJa: "KY活動の正しい順序は、①危険の発見（危険ポイント抽出）➔ ②対策の検討（対策の立案・記入）➔ ③行動目標の決定 ➔ ④指差し唱和（かけ声・復唱）です（テキストp.6-7）。",
+    expId: "Urutan aktivitas KY: 1. Temukan potensi bahaya -> 2. Diskusikan langkah pencegahan -> 3. Tentukan target tindakan penting -> 4. Teriakkan sasaran bersama dengan tunjuk-sebut.",
+    expNe: "KY गतिविधिको सही प्रक्रिया: १. खतरा पत्ता लगाउने -> २. उपायबारे छलफल गर्ने -> ३. कार्य लक्ष्य तय गर्ने -> ४. सबै मिलेर औंला देखाउँदै आवाज निकालेर दोहोर्याउने।"
+  },
+  {
     id: 7,
     cat: "第2章：2.1.1 労働基準法 (p.8)",
     q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>で <ruby>定<rt>さだ</rt></ruby>められている「<ruby>法定<rt>ほうてい</rt></ruby><ruby>労働<rt>ろうどう</rt></ruby><ruby>時間<rt>じかん</rt></ruby>」と「<ruby>割増<rt>わりまし</rt></ruby><ruby>賃金<rt>ちんぎん</rt></ruby>」について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
@@ -117,3 +340,156 @@
     expId: "UU ini mendukung peningkatan keterampilan pekerja secara bertahap melalui sistem ujian keterampilan nasional (Ginou Kentei) yang diakui oleh pemerintah.",
     expNe: "यस ऐनले कामदारको क्षमता बढाउन सरकारी स्तरबाट सीप परीक्षण (गिनौ केन्तेई) गरी योग्यता प्रमाणित गर्ने अवसर प्रदान गर्छ।"
   }
+];
+
+let currentIndex = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+function renderNav() {
+  const grid = document.getElementById("nav-grid");
+  grid.innerHTML = "";
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
+    btn.textContent = i + 1;
+    btn.onclick = () => { currentIndex = i; loadQuestion(); };
+    grid.appendChild(btn);
+  });
+  document.getElementById("current-num").textContent = currentIndex + 1;
+  document.getElementById("total-num").textContent = questions.length;
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
+}
+
+function loadQuestion() {
+  renderNav();
+  const q = questions[currentIndex];
+  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
+  document.getElementById("q-text").innerHTML = q.q;
+
+  document.getElementById("hint-id").textContent = q.hintId;
+  document.getElementById("hint-id").style.display = "none";
+  document.getElementById("hint-ne").textContent = q.hintNe;
+  document.getElementById("hint-ne").style.display = "none";
+
+  const optBox = document.getElementById("options-box");
+  optBox.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `option-btn ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
+    btn.innerHTML = `<strong>${idx + 1}.</strong> <span>${opt}</span>`;
+    btn.onclick = () => selectOption(idx);
+    optBox.appendChild(btn);
+  });
+
+  document.getElementById("btn-prev").disabled = currentIndex === 0;
+  const isLast = currentIndex === questions.length - 1;
+  const btnNext = document.getElementById("btn-next");
+  btnNext.textContent = isLast ? "採点する" : "次へ";
+}
+
+function selectOption(idx) {
+  userAnswers[currentIndex] = idx;
+  loadQuestion();
+}
+
+function toggleHint(lang) {
+  const el = document.getElementById(`hint-${lang}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
+}
+
+function nextQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function skipQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    const firstUnanswered = userAnswers.findIndex(a => a === null);
+    if (firstUnanswered !== -1) {
+      currentIndex = firstUnanswered;
+      loadQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+}
+
+function finishQuiz() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
+      const firstUnanswered = userAnswers.findIndex(a => a === null);
+      if (firstUnanswered !== -1) {
+        currentIndex = firstUnanswered;
+        loadQuestion();
+      }
+      return;
+    }
+  }
+
+  document.getElementById("quiz-view").style.display = "none";
+  document.getElementById("result-view").style.display = "block";
+
+  let score = 0;
+  const reviewBox = document.getElementById("review-box");
+  reviewBox.innerHTML = "";
+
+  questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.answer;
+    if (isCorrect) score++;
+
+    const item = document.createElement("div");
+    item.className = "review-item";
+    
+    const yourChoiceText = userAnswers[i] !== null 
+      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]]}` 
+      : "（<ruby>未解答<rt>みかいとう</rt></ruby>）";
+      
+    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer]}`;
+
+    item.innerHTML = `
+      <div style="margin-bottom: 8px;">
+        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
+        <strong style="margin-left: 8px;"><ruby>問<rt>もん</rt></ruby> ${i + 1}</strong>
+        <span style="font-size: 0.8rem; color: var(--text-sub); margin-left: 8px;">(${q.cat})</span>
+      </div>
+      <div style="font-size: 0.98rem; margin-bottom: 8px; line-height: 2.0;">${q.q}</div>
+      <div class="review-ans" style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+        あなたの<ruby>解答<rt>かいとう</rt></ruby>: ${yourChoiceText}
+      </div>
+      ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
+      <div class="review-exp-box">
+        <div>💡 <strong><ruby>解説<rt>かいせつ</rt></ruby>:</strong> ${q.expJa}</div>
+        <div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>
+        <div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>
+      </div>
+    `;
+    reviewBox.appendChild(item);
+  });
+
+  const percentage = Math.round((score / questions.length) * 100);
+  document.getElementById("score-text").textContent = `${score} / ${questions.length} 点 (${percentage}%)`;
+  const passMsg = document.getElementById("pass-msg");
+  if (percentage >= 75) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準（75%以上）達成！素晴らしいです！</strong>";
+  } else {
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。解説を読んで復習しましょう！</strong>";
+  }
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
