@@ -21,6 +21,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
     .container { max-width: 740px; margin: 0 auto; }
+    
+    /* テキスト切り替えナビゲーション */
+    .menu-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+    .menu-link { flex: 1; text-align: center; padding: 10px; background: #e2e8f0; color: #334155; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; transition: all 0.2s; border: 1px solid var(--border); }
+    .menu-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
     header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
     h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
     .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
@@ -60,11 +66,17 @@
 <body>
 
 <div class="container">
+  <!-- 教材切り替えボタン -->
+  <div class="menu-bar">
+    <a href="index.html" class="menu-link active">職長・安全管理</a>
+    <a href="gakka1.html" class="menu-link">学科テキスト1（現場・法令）</a>
+  </div>
+
   <div id="quiz-view">
     <header>
-      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>対策<rt>たいさく</rt></ruby>テスト（<ruby>職長<rt>しょくちょう</rt></ruby>・<ruby>安全管理<rt>あんぜんかんり</rt></ruby><ruby>編<rt>へん</rt></ruby>）</h1>
+      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>対策<rt>たいさく</rt></ruby>テスト（<ruby>職長<rt>しょくちょう</rt></ruby>・<ruby>安全管理編<rt>あんぜんかんりへん</rt></ruby>）</h1>
       <div class="status-bar">
-        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / 10 <ruby>問<rt>もん</rt></ruby></span>
+        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">5</span> <ruby>問<rt>もん</rt></ruby></span>
         <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
       </div>
       <div class="nav-grid" id="nav-grid"></div>
@@ -109,173 +121,88 @@
 const questions = [
   {
     id: 1,
-    cat: "職長の役割 (指示伝達と確認)",
-    q: "<ruby>朝礼<rt>ちょうれい</rt></ruby>で、<ruby>現場監督<rt>げんばかんとく</rt></ruby>から <ruby>施工<rt>せこう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>の <ruby>変更<rt>へんこう</rt></ruby>が <ruby>伝<rt>つた</rt></ruby>えられました。<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>対応<rt>たいおう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+    cat: "職長の役割と責任",
+    q: "<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を <ruby>決<rt>き</rt></ruby>めるとき、<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>行動<rt>こうどう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
     options: [
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>変更<rt>へんこう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>を<ruby>口頭<rt>こうとう</rt></ruby>で<ruby>伝<rt>つた</rt></ruby>えたあと、<ruby>理解<rt>りかい</rt></ruby>できたか<ruby>質問<rt>しつもん</rt></ruby>して<ruby>確認<rt>かくにん</rt></ruby>する。",
-      "<ruby>工期<rt>こうき</rt></ruby>を<ruby>優先<rt>ゆうせん</rt></ruby>するため、<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>開始<rt>かいし</rt></ruby>させてから<ruby>順次<rt>じゅんじ</rt></ruby><ruby>個別<rt>こべつ</rt></ruby>に<ruby>伝<rt>つた</rt></ruby>えていく。",
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>混乱<rt>こんらん</rt></ruby>しないよう、<ruby>職長<rt>しょくちょう</rt></ruby>だけが<ruby>変更点<rt>へんこうてん</rt></ruby>を<ruby>把握<rt>はあく</rt></ruby>して<ruby>手元<rt>てもと</rt></ruby>で<ruby>調整<rt>ちょうせい</rt></ruby>する。",
-      "<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順書<rt>てじゅんしょ</rt></ruby>の<ruby>書<rt>か</rt></ruby>き<ruby>換<rt>か</rt></ruby>えは<ruby>行<rt>おこな</rt></ruby>わず、<ruby>前日<rt>ぜんじつ</rt></ruby>の<ruby>手順<rt>てじゅん</rt></ruby>のままで<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めさせる。"
+      "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>第一<rt>だいいち</rt></ruby>に<ruby>考<rt>かんが</rt></ruby>え、<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>手順書<rt>てじゅんしょ</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>共有<rt>きょうゆう</rt></ruby>・<ruby>確認<rt>かくにん</rt></ruby>する。",
+      "<ruby>工期<rt>こうき</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れているため、<ruby>安全<rt>あんぜん</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>の<ruby>工程<rt>こうてい</rt></ruby>をすべて<ruby>省略<rt>しょうりゃく</rt></ruby>して<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>急<rt>いそ</rt></ruby>がせる。",
+      "<ruby>経験<rt>けいけん</rt></ruby>の<ruby>浅<rt>あさ</rt></ruby>い<ruby>作業員<rt>さぎょういん</rt></ruby>にだけ<ruby>危険<rt>きけん</rt></ruby>な<ruby>高所<rt>こうしょ</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>を<ruby>任<rt>まか</rt></ruby>せ、<ruby>自分<rt>じぶん</rt></ruby>は<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>さずに<ruby>見<rt>み</rt></ruby>ている。",
+      "<ruby>当日<rt>とうじつ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>を<ruby>朝礼<rt>ちょうれい</rt></ruby>で<ruby>伝<rt>つた</rt></ruby>えず、<ruby>各自<rt>かくじ</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>で<ruby>自由<rt>じゆう</rt></ruby>に<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めさせる。"
     ],
     answer: 0,
-    hintId: "Hanya memberi tahu saja tidak cukup. Shokucho harus memverifikasi apakah pekerja benar-benar paham.",
-    hintNe: "बताउनु मात्र पर्याप्त छैन। कार्यनेताले कामदारले साँच्चै बुझेको छ कि छैन भनी जाँच्नुपर्छ।",
-    expJa: "<ruby>指示<rt>しじ</rt></ruby>を<ruby>伝<rt>つた</rt></ruby>える<ruby>際<rt>さい</rt></ruby>は「<ruby>一方的<rt>いっぽうてき</rt></ruby>な<ruby>伝達<rt>でんたつ</rt></ruby>」で<ruby>終<rt>お</rt></ruby>わらせず、<ruby>相手<rt>あいて</rt></ruby>が<ruby>正<rt>ただ</rt></ruby>しく<ruby>理解<rt>りかい</rt></ruby>したかを<ruby>確認<rt>かくにん</rt></ruby>（<ruby>質問<rt>しつもん</rt></ruby>や<ruby>復唱<rt>ふくしょう</rt></ruby>）することが<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>必須<rt>ひっす</rt></ruby>の<ruby>役割<rt>やくわり</rt></ruby>です。",
-    expId: "Instruksi tidak boleh hanya satu arah. Mandor wajib memastikan pekerja benar-benar mengerti lewat pertanyaan atau meminta mereka mengulang instruksi.",
-    expNe: "निर्देशन एकतर्फी मात्र हुनुहुँदैन। कामदारले राम्रोसँग बुझेको छ कि छैन भनी प्रश्न सोधेर वा दोहोर्याउन लगाएर निश्चित गर्नु कार्यनेताको मुख्य जिम्मेवारी हो।"
+    hintId: "Prioritas utama seorang mandor adalah keselamatan pekerja melalui prosedur kerja yang jelas.",
+    hintNe: "कार्यनेताको मुख्य जिम्मेवारी कामदारको सुरक्षालाई प्राथमिकता दिएर कार्यविधि पालना गराउनु हो।",
+    expJa: "<ruby>職長<rt>しょくちょう</rt></ruby>は<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>と<ruby>健康<rt>けんこう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るため、<ruby>無理<rt>むり</rt></ruby>のない<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>め、<ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>徹底<rt>てってい</rt></ruby>させる<ruby>責任<rt>せきにん</rt></ruby>があります。",
+    expId: "Mandor bertanggung jawab memastikan seluruh tim memahami instruksi kerja dan mengutamakan keselamatan daripada ketergesaan waktu.",
+    expNe: "कार्यनेताले सबै टोलीलाई कार्यविधि स्पष्ट रूपमा बुझाएर दुर्घटना हुन नदिन सुरक्षालाई पहिलो प्राथमिकता दिनुपर्छ।"
   },
   {
     id: 2,
-    cat: "連絡の基本 (騒音環境での伝達)",
-    q: "<ruby>切断機<rt>せつだんき</rt></ruby>などの <ruby>音<rt>おと</rt></ruby>で <ruby>周囲<rt>しゅうい</rt></ruby>が うるさい<ruby>場所<rt>ばしょ</rt></ruby>で、<ruby>作業員<rt>さぎょういん</rt></ruby>に <ruby>安全<rt>あんぜん</rt></ruby>に<ruby>関<rt>かん</rt></ruby>わる <ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>連絡<rt>れんらく</rt></ruby>を します。<ruby>職長<rt>しょくちょう</rt></ruby>は どうしますか。",
+    cat: "労働安全衛生法",
+    q: "<ruby>労働安全衛生法<rt>ろうどうあんぜんえいせいほう</rt></ruby>において、<ruby>職長<rt>しょくちょう</rt></ruby>が <ruby>行<rt>おこな</rt></ruby>うべき **<ruby>職務<rt>しょくむ</rt></ruby>として<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
     options: [
-      "<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>止<rt>と</rt></ruby>めさせ、<ruby>声<rt>こえ</rt></ruby>がしっかり<ruby>届<rt>とど</rt></ruby>く<ruby>場所<rt>ばしょ</rt></ruby>へ<ruby>移動<rt>いどう</rt></ruby>させて<ruby>伝<rt>つた</rt></ruby>え、<ruby>復唱<rt>ふくしょう</rt></ruby>させる。",
-      "<ruby>作業<rt>さぎょう</rt></ruby>の<ruby>手<rt>て</rt></ruby>を<ruby>止<rt>と</rt></ruby>めないよう、<ruby>機械<rt>きかい</rt></ruby>の<ruby>横<rt>よこ</rt></ruby>から<ruby>大声<rt>おおごえ</rt></ruby>で<ruby>怒鳴<rt>どな</rt></ruby>るように<ruby>指示<rt>しじ</rt></ruby>する。",
-      "<ruby>身振<rt>みぶ</rt></ruby>り<ruby>手振<rt>てぶ</rt></ruby>りのサインを<ruby>送<rt>おく</rt></ruby>り、<ruby>作業員<rt>さぎょういん</rt></ruby>がうなずいたので<ruby>伝<rt>つた</rt></ruby>わったとみなす。",
-      "<ruby>現場<rt>げんば</rt></ruby>の<ruby>騒音<rt>そうおん</rt></ruby>が<ruby>静<rt>しず</rt></ruby>かになるまで、<ruby>夕方<rt>ゆうがた</rt></ruby>の<ruby>打合<rt>うちあわ</rt></ruby>せまで<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>保留<rt>ほりゅう</rt></ruby>にする。"
+      "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>適性<rt>てきせい</rt></ruby>や<ruby>健康<rt>けんこう</rt></ruby><ruby>状態<rt>じょうたい</rt></ruby>に<ruby>応<rt>おう</rt></ruby>じた<ruby>人員<rt>じんいん</rt></ruby><ruby>配置<rt>はいち</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
+      "<ruby>設備<rt>せつび</rt></ruby>や<ruby>工具<rt>こうぐ</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby><ruby>点検<rt>てんけん</rt></ruby>を<ruby>定期的<rt>ていきてき</rt></ruby>に<ruby>実施<rt>じっし</rt></ruby>する。",
+      "<ruby>現場<rt>げんば</rt></ruby>で<ruby>労働災害<rt>ろうどうさいがい</rt></ruby>が<ruby>発生<rt>はっせい</rt></ruby>したとき、<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>せず<ruby>隠<rt>かく</rt></ruby>す。",
+      "<ruby>労働者<rt>ろうどうしゃ</rt></ruby>に<ruby>対<rt>たい</rt></ruby>する<ruby>安全<rt>あんぜん</rt></ruby><ruby>衛生<rt>えいせい</rt></ruby><ruby>教育<rt>きょういく</rt></ruby>や<ruby>指導<rt>しどう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。"
     ],
-    answer: 0,
-    hintId: "Pekerjaan harus dihentikan sejenak. Pindah ke tempat yang tenang dan minta pekerja mengulangi kata-kata Anda.",
-    hintNe: "कामलाई केही बेर रोक्नुहोस्। शान्त ठाउँमा जानुहोस् र कामदारलाई कुरा दोहोर्याउन लगाउनुहोस्।",
-    expJa: "<ruby>騒音<rt>そうおん</rt></ruby><ruby>環境<rt>かんきょう</rt></ruby>でのサインや<ruby>大声<rt>おおごえ</rt></ruby>は<ruby>誤解<rt>ごかい</rt></ruby>を<ruby>生<rt>う</rt></ruby>む<ruby>原因<rt>げんいん</rt></ruby>になります。<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>止<rt>と</rt></ruby>め、<ruby>声<rt>こえ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>く<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>で<ruby>復唱<rt>ふくしょう</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>をします。",
-    expId: "Bahasa tubuh atau berteriak di tempat bising rawan menimbulkan salah paham berbahaya. Hentikan pekerjaan dan cari tempat yang tenang untuk konfirmasi kata-kata.",
-    expNe: "हल्ला हुने ठाउँमा इसारा वा चिच्याएर कुरा गर्दा दुर्घटना हुन सक्छ। काम रोकी आवाज प्रष्ट सुनिने ठाउँमा गएर दोहोर्याएर सुन्नुपर्छ।"
+    answer: 2,
+    hintId: "Menyembunyikan kecelakaan kerja adalah pelanggaran hukum berat!",
+    hintNe: "दुर्घटना लुकाउनु कानुनी रूपमा गम्भीर अपराध हो।",
+    expJa: "<ruby>災害<rt>さいがい</rt></ruby>が<ruby>発生<rt>はっせい</rt></ruby>したときは、ただちに<ruby>応急<rt>おうきゅう</rt></ruby><ruby>手当<rt>てあて</rt></ruby>と<ruby>元請<rt>もとうけ</rt></ruby>への<ruby>報告<rt>ほうこく</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>い、<ruby>再発<rt>さいはつ</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>を<ruby>図<rt>はか</rt></ruby>る<ruby>義務<rt>ぎむ</rt></ruby>があります。<ruby>隠蔽<rt>いんぺい</rt></ruby>は<ruby>違法<rt>いほう</rt></ruby>です。",
+    expId: "Jika terjadi kecelakaan kerja, mandor wajib segera melapor ke kontraktor utama dan memberi pertolongan pertama, tidak boleh disembunyikan.",
+    expNe: "दुर्घटना भएमा तुरुन्त प्राथमिक उपचार गरी माथिल्लो निकायमा खबर गर्नुपर्छ, यसलाई लुकाउन पाइँदैन।"
   },
   {
     id: 3,
-    cat: "原価管理 (材料不足と手待ち)",
-    q: "<ruby>朝<rt>あさ</rt></ruby>の<ruby>点検<rt>てんけん</rt></ruby>で <ruby>必要<rt>ひつよう</rt></ruby>な<ruby>材料<rt>ざいりょう</rt></ruby>が <ruby>足<rt>た</rt></ruby>りず、<ruby>作業員<rt>さぎょういん</rt></ruby>の <ruby>手<rt>て</rt></ruby>が <ruby>止<rt>と</rt></ruby>まる「<ruby>手待<rt>てま</rt></ruby>ち」が <ruby>発生<rt>はっせい</rt></ruby>しそうです。<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>行動<rt>こうどう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+    cat: "作業危険予知活動（KYK）",
+    q: "<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>（KYK）を <ruby>行<rt>おこな</rt></ruby>う **<ruby>一番<rt>いちばん</rt></ruby>の<ruby>目的<rt>もくてき</rt></ruby>**は 何ですか。",
     options: [
-      "<ruby>早期<rt>そうき</rt></ruby>に<ruby>納入先<rt>のうにゅうさき</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>して<ruby>納期<rt>のうき</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>届<rt>とど</rt></ruby>くまでの<ruby>間<rt>あいだ</rt></ruby>は<ruby>別<rt>べつ</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>段取<rt>だんど</rt></ruby>り<ruby>作業<rt>さぎょう</rt></ruby>に<ruby>振<rt>ふ</rt></ruby>り<ruby>替<rt>か</rt></ruby>える。",
-      "<ruby>材料<rt>ざいりょう</rt></ruby>が<ruby>届<rt>とど</rt></ruby>くまで<ruby>全員<rt>ぜんいん</rt></ruby>を<ruby>休憩<rt>きゅうけい</rt></ruby>させ、<ruby>届<rt>とど</rt></ruby>いた<ruby>後<rt>あと</rt></ruby>に<ruby>残業<rt>ざんぎょう</rt></ruby>をさせて<ruby>遅<rt>おく</rt></ruby>れを<ruby>取<rt>と</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>す。",
-      "<ruby>他<rt>ほか</rt></ruby>の<ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>の<ruby>資材<rt>しざい</rt></ruby><ruby>置場<rt>おきば</rt></ruby>から、<ruby>似<rt>に</rt></ruby>たような<ruby>規格<rt>きかく</rt></ruby>の<ruby>材料<rt>ざいりょう</rt></ruby>を<ruby>無断<rt>むだん</rt></ruby>で<ruby>借<rt>か</rt></ruby>りてきて<ruby>使<rt>つか</rt></ruby>う。",
-      "<ruby>手待<rt>てま</rt></ruby>ちが<ruby>出<rt>で</rt></ruby>たことを<ruby>隠<rt>かく</rt></ruby>すため、<ruby>作業<rt>さぎょう</rt></ruby><ruby>日報<rt>にっぽう</rt></ruby>には「<ruby>順調<rt>じゅんちょう</rt></ruby>に<ruby>施工<rt>せこう</rt></ruby>」と<ruby>記録<rt>きろく</rt></ruby>する。"
+      "<ruby>作業前<rt>さぎょうまえ</rt></ruby>に<ruby>潜<rt>ひそ</rt></ruby>む<ruby>危険<rt>きけん</rt></ruby>を<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>い、<ruby>事故<rt>じこ</rt></ruby>を<ruby>未然<rt>みぜん</rt></ruby>に<ruby>防<rt>ふせ</rt></ruby>ぐため。",
+      "<ruby>朝<rt>あさ</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>潰<rt>つぶ</rt></ruby>して<ruby>作業<rt>さぎょう</rt></ruby><ruby>開始<rt>かいし</rt></ruby>を<ruby>遅<rt>おく</rt></ruby>らせるため。",
+      "<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>提出<rt>ていしゅつ</rt></ruby>する<ruby>書類<rt>しょるい</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めることだけが<ruby>目的<rt>もくてき</rt></ruby>である。",
+      "<ruby>作業員<rt>さぎょういん</rt></ruby>のミスの<ruby>責任<rt>せきにん</rt></ruby>を<ruby>特定<rt>とくてい</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>押<rt>お</rt></ruby>し<ruby>付<rt>つ</rt></ruby>けるため。"
     ],
     answer: 0,
-    hintId: "Jangan biarkan pekerja hanya menunggu. Hubungi pemasok dan alihkan ke pekerjaan persiapan lainnya yang aman.",
-    hintNe: "कामदारहरूलाई यत्तिकै बस्न नदिनुहोस्। आपूर्तिकर्तासँग बुझेर अन्य सुरक्षित काममा लगाउनुहोस्।",
-    expJa: "<ruby>手待<rt>てま</rt></ruby>ちは<ruby>人件費<rt>じんけんひ</rt></ruby>の<ruby>無駄<rt>むだ</rt></ruby>（コスト<ruby>増<rt>ぞう</rt></ruby>）になります。<ruby>早期<rt>そうき</rt></ruby>に<ruby>納期<rt>のうき</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>届<rt>とど</rt></ruby>くまでの<ruby>時間<rt>じかん</rt></ruby>を<ruby>他<rt>ほか</rt></ruby>の<ruby>有効<rt>ゆうこう</rt></ruby>な<ruby>段取<rt>だんど</rt></ruby>り<ruby>作業<rt>さぎょう</rt></ruby>に<ruby>使<rt>つか</rt></ruby>うのが<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>管理<rt>かんり</rt></ruby>です。",
-    expId: "Temachi (pekerja menganggur menunggu bahan) menambah biaya tenaga kerja secara sia-sia. Segera pastikan jadwal pengiriman dan alihkan ke pekerjaan lain yang bermanfaat.",
-    expNe: "तेमाची (सामान नभएर कामदार पर्खनु) ले लागत बढाउँछ। तुरुन्तै डेलिभरी समय बुझेर आइपुगुन्जेल अन्य काममा लगाउनु कार्यनेताको जिम्मेवारी हो।"
+    hintId: "KYK bertujuan memprediksi dan mencegah bahaya sebelum pekerjaan dimulai.",
+    hintNe: "KYK को मुख्य उद्देश्य काम सुरु हुनु अघि सम्भावित खतराहरू पहिचान गरी रोक्नु हो।",
+    expJa: "KYKは「どんな<ruby>危険<rt>きけん</rt></ruby>があるか」を<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>い、<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて<ruby>事故<rt>じこ</rt></ruby>をゼロにするための<ruby>活動<rt>かつどう</rt></ruby>です。",
+    expId: "Aktivitas KYK dilakukan untuk menemukan potensi bahaya dan menentukan tindakan pencegahan bersama seluruh pekerja.",
+    expNe: "KYK सबै कामदार मिलेर कार्यस्थलको जोखिम पहिचान गर्ने र सुरक्षित काम गर्ने उपाय निकाल्ने महत्त्वपूर्ण गतिविधि हो।"
   },
   {
     id: 4,
-    cat: "品質管理 (手戻りと施工不良)",
-    q: "<ruby>作業員<rt>さぎょういん</rt></ruby>が <ruby>下地<rt>したじ</rt></ruby>の<ruby>固定<rt>こてい</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>を せずに、<ruby>次<rt>つぎ</rt></ruby>の<ruby>仕上<rt>しあ</rt></ruby>げ<ruby>工程<rt>こうてい</rt></ruby>を <ruby>進<rt>すす</rt></ruby>めていました。<ruby>職長<rt>しょくちょう</rt></ruby>は どう<ruby>指示<rt>しじ</rt></ruby>しますか。",
+    cat: "高所作業と墜落防止",
+    q: "<ruby>高所<rt>こうしょ</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>における <ruby>フルハーネス<rt>ふるはーねす</rt></ruby><ruby>型<rt>がた</rt></ruby><ruby>安全帯<rt>あんぜんたい</rt></ruby>（<ruby>墜落制止用器具<rt>ついらくせいしようきぐ</rt></ruby>）の <ruby>使用<rt>しよう</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>中断<rt>ちゅうだん</rt></ruby>させ、<ruby>下地<rt>したじ</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby>ができる<ruby>工程<rt>こうてい</rt></ruby>まで<ruby>戻<rt>もど</rt></ruby>してやり<ruby>直<rt>なお</rt></ruby>させる（<ruby>手戻<rt>てもど</rt></ruby>り）。",
-      "<ruby>後<rt>あと</rt></ruby>で<ruby>元請<rt>もとうけ</rt></ruby>の<ruby>検査<rt>けんさ</rt></ruby>で<ruby>指摘<rt>してき</rt></ruby>された<ruby>場合<rt>ばあい</rt></ruby>だけ、やり<ruby>直<rt>なお</rt></ruby>すことにしてそのまま<ruby>続<rt>つづ</rt></ruby>けさせる。",
-      "<ruby>工期<rt>こうき</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れるのを<ruby>防<rt>ふせ</rt></ruby>ぐため、<ruby>仕上<rt>しあ</rt></ruby>げの<ruby>上<rt>うえ</rt></ruby>から<ruby>増<rt>ま</rt></ruby>し<ruby>締<rt>じ</rt></ruby>めをしてごまかす。",
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>言<rt>い</rt></ruby>わずに、<ruby>職長<rt>しょくちょう</rt></ruby>が<ruby>夜<rt>よる</rt></ruby>に残業してひとりでこっそり直しておく。"
+      "<ruby>高<rt>たか</rt></ruby>さ2m<ruby>以上<rt>いじょう</rt></ruby>で<ruby>手<rt>て</rt></ruby>すり等がない<ruby>箇所<rt>かしょ</rt></ruby>では、<ruby>原則<rt>げんそく</rt></ruby>としてフルハーネス<ruby>型<rt>がた</rt></ruby>を<ruby>着用<rt>ちゃくよう</rt></ruby>しフックを<ruby>掛<rt>か</rt></ruby>ける。",
+      "<ruby>面倒<rt>めんどう</rt></ruby>なときはフックをどこにも<ruby>掛<rt>か</rt></ruby>けずに<ruby>作業<rt>さぎょう</rt></ruby>してもよい。",
+      "<ruby>胴<rt>どう</rt></ruby>ベルト<ruby>型<rt>がた</rt></ruby>（1<ruby>本<rt>ぽん</rt></ruby>つり）であれば、どんな<ruby>高<rt>たか</rt></ruby>さでもフルハーネスより<ruby>安全<rt>あんぜん</rt></ruby>である。",
+      "<ruby>足場<rt>あしば</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>では<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>落<rt>お</rt></ruby>ちないので、<ruby>安全帯<rt>あんぜんたい</rt></ruby>を<ruby>着<rt>つ</rt></ruby>ける<ruby>必要<rt>ひつよう</rt></ruby>はない。"
     ],
     answer: 0,
-    hintId: "Meskipun butuh waktu (temodori), harus kembali ke langkah sebelumnya dan memperbaikinya secara benar demi kualitas.",
-    hintNe: "समय लागे पनि (तेमोदोरी), गुणस्तरका लागि पहिलेको चरणमै फर्किएर सही तरिकाले सच्याउनुपर्छ।",
-    expJa: "<ruby>手順<rt>てじゅん</rt></ruby>の<ruby>省略<rt>しょうりゃく</rt></ruby>は<ruby>重大<rt>じゅうだい</rt></ruby>な<ruby>施工<rt>せこう</rt></ruby><ruby>不良<rt>ふりょう</rt></ruby>になります。<ruby>手戻<rt>てもど</rt></ruby>り（<ruby>前<rt>まえ</rt></ruby>の<ruby>工程<rt>こうてい</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>ってやり<ruby>直<rt>なお</rt></ruby>すこと）になっても、<ruby>必<rt>かなら</rt></ruby>ず<ruby>正<rt>ただ</rt></ruby>しく<ruby>直<rt>なお</rt></ruby>させることが<ruby>品質<rt>ひんしつ</rt></ruby><ruby>管理<rt>かんり</rt></ruby>の<ruby>鉄則<rt>てっそく</rt></ruby>です。",
-    expId: "Melewatkan prosedur dapat menyebabkan cacat konstruksi parah. Walaupun timbul 'Temodori' (pengerjaan ulang), harus kembali ke langkah sebelumnya demi kualitas bangunan.",
-    expNe: "प्रक्रिया छोड्दा ठूलो निर्माण त्रुटि हुन्छ। समय र काम दोहोरिए पनि (तेमोदोरी), अघिल्लो चरणमै फर्किएर सही गराउनु नै गुणस्तर व्यवस्थापनको नियम हो।"
+    hintId: "Ketinggian 2 meter atau lebih tanpa pagar wajib menggunakan sabuk pengaman full-harness.",
+    hintNe: "२ मिटर भन्दा अग्लो स्थानमा काम गर्दा फुल-हार्नेस सेफ्टी बेल्ट अनिवार्य प्रयोग गर्नुपर्छ।",
+    expJa: "<ruby>高<rt>たか</rt></ruby>さ2m<ruby>以上<rt>いじょう</rt></ruby>の<ruby>作業床<rt>さぎょうゆか</rt></ruby>がない<ruby>箇所<rt>かしょ</rt></ruby>等では、<ruby>墜落<rt>ついらく</rt></ruby><ruby>制止<rt>せいし</rt></ruby><ruby>用<rt>よう</rt></ruby><ruby>器具<rt>きぐ</rt></ruby>（フルハーネス<ruby>型<rt>がた</rt></ruby>）の<ruby>使用<rt>しよう</rt></ruby>が<ruby>義務<rt>ぎむ</rt></ruby>づけられています。",
+    expId: "Pada pekerjaan di atas 2 meter tanpa pembatas, penggunaan full-harness yang dikaitkan dengan benar adalah kewajiban hukum untuk mencegah jatuh fatal.",
+    expNe: "२ मिटरभन्दा अग्लो जोखिमपूर्ण ठाउँमा काम गर्दा सुरक्षित रूपमा फुल हार्नेस बेल्टको हुक अड्काएर मात्र काम गर्नुपर्छ।"
   },
   {
     id: 5,
-    cat: "工程管理 (工期遅れと人員配置)",
-    q: "<ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>引渡<rt>ひきわた</rt></ruby>し<ruby>日<rt>び</rt></ruby>に <ruby>直結<rt>ちょっけつ</rt></ruby>する <ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>作業<rt>さぎょう</rt></ruby>が <ruby>遅<rt>おく</rt></ruby>れそうです。<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>判断<rt>はんだん</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+    cat: "異常時・緊急時の措置",
+    q: "<ruby>作業<rt>さぎょう</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きな<ruby>地震<rt>じしん</rt></ruby>が <ruby>発生<rt>はっせい</rt></ruby>しました。<ruby>職長<rt>しょくちょう</rt></ruby>が **<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>取<rt>と</rt></ruby>るべき<ruby>行動<rt>こうどう</rt></ruby>**は どれですか。",
     options: [
-      "<ruby>日程<rt>にってい</rt></ruby>に<ruby>余裕<rt>よゆう</rt></ruby>がある<ruby>作業<rt>さぎょう</rt></ruby>から<ruby>人員<rt>じんいん</rt></ruby>を<ruby>回<rt>まわ</rt></ruby>し、<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>作業<rt>さぎょう</rt></ruby>の<ruby>遅<rt>おく</rt></ruby>れを<ruby>防<rt>ふせ</rt></ruby>ぐよう<ruby>計画<rt>けいかく</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>する。",
-      "<ruby>安全<rt>あんぜん</rt></ruby><ruby>点検<rt>てんけん</rt></ruby>や<ruby>保護具<rt>ほごぐ</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby><ruby>時間<rt>じかん</rt></ruby>を<ruby>削<rt>けず</rt></ruby>って、<ruby>作業<rt>さぎょう</rt></ruby>スピードを<ruby>上<rt>あ</rt></ruby>げさせる。",
-      "<ruby>勝手<rt>かって</rt></ruby>に<ruby>他<rt>ほか</rt></ruby>の<ruby>専門<rt>せんもん</rt></ruby><ruby>業者<rt>ぎょうしゃ</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>声<rt>こえ</rt></ruby>をかけ、<ruby>自分<rt>じぶん</rt></ruby>のチームを<ruby>手伝<rt>てつだ</rt></ruby>わせる。",
-      "<ruby>現場監督<rt>げんばかんとく</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>せず、<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>だけで<ruby>勝手<rt>かって</rt></ruby>に<ruby>完成<rt>かんせい</rt></ruby><ruby>期日<rt>きじつ</rt></ruby>を1<ruby>週間<rt>しゅうかん</rt></ruby><ruby>延<rt>の</rt></ruby>ばす。"
+      "<ruby>直<rt>ただ</rt></ruby>ちに<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>中止<rt>ちゅうし</rt></ruby>させ、<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>へ<ruby>避難<rt>ひなん</rt></ruby>させて<ruby>点呼<rt>てんこ</rt></ruby>を<ruby>取<rt>と</rt></ruby>る。",
+      "<ruby>工期<rt>こうき</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わなくなるので、そのまま<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>続行<rt>ぞっこう</rt></ruby>させる。",
+      "<ruby>自分<rt>じぶん</rt></ruby>だけ<ruby>一人<rt>ひとり</rt></ruby>で<ruby>現場<rt>げんば</rt></ruby>から<ruby>逃<rt>に</rt></ruby>げ<ruby>出<rt>だ</rt></ruby>し、<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>何<rt>なに</rt></ruby>も<ruby>伝<rt>つた</rt></ruby>えない。",
+      "<ruby>落<rt>お</rt></ruby>ちてきそうな<ruby>資材<rt>しざい</rt></ruby>を<ruby>手<rt>て</rt></ruby>で<ruby>押<rt>お</rt></ruby>さえるよう<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>命<rt>めい</rt></ruby>じる。"
     ],
     answer: 0,
-    hintId: "Jangan mengurangi prosedur keselamatan. Alihkan pekerja dari tugas yang memiliki kelonggaran waktu (float).",
-    hintNe: "सुरक्षा जाँच नछोड्नुहोस्। समयको बचत भएको कामबाट कामदारहरूलाई मुख्य काममा सार्नुहोस्।",
-    expJa: "<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>工程<rt>こうてい</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れそうなときは、<ruby>日程<rt>にってい</rt></ruby>に<ruby>余裕<rt>よゆう</rt></ruby>のある<ruby>別<rt>べつ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>から<ruby>応援<rt>おうえん</rt></ruby>を<ruby>入<rt>い</rt></ruby>れて<ruby>調整<rt>ちょうせい</rt></ruby>します。<ruby>安全<rt>あんぜん</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を<ruby>省<rt>はぶ</rt></ruby>くことは<ruby>絶対<rt>ぜったい</rt></ruby>にしてはいけません。",
-    expId: "Bila proses kritis tertunda, pindahkan tenaga kerja dari proses lain yang masih longgar waktunya. Dilarang keras mengabaikan prosedur keselamatan demi mengejar target waktu.",
-    expNe: "मुख्य काम ढिलाइ भएमा समय बाँकी रहेको अन्य कामबाट कामदार सारेर व्यवस्थापन गर्नुहोस्। काम छिटो सक्न सुरक्षा जाँच हटाउनु हुँदैन।"
-  },
-  {
-    id: 6,
-    cat: "品質管理 (3現主義の実践)",
-    q: "<ruby>施工<rt>せこう</rt></ruby>した<ruby>製品<rt>せいひん</rt></ruby>の <ruby>寸法<rt>すんぽう</rt></ruby>が <ruby>合<rt>あ</rt></ruby>わないと <ruby>作業員<rt>さぎょういん</rt></ruby>から <ruby>報告<rt>ほうこく</rt></ruby>が ありました。<ruby>職長<rt>しょくちょう</rt></ruby>が **<ruby>最初<rt>さいしょ</rt></ruby>に とるべき<ruby>行動<rt>こうどう</rt></ruby>**は どれですか。",
-    options: [
-      "<ruby>先入観<rt>せんにゅうかん</rt></ruby>を<ruby>捨<rt>す</rt></ruby>てて「<ruby>現地<rt>げんち</rt></ruby>」に<ruby>行<rt>い</rt></ruby>き、「<ruby>現物<rt>げんぶつ</rt></ruby>」と「<ruby>現実<rt>げんじつ</rt></ruby>」の<ruby>状況<rt>じょうきょう</rt></ruby>を<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>する。",
-      "<ruby>過去<rt>かこ</rt></ruby>の<ruby>経験<rt>けいけん</rt></ruby>から「<ruby>加工<rt>かこう</rt></ruby>ミスに<ruby>違<rt>ちが</rt></ruby>いない」と<ruby>判断<rt>はんだん</rt></ruby>し、すぐに<ruby>工場<rt>こうじょう</rt></ruby>へ<ruby>再製作<rt>さいせいさく</rt></ruby>を<ruby>頼<rt>たの</rt></ruby>む。",
-      "<ruby>現場<rt>げんば</rt></ruby><ruby>事務所<rt>じむしょ</rt></ruby>から<ruby>電話<rt>でんわ</rt></ruby>で「<ruby>力<rt>ちから</rt></ruby>づくで押し込めば入る」と<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>指示<rt>しじ</rt></ruby>する。",
-      "<ruby>図面<rt>ずめん</rt></ruby>を<ruby>描<rt>か</rt></ruby>いた<ruby>設計者<rt>せっけいしゃ</rt></ruby>のミスだと<ruby>決<rt>き</rt></ruby>めつけ、<ruby>現物<rt>げんぶつ</rt></ruby>を<ruby>見<rt>み</rt></ruby>ずに<ruby>元請<rt>もとうけ</rt></ruby>へクレームを<ruby>入<rt>い</rt></ruby>れる。"
-    ],
-    answer: 0,
-    hintId: "Pegang prinsip 'Sangenshugi': Langsung lihat lokasi kerja (Genchi), barangnya (Gembutsu), dan fakta lapangan (Genjitsu).",
-    hintNe: "'सान्गेन' सिद्धान्त: घटनास्थल (गेन्ची), वास्तविक सामान (गेम्बुत्सु), र यथार्थ अवस्था (गेन्जित्सु) आफैँ गएर हेर्नुहोस्।",
-    expJa: "<ruby>不具合<rt>ふぐあい</rt></ruby>が<ruby>起<rt>お</rt></ruby>きたときは、<ruby>思<rt>おも</rt></ruby>い<ruby>込<rt>こ</rt></ruby>みで<ruby>判断<rt>はんだん</rt></ruby>せず「<ruby>現地<rt>げんち</rt></ruby>」「<ruby>現物<rt>げんぶつ</rt></ruby>」「<ruby>現実<rt>げんじつ</rt></ruby>」を<ruby>自分<rt>じぶん</rt></ruby>の<ruby>目<rt>め</rt></ruby>で<ruby>確<rt>たし</rt></ruby>かめる「3<ruby>現主義<rt>げんしゅぎ</rt></ruby>」が<ruby>問題<rt>もんだい</rt></ruby><ruby>解決<rt>かいけつ</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>です。",
-    expId: "Bila terjadi masalah kualitas, jangan berasumsi. Terapkan prinsip Sangenshugi: cek langsung lokasinya (Genchi), bendanya (Gembutsu), dan fakta lapangan sebenarnya (Genjitsu).",
-    expNe: "समस्या हुँदा अनुमान भरमा निर्णय नगर्नुहोस्। कार्यस्थल (गेन्ची), सामान (गेम्बुत्सु) र वास्तविकता (गेन्जित्सु) आफैँ प्रत्यक्ष हेरेर समस्या समाधान गर्नुहोस्।"
-  },
-  {
-    id: 7,
-    cat: "労働衛生 (暑さ指数と作業判断)",
-    q: "<ruby>夏季<rt>かき</rt></ruby>の <ruby>屋外<rt>おくがい</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>で、<ruby>暑<rt>あつ</rt></ruby>さ<ruby>指数<rt>しすう</rt></ruby>（WBGT<ruby>値<rt>ち</rt></ruby>）が **31<ruby>以上<rt>いじょう</rt></ruby>**に なりました。<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>指示<rt>しじ</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
-    options: [
-      "<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby>の<ruby>危険<rt>きけん</rt></ruby>が「<ruby>危険<rt>きけん</rt></ruby>」ランクに<ruby>達<rt>たっ</rt></ruby>したため、<ruby>原則<rt>げんそく</rt></ruby>として<ruby>可能<rt>かのう</rt></ruby>な<ruby>限<rt>かぎ</rt></ruby>り<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>中断<rt>ちゅうだん</rt></ruby>する。",
-      "<ruby>喉<rt>のど</rt></ruby>の<ruby>渇<rt>かわ</rt></ruby>きを<ruby>感<rt>かん</rt></ruby>じた<ruby>作業員<rt>さぎょういん</rt></ruby>だけ、<ruby>各自<rt>かくじ</rt></ruby>のペースで<ruby>自由<rt>じゆう</rt></ruby>に<ruby>水<rt>みず</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みながら<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けさせる。",
-      "<ruby>塩分<rt>えんぶん</rt></ruby>さえ<ruby>補給<rt>ほきゅう</rt></ruby>していれば<ruby>問題<rt>もんだい</rt></ruby>ないので、<ruby>休憩<rt>きゅうけい</rt></ruby><ruby>時間<rt>じかん</rt></ruby>を<ruby>増<rt>ふ</rt></ruby>やさずに<ruby>定時<rt>ていじ</rt></ruby>まで<ruby>作業<rt>さぎょう</rt></ruby>させる。",
-      "<ruby>体<rt>からだ</rt></ruby>を<ruby>冷<rt>ひ</rt></ruby>やすと<ruby>風邪<rt>かぜ</rt></ruby>をひくため、<ruby>休憩室<rt>きゅうけいしつ</rt></ruby>のエアコンを<ruby>止<rt>と</rt></ruby>めて<ruby>休<rt>やす</rt></ruby>ませる。"
-    ],
-    answer: 0,
-    hintId: "Nilai WBGT 31 ke atas adalah level tertinggi (Bahaya). Pekerjaan harus dihentikan sebisa mungkin.",
-    hintNe: "WBGT ३१ वा माथि पुग्नु भनेको उच्च जोखिम हो। सकेसम्म काम रोक्नु नै सही निर्णय हो।",
-    expJa: "WBGT 28〜31は「<ruby>厳重<rt>げんじゅう</rt></ruby><ruby>警戒<rt>けいかい</rt></ruby>」ですが、**31<ruby>以上<rt>いじょう</rt></ruby>**は「<ruby>危険<rt>きけん</rt></ruby>」レベルです。<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby>で<ruby>命<rt>いのち</rt></ruby>を<ruby>落<rt>お</rt></ruby>とす<ruby>危険<rt>きけん</rt></ruby>があるため、<ruby>原則<rt>げんそく</rt></ruby>として<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>中断<rt>ちゅうだん</rt></ruby>します。",
-    expId: "Nilai WBGT 31 ke atas berada pada level 'Bahaya'. Pekerjaan pada dasarnya harus dihentikan demi mencegah kematian akibat heatstroke.",
-    expNe: "WBGT ३१ भन्दा माथि पुग्दा 'खतरा' स्तर मानिन्छ। अत्यधिक गर्मीको कारण हुने मृत्युबाट बच्न नियम अनुसार काम रोक्नुपर्छ।"
-  },
-  {
-    id: 8,
-    cat: "安全管理 (重機災害における隔離)",
-    q: "<ruby>移動式<rt>いどうしき</rt></ruby>クレーンを <ruby>使<rt>つか</rt></ruby>って <ruby>鉄骨<rt>てっこつ</rt></ruby>を <ruby>吊<rt>つ</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げています。<ruby>作業員<rt>さぎょういん</rt></ruby>が <ruby>挟<rt>はさ</rt></ruby>まれるのを <ruby>防<rt>ふせ</rt></ruby>ぐ「<ruby>隔離<rt>かくり</rt></ruby>」の <ruby>対策<rt>たいさく</rt></ruby>は どれですか。",
-    options: [
-      "<ruby>旋回<rt>せんかい</rt></ruby><ruby>範囲<rt>はんい</rt></ruby>に<ruby>立<rt>た</rt></ruby>ち<ruby>入<rt>い</rt></ruby>り<ruby>禁止<rt>きんし</rt></ruby><ruby>柵<rt>さく</rt></ruby>を<ruby>設<rt>もう</rt></ruby>け、<ruby>専任<rt>せんにん</rt></ruby>の<ruby>合図者<rt>あいずしゃ</rt></ruby>・<ruby>誘導員<rt>ゆうどういん</rt></ruby>を<ruby>配置<rt>はいち</rt></ruby>して<ruby>人<rt>ひと</rt></ruby>を<ruby>近<rt>ちか</rt></ruby>づけない。",
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>に「クレーンの<ruby>動<rt>うご</rt></ruby>きをよく<ruby>見<rt>み</rt></ruby>て、<ruby>素早<rt>すばや</rt></ruby>く<ruby>下<rt>した</rt></ruby>を<ruby>通<rt>とお</rt></ruby>り<ruby>抜<rt>ぬ</rt></ruby>けろ」と<ruby>口頭<rt>こうとう</rt></ruby>で<ruby>注意<rt>ちゅうい</rt></ruby>する。",
-      "<ruby>頑丈<rt>がんじょう</rt></ruby>なヘルメットと<ruby>安全靴<rt>あんぜんぐつ</rt></ruby>を<ruby>着用<rt>ちゃくよう</rt></ruby>させ、クレーンのすぐ<ruby>脇<rt>わき</rt></ruby>で<ruby>別<rt>べつ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>わせる。",
-      "クレーンのブザー<ruby>音<rt>おと</rt></ruby>がうるさいので、スイッチを<ruby>切<rt>き</rt></ruby>って<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>集中<rt>しゅうちゅう</rt></ruby>できるようにする。"
-    ],
-    answer: 0,
-    hintId: "'Isolasi' berarti memisahkan manusia dari mesin secara fisik (memasang pagar atau menempatkan pemandu).",
-    hintNe: "'आइसोलेसन (अलगाव)' भन्नाले मानिस र मेसिनलाई भौतिक रूपमा अलग राख्नु हो (बार लगाउने वा गार्ड राख्ने)।",
-    expJa: "「<ruby>隔離<rt>かくり</rt></ruby>」とは、<ruby>柵<rt>さく</rt></ruby>やカラーコーン、<ruby>誘導員<rt>ゆうどういん</rt></ruby>を<ruby>配置<rt>はいち</rt></ruby>して、<ruby>危険<rt>きけん</rt></ruby>なエリアに<ruby>人<rt>ひと</rt></ruby>が<ruby>物理的<rt>ぶつりてき</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>づけないようにすることです。",
-    expId: "'Isolasi' berarti secara fisik memisahkan pekerja dari area bahaya putaran crane dengan memasang barikade/pagar dan menugaskan pemandu khusus.",
-    expNe: "'आइसोलेसन (अलगाव)' भनेको क्रेन घुम्ने खतरनाक ठाउँमा मानिसहरू भौतिक रूपमै जान नसक्ने गरी बार लगाउने र गार्ड खटाउनु हो।"
-  },
-  {
-    id: 9,
-    cat: "安全活動 (KYT 4ラウンドの進め方)",
-    q: "<ruby>作業前<rt>さぎょうまえ</rt></ruby>に <ruby>危険予知訓練<rt>きけんよちくんれん</rt></ruby>（KYT 4ラウンド<ruby>法<rt>ほう</rt></ruby>）を <ruby>行<rt>おこな</rt></ruby>います。**第2ラウンド（2R）**で <ruby>行<rt>おこな</rt></ruby>うことは どれですか。",
-    options: [
-      "<ruby>出<rt>だ</rt></ruby>し<ruby>合<rt>あ</rt></ruby>った<ruby>危険<rt>きけん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から、<ruby>最<rt>もっと</rt></ruby>も<ruby>重要<rt>じゅうよう</rt></ruby>な「<ruby>危険<rt>きけん</rt></ruby>のポイント」を<ruby>絞<rt>しぼ</rt></ruby>り<ruby>込<rt>こ</rt></ruby>んで◎をつける。",
-      "イラストシートを<ruby>見<rt>み</rt></ruby>て、「どんな<ruby>危険<rt>きけん</rt></ruby>がひそんでいるか」を<ruby>自由<rt>じゆう</rt></ruby>にたくさん<ruby>出<rt>だ</rt></ruby>し<ruby>合<rt>あ</rt></ruby>う。",
-      "<ruby>危険<rt>きけん</rt></ruby>を<ruby>解決<rt>かいけつ</rt></ruby>するための「<ruby>具体的<rt>ぐたいてき</rt></ruby>な<ruby>対策<rt>たいさく</rt></ruby>」をみんなで<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>う。",
-      "チームの「<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>」を<ruby>決<rt>き</rt></ruby>めて、<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>する。"
-    ],
-    answer: 0,
-    hintId: "1R: Temukan bahaya -> 2R: Tentukan poin bahaya utama (tanda ◎) -> 3R: Rencanakan solusi -> 4R: Tetapkan target tim.",
-    hintNe: "1R: खतरा पत्ता लगाउने -> 2R: मुख्य खतरा छान्ने (◎ चिन्ह) -> 3R: समाधान खोज्ने -> 4R: टोली लक्ष्य तय गर्ने।",
-    expJa: "KYT 4ラウンドは、1R＝<ruby>現状<rt>げんじょう</rt></ruby><ruby>把握<rt>はあく</rt></ruby>、**2R＝<ruby>本質<rt>ほんしつ</rt></ruby><ruby>追及<rt>ついきゅう</rt></ruby>（<ruby>危険<rt>きけん</rt></ruby>ポイントの特定・◎づけ）**、3R＝<ruby>対策<rt>たいさく</rt></ruby><ruby>樹立<rt>じゅりつ</rt></ruby>、4R＝<ruby>目標<rt>もくひょう</rt></ruby><ruby>設定<rt>せってい</rt></ruby>です。",
-    expId: "Tahapan KYT: 1R (Cari bahaya) -> 2R (Pilih bahaya paling kritis dengan tanda ◎) -> 3R (Rencana perbaikan) -> 4R (Target tindakan tim).",
-    expNe: "KYT चरणहरू: 1R (खतरा पत्ता लगाउने) -> 2R (मुख्य खतरा पहिचान गरी ◎ चिन्ह लगाउने) -> 3R (समाधान बनाउने) -> 4R (लक्ष्य तय गर्ने)।"
-  },
-  {
-    id: 10,
-    cat: "安全衛生 (ヒヤリ・ハットの指導)",
-    q: "<ruby>経験<rt>けいけん</rt></ruby>の<ruby>浅<rt>あさ</rt></ruby>い<ruby>作業員<rt>さぎょういん</rt></ruby>が「<ruby>脚立<rt>きゃたつ</rt></ruby>から <ruby>落<rt>お</rt></ruby>ちそうになった」と <ruby>報告<rt>ほうこく</rt></ruby>してきました。<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>対応<rt>たいおう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
-    options: [
-      "<ruby>報告<rt>ほうこく</rt></ruby>してくれたことを<ruby>評価<rt>ひょうか</rt></ruby>し、<ruby>報告者<rt>ほうこくしゃ</rt></ruby>を<ruby>責<rt>せ</rt></ruby>めずに<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>作業<rt>さぎょう</rt></ruby><ruby>環境<rt>かんきょう</rt></ruby>や<ruby>手順<rt>てじゅん</rt></ruby>の<ruby>見直<rt>みなお</rt></ruby>しを<ruby>行<rt>おこな</rt></ruby>う。",
-      "<ruby>不安全<rt>ふあんぜん</rt></ruby>な<ruby>行動<rt>こうどう</rt></ruby>をとったことの<ruby>責任<rt>せきにん</rt></ruby>を<ruby>追及<rt>ついきゅう</rt></ruby>し、<ruby>朝礼<rt>ちょうれい</rt></ruby>で<ruby>全員<rt>ぜんいん</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>で<ruby>厳<rt>きび</rt></ruby>しく<ruby>注意<rt>ちゅうい</rt></ruby>する。",
-      "<ruby>実際<rt>じっさい</rt></ruby>にケガはしていないので、<ruby>記録<rt>きろく</rt></ruby>はとらずに「<ruby>次<rt>つぎ</rt></ruby>から<ruby>気<rt>き</rt></ruby>をつけるように」とだけ<ruby>言<rt>い</rt></ruby>う。",
-      "<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>知<rt>し</rt></ruby>られると<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>評価<rt>ひょうか</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちるので、<ruby>他<rt>ほか</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>話<rt>はな</rt></ruby>さないよう<ruby>口止<rt>くちど</rt></ruby>めする。"
-    ],
-    answer: 0,
-    hintId: "Jangan pernah menyalahkan orang yang melapor. Jadikan laporan sebagai bahan perbaikan bersama.",
-    hintNe: "रिपोर्ट गर्ने व्यक्तिलाई कहिल्यै दोष नदिनुहोस्। यसलाई सम्पूर्ण टोलीको सुधारको अवसर बनाउनुहोस्।",
-    expJa: "ヒヤリ・ハット<ruby>報告<rt>ほうこく</rt></ruby>で<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>叱責<rt>しっせき</rt></ruby>すると<ruby>危険<rt>きけん</rt></ruby>の<ruby>隠蔽<rt>いんぺい</rt></ruby>を<ruby>招<rt>まね</rt></ruby>きます。<ruby>報告<rt>ほうこく</rt></ruby>したことを<ruby>褒<rt>ほ</rt></ruby>め、<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>原因<rt>げんいん</rt></ruby>と<ruby>対策<rt>たいさく</rt></ruby>を<ruby>共有<rt>きょうゆう</rt></ruby>することが<ruby>重大<rt>じゅうだい</rt></ruby><ruby>事故<rt>じこ</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>につながります。",
-    expId: "Menyalahkan pelapor insiden nyaris celaka membuat pekerja takut dan menyembunyikan bahaya. Puji kejujurannya dan jadikan pelajaran untuk mencegah kecelakaan fatal.",
-    expNe: "खतराबाट बचेको कुरा रिपोर्ट गर्दा कामदारलाई गाली गरेमा उनीहरूले खतरा लुकाउन थाल्छन्। इमानदारीको प्रशंसा गर्दै टोलीसँग छलफल गरेर ठूलो दुर्घटना हुनबाट रोक्नुपर्छ।"
+    hintId: "Saat bencana gempa, utamakan evakuasi pekerja ke tempat aman dan hitung jumlah anggota tim.",
+    hintNe: "भूकम्प आउँदा तुरुन्त काम रोकेर सुरक्षित स्थानमा जानु र टोलीका सबै सदस्य गन्ती गर्नु पहिलो काम हो।",
+    expJa: "<ruby>緊急時<rt>きんきゅうじ</rt></ruby>は<ruby>作業<rt>さぎょう</rt></ruby><ruby>中止<rt>ちゅうし</rt></ruby>と<ruby>人命<rt>じんめい</rt></ruby><ruby>第一<rt>だいいち</rt></ruby>の<ruby>避難<rt>ひなん</rt></ruby>が<ruby>最優先<rt>さいゆうせん</rt></ruby>です。<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>で<ruby>点呼<rt>てんこ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>い、<ruby>全員<rt>ぜんいん</rt></ruby>の<ruby>無事<rt>ぶじ</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>します。",
+    expId: "Tindakan pertama saat gempa adalah menghentikan pekerjaan seketika, mengarahkan pekerja ke area evakuasi, dan mengecek kelengkapan personil.",
+    expNe: "आपतकालीन अवस्थामा काम तुरुन्त रोकेर सुरक्षित ठाउँमा जाने र आफ्ना सबै कामदार सकुशल छन् कि छैनन् भनी यकिन गर्नुपर्छ।"
   }
 ];
 
@@ -293,6 +220,7 @@ function renderNav() {
     grid.appendChild(btn);
   });
   document.getElementById("current-num").textContent = currentIndex + 1;
+  document.getElementById("total-num").textContent = questions.length;
   const answered = userAnswers.filter(a => a !== null).length;
   document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
 }
