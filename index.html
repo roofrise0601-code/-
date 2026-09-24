@@ -74,7 +74,7 @@
   </div>
 
   <!-- 学科テキスト 第1章・第2章 -->
-  <div class="module-group-title"><ruby>法令<rt>ほうれい</rt></ruby>・<ruby>現場基本<rt>げんばきほん</rt></ruby>（テキスト2）</div>
+  <div class="module-group-title"><ruby>現場基本<rt>げんばきほん</rt></ruby>・<ruby>法令<rt>ほうれい</rt></ruby></div>
   <div class="module-list">
     <a href="quiz.html?day=1" class="module-card">
       <div class="card-info">
@@ -107,18 +107,32 @@
     </a>
   </div>
 
+  <!-- 学科テキスト 第3章 -->
+  <div class="module-group-title"><ruby>工事<rt>こうじ</rt></ruby>の<ruby>種類<rt>しゅるい</rt></ruby>と<ruby>業務<rt>ぎょうむ</rt></ruby>（第3章）</div>
+  <div class="module-list">
+    <a href="quiz.html?day=4" class="module-card">
+      <div class="card-info">
+        <span class="card-title">📕 Day 4：<ruby>建設工事<rt>けんせつこうじ</rt></ruby>の<ruby>種類<rt>しゅるい</rt></ruby>（土木・建築・設備）</span>
+        <span class="card-meta">10問 | 第3章 3.1（ダム・トンネル・RC/S造・耐震・ライフライン）</span>
+      </div>
+      <div class="status-area" id="status-day4">
+        <span class="badge badge-yet">未挑戦</span>
+      </div>
+    </a>
+  </div>
+
   <footer>
     &copy; 特定技能2号 建設 合格支援プラットフォーム
   </footer>
 </div>
 
 <script>
-  // 点数バッジの自動判定・表示
   const modules = [
     { targetId: "status-shokucho", key: "score_shokucho", passScore: 80 },
     { targetId: "status-day1", key: "score_gakka1", passScore: 70 },
     { targetId: "status-day2", key: "score_gakka1_2", passScore: 70 },
-    { targetId: "status-day3", key: "score_gakka2", passScore: 70 }
+    { targetId: "status-day3", key: "score_gakka2", passScore: 70 },
+    { targetId: "status-day4", key: "score_gakka3_1", passScore: 70 }
   ];
 
   modules.forEach(m => {
