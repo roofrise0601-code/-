@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 学科1：Day 2（建設業法・環境法令編）</title>
+  <title>特定技能2号 学科：第2章 2.1 労働法編（Day 2）</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -22,13 +22,11 @@
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
     .container { max-width: 740px; margin: 0 auto; position: relative; }
     
-    /* ヘッダー・メニューバー */
     .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .app-title-sub { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
     .btn-menu-open { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
     .btn-menu-open:hover { background: #f1f5f9; }
 
-    /* サイドメニュー（ドロワー） */
     .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; }
     .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: #fff; z-index: 100; box-shadow: -2px 0 8px rgba(0,0,0,0.15); transition: right 0.25s ease; display: flex; flex-direction: column; }
     .drawer.open { right: 0; }
@@ -80,13 +78,11 @@
 <body>
 
 <div class="container">
-  <!-- 上部バー（三本線メニュー付き） -->
   <div class="top-bar">
     <span class="app-title-sub">特定技能2号 建設 対策プラットフォーム</span>
     <button class="btn-menu-open" onclick="openMenu()">☰ 学習メニュー</button>
   </div>
 
-  <!-- スライドメニュー（ドロワー） -->
   <div class="drawer-overlay" id="overlay" onclick="closeMenu()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -99,19 +95,23 @@
         <span class="badge-score" id="badge-shokucho" style="display:none;"></span>
       </a>
       <a href="gakka1.html" class="menu-item">
-        <span>📗 学科1：Day 1 (基本・労働 10問)</span>
+        <span>📗 第1章：現場基本・チームワーク (10問)</span>
         <span class="badge-score" id="badge-gakka1" style="display:none;"></span>
       </a>
       <a href="gakka1-2.html" class="menu-item active">
-        <span>📗 学科1：Day 2 (業法・環境 10問)</span>
+        <span>📗 第2章：2.1 労働法編 (Day 2 / 10問)</span>
         <span class="badge-score" id="badge-gakka1-2" style="display:none;"></span>
+      </a>
+      <a href="gakka2.html" class="menu-item">
+        <span>📙 第2章：2.2〜2.17 建設業法・環境法令編 (Day 3 / 10問)</span>
+        <span class="badge-score" id="badge-gakka2" style="display:none;"></span>
       </a>
     </div>
   </div>
 
   <div id="quiz-view">
     <header>
-      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>（テキスト1：<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>・<ruby>環境法令編<rt>かんきょうほうれいへん</rt></ruby>）</h1>
+      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>（<ruby>第<rt>だい</rt></ruby>2<ruby>章<rt>しょう</rt></ruby>：2.1 <ruby>労働法編<rt>ろうどうほうへん</rt></ruby>）</h1>
       <div class="status-bar">
         <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">10</span> <ruby>問<rt>もん</rt></ruby></span>
         <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
@@ -160,173 +160,173 @@ const MODULE_KEY = "score_gakka1_2";
 const questions = [
   {
     id: 1,
-    cat: "第2章：2.2 建設業法 (p.18)",
-    q: "<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>で <ruby>固<rt>かた</rt></ruby>く**<ruby>禁止<rt>きんし</rt></ruby>されていること**として、<ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+    cat: "2.1.1 労働基準法：労働条件の決定 (p.8)",
+    q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>における「<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>」について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>請<rt>う</rt></ruby>け<ruby>負<rt>お</rt></ruby>った<ruby>工事<rt>こうじ</rt></ruby>の<ruby>全部<rt>ぜんぶ</rt></ruby>または<ruby>大部分<rt>だいぶぶん</rt></ruby>を、そのまま<ruby>他<rt>ほか</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>丸投<rt>まるな</rt></ruby>げする「<ruby>一括<rt>いっかつ</rt></ruby><ruby>下請負<rt>したうけおい</rt></ruby>」。",
-      "<ruby>工事<rt>こうじ</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>める<ruby>前<rt>まえ</rt></ruby>に、<ruby>工事<rt>こうじ</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>や<ruby>金額<rt>きんがく</rt></ruby>について<ruby>書面<rt>しょめん</rt></ruby>で<ruby>適正<rt>てきせい</rt></ruby>な<ruby>契約<rt>けいやく</rt></ruby>を<ruby>結<rt>むす</rt></ruby>ぶこと。",
-      "<ruby>施工<rt>せこう</rt></ruby>する<ruby>現場<rt>げんば</rt></ruby>ごとに、<ruby>技術<rt>ぎじゅつ</rt></ruby><ruby>管理<rt>かんり</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う「<ruby>主任技術者<rt>しゅにんぎじゅつしゃ</rt></ruby>」を<ruby>配置<rt>はいち</rt></ruby>すること。",
-      "<ruby>現場<rt>げんば</rt></ruby>の<ruby>見<rt>み</rt></ruby>えやすい<ruby>場所<rt>ばしょ</rt></ruby>に、<ruby>建設業<rt>けんせつぎょう</rt></ruby>の<ruby>許可<rt>きょか</rt></ruby><ruby>票<rt>ひょう</rt></ruby>（<ruby>標識<rt>ひょうしき</rt></ruby>）を<ruby>掲示<rt>けいじ</rt></ruby>すること。"
+      "<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>は、<ruby>使用者<rt>しようしゃ</rt></ruby>と<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が「<ruby>対等<rt>たいとう</rt></ruby>の<ruby>立場<rt>たちば</rt></ruby>」において<ruby>決定<rt>けってい</rt></ruby>すべきものであり、お<ruby>互<rt>たが</rt></ruby>いに<ruby>約束事<rt>やくそくごと</rt></ruby>をしっかり<ruby>守<rt>まも</rt></ruby>る<ruby>必要<rt>ひつよう</rt></ruby>がある。",
+      "<ruby>会社<rt>かいしゃ</rt></ruby>（<ruby>使用者<rt>しようしゃ</rt></ruby>）の<ruby>立場<rt>たちば</rt></ruby>のほうが<ruby>強<rt>つよ</rt></ruby>いため、<ruby>会社<rt>かいしゃ</rt></ruby>が<ruby>一方的<rt>いっぽうてき</rt></ruby>にどんなに<ruby>不利<rt>ふり</rt></ruby>な<ruby>条件<rt>じょうけん</rt></ruby>でも<ruby>決<rt>き</rt></ruby>めてよい。",
+      "<ruby>法律<rt>ほうりつ</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>していない<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>であっても、<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が<ruby>同意<rt>どうい</rt></ruby>すればその<ruby>契約<rt>けいやく</rt></ruby>は<ruby>有効<rt>ゆうこう</rt></ruby>になる。",
+      "<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>とは「<ruby>賃金<rt>ちんぎん</rt></ruby>」のことだけをいい、<ruby>労働時間<rt>ろうどうじかん</rt></ruby>や<ruby>安全衛生<rt>あんぜんえいせい</rt></ruby>は<ruby>含<rt>ふく</rt></ruby>まれない。"
     ],
     answer: 0,
-    hintId: "Undang-Undang Industri Konstruksi melarang keras 'Ikkatsu Shitaukeoi' (melempar seluruh pekerjaan ke pihak lain).",
-    hintNe: "निर्माण व्यवसाय ऐनले काम अरूलाई पूरै जिम्मा लगाउने (इक्कात्सु सिताउकेओइ) पूर्ण निषेध गरेको छ।",
-    expJa: "建設業法では、責任の所在が不明確になることを防ぐため、「一括下請負（丸投げ）」を禁止しています（テキストp.18）。",
-    expId: "Hukum melarang penyerahan seluruh pekerjaan konstruksi kepada pihak lain demi mencegah pengerjaan asal-asalan.",
-    expNe: "निर्माण कार्यको सम्पूर्ण जिम्मा सिधै अर्को कम्पनीलाई सुम्पनु (इक्कात्सु सिताउकेओइ) गैरकानुनी हो।"
+    hintId: "Kondisi kerja harus diputuskan atas dasar kedudukan setara antara pengusaha dan pekerja.",
+    hintNe: "कामको सर्तहरू रोजगारदाता र श्रमिक दुवै समान हैसियतमा रहेर तय गर्नुपर्छ र पालना गर्नुपर्छ।",
+    expJa: "労働条件は使用者と労働者が対等の立場において決定すべきものです。基準に達しない部分は違法となり労働基準法の規定が適用されます（テキストp.8）。",
+    expId: "Syarat kerja harus disepakati secara setara antara perusahaan dan pekerja, dan tidak boleh berada di bawah standar hukum minimal.",
+    expNe: "श्रम मानक ऐन अनुसार कामको सर्त रोजगारदाता र कामदारले बराबरीको हैसियतमा तय गर्नुपर्छ।"
   },
   {
     id: 2,
-    cat: "第2章：2.3 建築基準法 (p.19)",
-    q: "「<ruby>建築基準法<rt>けんちくきじゅんほう</rt></ruby>」の **<ruby>主<rt>おも</rt></ruby>な<ruby>目的<rt>もくてき</rt></ruby>**について、<ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+    cat: "2.1.1 労働基準法：均等・強制労働禁止・パワハラ防止 (p.8)",
+    q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>および<ruby>労働施策総合推進法<rt>ろうどうしさくそうごうすいしんほう</rt></ruby>（パワハラ<ruby>防止法<rt>ぼうしほう</rt></ruby>）について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
     options: [
-      "<ruby>国民<rt>こくみん</rt></ruby>の<ruby>生命<rt>せいめい</rt></ruby>・<ruby>健康<rt>けんこう</rt></ruby>・<ruby>財産<rt>ざいさん</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るため、<ruby>建物<rt>たてもの</rt></ruby>の<ruby>敷地<rt>しきち</rt></ruby>・<ruby>構造<rt>こうぞう</rt></ruby>・<ruby>設備<rt>せつび</rt></ruby>・<ruby>用途<rt>ようと</rt></ruby>に<ruby>関<rt>かん</rt></ruby>する<ruby>最低<rt>さいてい</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める。",
-      "<ruby>建具<rt>たてぐ</rt></ruby>や<ruby>壁紙<rt>かべがみ</rt></ruby>などの<ruby>内装<rt>ないそう</rt></ruby>デザインが、おしゃれな<ruby>色<rt>いろ</rt></ruby>になっているかを<ruby>審査<rt>しんさ</rt></ruby>する。",
-      "<ruby>建物<rt>たてもの</rt></ruby>の<ruby>売買<rt>ばいばい</rt></ruby><ruby>価格<rt>かかく</rt></ruby>や<ruby>家賃<rt>やちん</rt></ruby>の<ruby>金額<rt>きんがく</rt></ruby>を、全国で<ruby>同<rt>おな</rt></ruby>じ<ruby>値段<rt>ねだん</rt></ruby>に<ruby>統一<rt>とういつ</rt></ruby>する。",
-      "<ruby>現場<rt>げんば</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>く<ruby>技能者<rt>ぎのうしゃ</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>や<ruby>休<rt>やす</rt></ruby>みの<ruby>日数<rt>にっすう</rt></ruby>を<ruby>決定<rt>けってい</rt></ruby>する。"
+      "<ruby>外国人<rt>がいこくじん</rt></ruby>であることを<ruby>理由<rt>りゆう</rt></ruby>にして、<ruby>賃金<rt>ちんぎん</rt></ruby>や<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>で<ruby>差別的取扱<rt>さべつてきとりあつかい</rt></ruby>をしてもよい。",
+      "<ruby>暴行<rt>ぼうこう</rt></ruby>、<ruby>脅迫<rt>きょうはく</rt></ruby>、<ruby>監禁<rt>かんきん</rt></ruby>などで<ruby>労働者<rt>ろうどうしゃ</rt></ruby>の<ruby>意思<rt>いし</rt></ruby>に<ruby>反<rt>はん</rt></ruby>して<ruby>労働<rt>ろうどう</rt></ruby>を<ruby>強制<rt>きょうせい</rt></ruby>してはならない。",
+      "<ruby>職場<rt>しょくば</rt></ruby>での<ruby>優位性<rt>ゆういせい</rt></ruby>を<ruby>利用<rt>りよう</rt></ruby>して<ruby>業務<rt>ぎょうむ</rt></ruby>の<ruby>適正<rt>てきせい</rt></ruby>な<ruby>範囲<rt>はんい</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えて<ruby>苦痛<rt>くつう</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えるパワハラは<ruby>禁止<rt>きんし</rt></ruby>されている。",
+      "<ruby>会社<rt>かいしゃ</rt></ruby>はパワハラを<ruby>防止<rt>ぼうし</rt></ruby>するため、<ruby>相談窓口<rt>そうだんまどぐち</rt></ruby>を<ruby>設<rt>もう</rt></ruby>けるなどの<ruby>措置<rt>そち</rt></ruby>を<ruby>講<rt>こう</rt></ruby>じることが<ruby>義務<rt>ぎむ</rt></ruby>づけられている。"
     ],
     answer: 0,
-    hintId: "UU Standar Bangunan menetapkan batas standar minimal demi keselamatan jiwa dan harta benda masyarakat.",
-    hintNe: "भवन निर्माण मानक ऐनले मानिसको जीवन, स्वास्थ्य र सम्पत्तिको सुरक्षाका लागि न्यूनतम मापदण्ड तोक्छ।",
-    expJa: "建築基準法は、人命・健康・財産を守るための建物の最低基準を定めた法律です（テキストp.19）。",
-    expId: "Tujuan UU Standar Bangunan adalah melindungi nyawa, kesehatan, dan aset masyarakat.",
-    expNe: "भूकम्प वा आगलागीबाट भवन र नागरिकको सुरक्षा गर्न भवन निर्माणको न्यूनतम मापदण्ड निर्धारण गरिन्छ।"
+    hintId: "Diskriminasi upah atau perlakuan berdasarkan kebangsaan asing sangat dilarang!",
+    hintNe: "विदेशी भएकै कारणले तलब वा कामको सुविधामा भेदभाव गर्नु गैरकानुनी हो।",
+    expJa: "国籍、信条、社会的身分を理由とする差別的取扱いは禁止されています（テキストp.8）。",
+    expId: "Pengusaha dilarang memperlakukan pekerja secara diskriminatif berdasarkan kebangsaan asing.",
+    expNe: "श्रम मानक ऐनले राष्ट्रियता वा धार्मिक आस्थाका आधारमा भेदभाव गर्न पूर्ण रोक लगाएको छ।"
   },
   {
     id: 3,
-    cat: "第2章：2.4 廃棄物処理法 (p.19)",
-    q: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>から<ruby>出<rt>で</rt></ruby>る「<ruby>産業廃棄物<rt>さんぎょうはいきぶつ</rt></ruby>（ゴミ）」の <ruby>処理<rt>しょり</rt></ruby>について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+    cat: "2.1.1 労働基準法：労働条件の明示 (p.8-9)",
+    q: "<ruby>使用者<rt>しようしゃ</rt></ruby>（<ruby>会社<rt>かいしゃ</rt></ruby>）が <ruby>労働者<rt>ろうどうしゃ</rt></ruby>に **<ruby>必<rt>かなら</rt></ruby>ず<ruby>明示<rt>めいじ</rt></ruby>（<ruby>知<rt>し</rt></ruby>らせる）しなければならない6<ruby>項目<rt>こうもく</rt></ruby>**に <ruby>含<rt>ふく</rt></ruby>まれないものは どれですか。",
     options: [
-      "<ruby>余<rt>あま</rt></ruby>った<ruby>木材<rt>もくざい</rt></ruby>やゴミは、<ruby>処分<rt>しょぶん</rt></ruby><ruby>費用<rt>ひよう</rt></ruby>を<ruby>節約<rt>せつやく</rt></ruby>するために<ruby>現場<rt>げんば</rt></ruby>の<ruby>隅<rt>すみ</rt></ruby>で<ruby>燃<rt>も</rt></ruby>やしてもよい。",
-      "<ruby>現場<rt>げんば</rt></ruby>から<ruby>出<rt>で</rt></ruby>たゴミは、<ruby>種類<rt>しゅるい</rt></ruby>ごとにきちんと<ruby>分別<rt>ぶんべつ</rt></ruby>して<ruby>保管<rt>ほかん</rt></ruby>しなければならない。",
-      "<ruby>産業廃棄物<rt>さんぎょうはいきぶつ</rt></ruby>を<ruby>運搬<rt>うんぱん</rt></ruby>・<ruby>処分<rt>しょぶん</rt></ruby>するときは、「マニフェスト（<ruby>管理票<rt>かんりひょう</rt></ruby>）」を<ruby>交付<rt>こうふ</rt></ruby>して<ruby>管理<rt>かんり</rt></ruby>する。",
-      "<ruby>工事<rt>こうじ</rt></ruby>で<ruby>発生<rt>はっせい</rt></ruby>したゴミの<ruby>処理<rt>しょり</rt></ruby><ruby>責任<rt>せきにん</rt></ruby>は、<ruby>原則<rt>げんそく</rt></ruby>として「<ruby>元請<rt>もとうけ</rt></ruby><ruby>業者<rt>ぎょうしゃ</rt></ruby>」にある。"
+      "<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>役員<rt>やくいん</rt></ruby>や<ruby>職長<rt>しょくちょう</rt></ruby>の「<ruby>趣味<rt>しゅみ</rt></ruby>や<ruby>家族<rt>かぞく</rt></ruby><ruby>構成<rt>こうせい</rt></ruby>」",
+      "<ruby>労働契約<rt>ろうどうけいやく</rt></ruby>の<ruby>期間<rt>きかん</rt></ruby>、および<ruby>契約<rt>けいやく</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>する<ruby>場合<rt>ばあい</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>",
+      "<ruby>就業場所<rt>しゅうぎょうばしょ</rt></ruby>、および<ruby>従事<rt>じゅうじ</rt></ruby>する<ruby>業務<rt>ぎょうむ</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>",
+      "<ruby>終業<rt>しゅうぎょう</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>、<ruby>残業<rt>ざんぎょう</rt></ruby>の<ruby>有無<rt>うむ</rt></ruby>、<ruby>休憩時間<rt>きゅうけいじかん</rt></ruby>、<ruby>休日<rt>きゅうじつ</rt></ruby>、<ruby>休暇<rt>きゅうか</rt></ruby>、<ruby>賃金<rt>ちんぎん</rt></ruby>、<ruby>退職<rt>たいしょく</rt></ruby>・<ruby>解雇<rt>かいこ</rt></ruby>に<ruby>関<rt>かん</rt></ruby>する<ruby>事項<rt>じこう</rt></ruby>"
     ],
     answer: 0,
-    hintId: "Membakar sampah proyek secara sembarangan (No-yaki) dilarang keras oleh hukum!",
-    hintNe: "निर्माण स्थलमा फोहोर जलाउनु (नोयाकी) कानुनी रूपमा पूर्ण निषेधित छ।",
-    expJa: "廃棄物処理法において、現場でのゴミの野焼き（焼却）や不法投棄は固く禁止されています（テキストp.19）。",
-    expId: "Membakar sisa material proyek secara terbuka dilarang keras oleh UU Pengolahan Limbah.",
-    expNe: "फोहोर विसर्जन ऐन अनुसार कार्यस्थलमा जथाभावी फोहोर जलाउन वा फाल्न पाइँदैन।"
+    hintId: "Poin yang wajib dinyatakan meliputi periode kontrak, lokasi kerja, jenis tugas, jam kerja, upah, dan aturan PHK.",
+    hintNe: "काम सम्झौतामा कामको ठाउँ, कामको विवरण, तलब, कामको समय र बिदा आदि अनिवार्य लेखिएको हुनुपर्छ।",
+    expJa: "明示義務があるのは、契約期間、更新基準、就業場所・業務内容、労働時間・休日、賃金、退職・解雇の6項目です（テキストp.8-9）。",
+    expId: "Pemberi kerja wajib menyatakan 6 butir persyaratan kerja utama secara tertulis saat merekrut pekerja.",
+    expNe: "कम्पनीले कामदार भर्ना गर्दा कामको सर्त सम्बन्धी ६ बुँदा अनिवार्य रूपमा स्पष्ट खुलाउनुपर्छ।"
   },
   {
     id: 4,
-    cat: "第2章：2.5 建設リサイクル法 (p.20)",
-    q: "「<ruby>建設<rt>けんせつ</rt></ruby>リサイクル<ruby>法<rt>ほう</rt></ruby>」で、<ruby>分別<rt>ぶんべつ</rt></ruby><ruby>解体<rt>かいたい</rt></ruby>と <ruby>再資源化<rt>さいしげんか</rt></ruby>が **<ruby>義務<rt>ぎむ</rt></ruby>づけられている<ruby>特定<rt>とくてい</rt></ruby><ruby>建設<rt>けんせつ</rt></ruby><ruby>資材<rt>しざい</rt></ruby>**の <ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせとして <ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+    cat: "2.1.1 労働基準法：賠償予定の禁止・解雇・賃金5原則 (p.9)",
+    q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>の ルールについて、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "コンクリート、コンクリート<ruby>及<rt>およ</rt></ruby>び<ruby>鉄<rt>てつ</rt></ruby>から<ruby>成<rt>な</rt></ruby>る<ruby>建設<rt>けんせつ</rt></ruby><ruby>資材<rt>しざい</rt></ruby>、<ruby>木材<rt>もくざい</rt></ruby>、アスファルト・コンクリート",
-      "<ruby>壁紙<rt>かべがみ</rt></ruby>、プラスチックパイプ、<ruby>断熱材<rt>だんねつざい</rt></ruby>、タイル",
-      "<ruby>板<rt>いた</rt></ruby>ガラス、<ruby>塗料<rt>とりょう</rt></ruby>、アルミサッシ、<ruby>接着剤<rt>せっちゃくざい</rt></ruby>",
-      "<ruby>石膏<rt>せっこう</rt></ruby>ボード、レンガ、<ruby>畳<rt>たたみ</rt></ruby>、ブルーシート"
+      "<ruby>解雇<rt>かいこ</rt></ruby>は<ruby>少<rt>すく</rt></ruby>なくとも30<ruby>日前<rt>にちまえ</rt></ruby>に<ruby>予告<rt>よこく</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>であり、<ruby>賃金<rt>ちんぎん</rt></ruby>は「<ruby>通貨<rt>つうか</rt></ruby>で、<ruby>直接<rt>ちょくせつ</rt></ruby>、<ruby>全額<rt>ぜんがく</rt></ruby>を、<ruby>毎月<rt>まいつき</rt></ruby>1<ruby>回以上<rt>かいいじょう</rt></ruby>、<ruby>一定<rt>いってい</rt></ruby>の<ruby>期日<rt>きじつ</rt></ruby>に」<ruby>支払<rt>しはら</rt></ruby>わなければならない。",
+      "「<ruby>仕事<rt>しごと</rt></ruby>をやめたら<ruby>違約金<rt>いやくきん</rt></ruby>として50<ruby>万円<rt>まんえん</rt></ruby><ruby>払<rt>はら</rt></ruby>う」という<ruby>契約<rt>けいやく</rt></ruby>をあらかじめ<ruby>結<rt>むす</rt></ruby>んでもよい。",
+      "<ruby>仕事中<rt>しごとちゅう</rt></ruby>のケガで<ruby>休業<rt>きゅうぎょう</rt></ruby>している<ruby>期間中<rt>きかんちゅう</rt></ruby>であっても、<ruby>会社<rt>かいしゃ</rt></ruby>はいつでも<ruby>即日<rt>そくじつ</rt></ruby><ruby>解雇<rt>かいこ</rt></ruby>できる。",
+      "<ruby>給料<rt>きゅうりょう</rt></ruby>は<ruby>現金<rt>げんきん</rt></ruby>ではなく、お<ruby>米<rt>こめ</rt></ruby>や<ruby>商品券<rt>しょうひんけん</rt></ruby>などの<ruby>品物<rt>しなもの</rt></ruby>だけで<ruby>支払<rt>しはら</rt></ruby>うことができる。"
     ],
     answer: 0,
-    hintId: "4 material daur ulang wajib: Beton, Beton bertulang, Kayu, dan Aspal.",
-    hintNe: "पुनर्प्रयोग अनिवार्य गरिएका ४ सामग्रीहरू: कंक्रीट, आरसीसी, काठ, र अस्फाल्ट हुन्।",
-    expJa: "建設リサイクル法では、コンクリート、鉄筋コンクリート、木材、アスファルト・コンクリートの4品目が特定建設資材です（テキストp.20）。",
-    expId: "Empat material wajib daur ulang adalah beton, beton bertulang, kayu, dan aspal beton.",
-    expNe: "कंक्रीट, आरसीसी, काठ, र अस्फाल्टलाई अनिवार्य छुट्याएर पुनः प्रयोग गर्नुपर्छ।"
+    hintId: "PHK butuh pemberitahuan 30 hari sebelumnya, dan upah wajib dibayar mata uang tunai secara penuh langsung ke pekerja.",
+    hintNe: "कामबाट निकाल्न ३० दिन अघि सूचना दिनुपर्छ र तलब ५ नियम अनुसार नगद मुद्रामा सिधै दिनुपर्छ।",
+    expJa: "解雇は30日前の予告が必要で、賃金支払いの5原則（通貨、直接、全額、毎月1回以上、一定期日）が定められています。賠償予定は違法です（テキストp.9）。",
+    expId: "PHK wajib diberitahukan minimal 30 hari sebelumnya, dan upah harus dibayarkan tunai sesuai 5 prinsip upah.",
+    expNe: "कामबाट हटाउँदा ३० दिन अघि पूर्वसूचना दिनुपर्छ र तलब जापानी मुद्रामा कामदारलाई सिधै पूरै भुक्तानी गर्नुपर्छ।"
   },
   {
     id: 5,
-    cat: "第2章：2.6 大気汚染防止法 (p.20)",
-    q: "「<ruby>大気汚染防止法<rt>たいきおせんぼうしほう</rt></ruby>」に おいて、<ruby>解体<rt>かいたい</rt></ruby>や<ruby>改修<rt>かいしゅう</rt></ruby><ruby>工事<rt>こうじ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に **<ruby>事前<rt>じぜん</rt></ruby><ruby>調査<rt>ちょうさ</rt></ruby>や <ruby>飛散<rt>ひさん</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>が <ruby>厳<rt>きび</rt></ruby>しく<ruby>義務<rt>ぎむ</rt></ruby>づけられている<ruby>物質<rt>ぶっしつ</rt></ruby>**は どれですか。",
+    cat: "2.1.1 労働基準法：労働時間・休憩・36協定割増 (p.9-10)",
+    q: "<ruby>法定労働時間<rt>ほうていろうどうじかん</rt></ruby>と <ruby>残業<rt>ざんぎょう</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "アスベスト（<ruby>石綿<rt>いしわた</rt></ruby>）",
-      "<ruby>二酸化炭素<rt>にさんかたんそ</rt></ruby>",
-      "<ruby>天然<rt>てんねん</rt></ruby>の<ruby>砂利<rt>じゃり</rt></ruby>",
-      "<ruby>錆<rt>さび</rt></ruby><ruby>止<rt>ど</rt></ruby>めペイント"
+      "<ruby>労働時間<rt>ろうどうじかん</rt></ruby>は<ruby>原則<rt>げんそく</rt></ruby>「1<ruby>週<rt>しゅう</rt></ruby>40<ruby>時間<rt>じかん</rt></ruby>、1<ruby>日<rt>にち</rt></ruby>8<ruby>時間<rt>じかん</rt></ruby>」以内で、<ruby>残業<rt>ざんぎょう</rt></ruby>には36<ruby>協定<rt>きょうてい</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>であり、<ruby>通常残業<rt>つうじょうざんぎょう</rt></ruby>は25％<ruby>以上<rt>いじょう</rt></ruby>、<ruby>休日出勤<rt>きゅうじつしゅっきん</rt></ruby>は35％<ruby>以上<rt>いじょう</rt></ruby>の<ruby>割増賃金<rt>わりましちんぎん</rt></ruby>となる。",
+      "<ruby>労働時間<rt>ろうどうじかん</rt></ruby>が8<ruby>時間<rt>じかん</rt></ruby>を<ruby>超<rt>こ</rt></ruby>える<ruby>場合<rt>ばあい</rt></ruby>でも、<ruby>休憩時間<rt>きゅうけいじかん</rt></ruby>は15<ruby>分<rt>ふん</rt></ruby>だけ<ruby>与<rt>あた</rt></ruby>えればよい。",
+      "<ruby>休日<rt>きゅうじつ</rt></ruby>に<ruby>出勤<rt>しゅっきん</rt></ruby>して<ruby>働<rt>はたら</rt></ruby>いたときでも、<ruby>平日<rt>へいじつ</rt></ruby>と<ruby>全<rt>まった</rt></ruby>く<ruby>同<rt>おな</rt></ruby>じ<ruby>時給<rt>じきゅう</rt></ruby>（<ruby>割増<rt>わりまし</rt></ruby>なし）でよい。",
+      "<ruby>会社<rt>かいしゃ</rt></ruby>は36<ruby>協定<rt>きょうてい</rt></ruby>を<ruby>結<rt>むす</rt></ruby>んでいなくても、1<ruby>日<rt>にち</rt></ruby>15<ruby>時間<rt>じかん</rt></ruby>まで<ruby>自由<rt>じゆう</rt></ruby>に<ruby>残業<rt>ざんぎょう</rt></ruby>させてよい。"
     ],
     answer: 0,
-    hintId: "Bahan berbahaya yang harus diperiksa sebelum pembongkaran gedung adalah Asbes (Ishiwata).",
-    hintNe: "भवन भत्काउनु अघि अनिवार्य रूपमा जाँच गरिनुपर्ने घातक पदार्थ 'एस्बेस्टस' (इशिवाता) हो।",
-    expJa: "解体・改修時には、重大な健康被害を及ぼす「アスベスト（石綿）」の事前調査と飛散防止が義務付けられています（テキストp.20）。",
-    expId: "Asbes (Ishiwata) adalah zat berbahaya bagi paru-paru yang wajib diperiksa sebelum proyek pembongkaran.",
-    expNe: "एस्बेस्टसको धुलोले क्यान्सर निम्त्याउने भएकाले संरचना भत्काउनु अघि यसको उपस्थिति अनिवार्य जाँच गर्नुपर्छ।"
+    hintId: "Jam kerja legal 8 jam/hari (40 jam/minggu). Lembur butuh Perjanjian 36 (+25%), kerja di hari libur resmi (+35%).",
+    hintNe: "कामको समय दिनको ८ घण्टा हो। ओभरटाइमका लागि ३६ सम्झौता चाहिन्छ र सामान्य ओभरटाइममा २५% तथा बिदाको काममा ३५% थप ज्याला पाउनुपर्छ।",
+    expJa: "労働時間は原則週40時間・1日8時間です。8時間超は1時間の休憩が必要で、通常残業は25%以上、休日出勤は35%以上の割増が必要です（テキストp.9-10）。",
+    expId: "Batas kerja standar 8 jam/hari. Lembur biasa minimal +25%, kerja hari libur minimal +35%.",
+    expNe: "कानुनी कामको समय दिनको ८ घण्टा हो र ओभरटाइम गर्दा कानुनी रूपमा अतिरिक्त पारिश्रमिक पाउनुपर्छ।"
   },
   {
     id: 6,
-    cat: "第2章：2.7 騒音規制法・振動防止法 (p.21)",
-    q: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>での「<ruby>騒音<rt>そうおん</rt></ruby>・<ruby>振動<rt>しんどう</rt></ruby>」を <ruby>防<rt>ふせ</rt></ruby>ぐための **<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>配慮<rt>はいりょ</rt></ruby>**として、<ruby>適切<rt>てきせつ</rt></ruby>なものは どれですか。",
+    cat: "2.1.1 労働基準法：年次有給休暇 (p.10)",
+    q: "「<ruby>年次有給休暇<rt>ねんじゆうきゅうきゅうか</rt></ruby>」の ルールとして、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>低騒音<rt>ていそうおん</rt></ruby>・<ruby>低振動<rt>ていしんどう</rt></ruby><ruby>型<rt>がた</rt></ruby>の<ruby>機械<rt>きかい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>い、<ruby>大<rt>おお</rt></ruby>きな<ruby>音<rt>おと</rt></ruby>や<ruby>揺<rt>ゆ</rt></ruby>れが<ruby>出<rt>で</rt></ruby>る<ruby>作業<rt>さぎょう</rt></ruby>は <ruby>早朝<rt>そうちょう</rt></ruby>や<ruby>深夜<rt>しんや</rt></ruby>を<ruby>避<rt>さ</rt></ruby>けて<ruby>昼間<rt>ひるま</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>う。",
-      "<ruby>近所<rt>きんじょ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>気<rt>き</rt></ruby>づかれないよう、<ruby>夜中<rt>よなか</rt></ruby>の2<ruby>時<rt>じ</rt></ruby>に<ruby>大型<rt>おおがた</rt></ruby>ブレーカーでコンクリートを<ruby>壊<rt>こわ</rt></ruby>す。",
-      "<ruby>近隣<rt>きんりん</rt></ruby>からの<ruby>苦情<rt>くじょう</rt></ruby>はすべて<ruby>無視<rt>むし</rt></ruby>し、どんなにうるさい<ruby>音<rt>おと</rt></ruby>でも<ruby>防音<rt>ぼうおん</rt></ruby>シートは<ruby>張<rt>は</rt></ruby>らない。",
-      "<ruby>音<rt>おと</rt></ruby>の<ruby>大<rt>おお</rt></ruby>きな<ruby>機械<rt>きかい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うときは、トラックのクラクションを<ruby>鳴<rt>な</rt></ruby>らし<ruby>続<rt>つづ</rt></ruby>ける。"
+      "<ruby>雇<rt>やと</rt></ruby>い<ruby>入<rt>い</rt></ruby>れから6か月<ruby>間継続勤務<rt>かんけいぞくきんむ</rt></ruby>し、<ruby>全労働日<rt>ぜんろうどうび</rt></ruby>の8<ruby>割以上出勤<rt>わりいじょうしゅっきん</rt></ruby>した<ruby>労働者<rt>ろうどうしゃ</rt></ruby>には「10<ruby>労働日<rt>ろうどうび</rt></ruby>」の<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>が<ruby>与<rt>あた</rt></ruby>えられ、<ruby>有休<rt>ゆうきゅう</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>取<rt>と</rt></ruby>りは<ruby>違法<rt>いほう</rt></ruby>である。",
+      "<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>は<ruby>使<rt>つか</rt></ruby>わせずに、すべて<ruby>会社<rt>かいしゃ</rt></ruby>がお<ruby>金<rt>かね</rt></ruby>で<ruby>強制買<rt>きょうせいか</rt></ruby>い<ruby>取<rt>と</rt></ruby>りすることが<ruby>法律<rt>ほうりつ</rt></ruby>で<ruby>義務<rt>ぎむ</rt></ruby>づけられている。",
+      "<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>技能者<rt>ぎのうしゃ</rt></ruby>には、<ruby>何年<rt>なんねん</rt></ruby><ruby>働<rt>はたら</rt></ruby>いても<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>を1<ruby>日<rt>にち</rt></ruby>も<ruby>与<rt>あた</rt></ruby>えなくてよい。",
+      "<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>を<ruby>取得<rt>しゅとく</rt></ruby>して<ruby>休<rt>やす</rt></ruby>んだ<ruby>日<rt>ひ</rt></ruby>は、その<ruby>日<rt>ひ</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>をゼロ（<ruby>無給<rt>むきゅう</rt></ruby>）にしなければならない。"
     ],
     answer: 0,
-    hintId: "Gunakan mesin rendah bising dan hindari pekerjaan bising saat larut malam/pagi buta.",
-    hintNe: "आवाज कम गर्ने मेसिन प्रयोग गर्ने र बिहान सबेरै वा राति चर्को आवाज आउने काम नगर्ने।",
-    expJa: "騒音規制法等に基づき、深夜の作業を避け、低騒音型建設機械や防音シートを使用します（テキストp.21）。",
-    expId: "Proyek harus mematuhi aturan kebisingan dengan memakai mesin berstandar ramah suara dan mengatur jadwal kerja.",
-    expNe: "आवाज नियन्त्रण ऐन अनुसार रातिको समयमा चर्को आवाज आउने काम गर्न पाइँदैन।"
+    hintId: "Bekerja 6 bulan berturut-turut dengan kehadiran 80% berhak mendapat cuti berbayar 10 hari. Cuti tidak boleh dibeli paksa.",
+    hintNe: "६ महिना काम गरी ८०% उपस्थिति भएमा १० दिन सवेतन बिदा पाइन्छ। यसलाई पैसामा किन्न पाइँदैन।",
+    expJa: "6か月継続勤務・8割以上出勤で10日が付与され、その後勤続年数に応じて加算されます。使用者による有給休暇の買い取りは違法です（テキストp.10）。",
+    expId: "Pekerja berhak atas 10 hari cuti tahunan berbayar (Yukyu) setelah 6 bulan masa kerja.",
+    expNe: "६ महिना काम गरेपछि १० दिनको तलबसहित बिदा पाउनुपर्छ र यो बिदा पैसामा साट्न पाइँदैन।"
   },
   {
     id: 7,
-    cat: "第2章：2.8 水質汚濁防止法 (p.21)",
-    q: "「<ruby>水質汚濁防止法<rt>すいしつおだくぼうしほう</rt></ruby>」を <ruby>守<rt>まも</rt></ruby>るため、<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>で **<ruby>絶対<rt>ぜったい</rt></ruby>に やってはならないこと**は どれですか。",
+    cat: "2.1.2 労働安全衛生法：安全衛生旗と労災原因 (p.11-12)",
+    q: "<ruby>労働安全衛生法<rt>ろうどうあんぜんえいせいほう</rt></ruby>および <ruby>建設業<rt>けんせつぎょう</rt></ruby>の <ruby>安全対策<rt>あんぜんたいさく</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>生<rt>なま</rt></ruby>コンクリートの<ruby>洗<rt>あら</rt></ruby>い<ruby>水<rt>みず</rt></ruby>や <ruby>油<rt>あぶら</rt></ruby>の<ruby>混<rt>ま</rt></ruby>ざった<ruby>汚水<rt>おすい</rt></ruby>を、そのまま<ruby>道路<rt>どうろ</rt></ruby>の<ruby>側溝<rt>そっこう</rt></ruby>や<ruby>川<rt>かわ</rt></ruby>に<ruby>流<rt>なが</rt></ruby>す。",
-      "<ruby>現場<rt>げんば</rt></ruby>のにごった<ruby>水<rt>みず</rt></ruby>を、フィルターなどでキレイにしてから<ruby>排水<rt>はいすい</rt></ruby>する。",
-      "<ruby>油<rt>あぶら</rt></ruby>を<ruby>使<rt>つか</rt></ruby>う<ruby>機械<rt>きかい</rt></ruby>の<ruby>下<rt>した</rt></ruby>にオイルパンを<ruby>置<rt>お</rt></ruby>き、<ruby>地面<rt>じめん</rt></ruby>へのオイル<ruby>漏<rt>も</rt></ruby>れを<ruby>防<rt>ふせ</rt></ruby>ぐ。",
-      "<ruby>燃料<rt>ねんりょう</rt></ruby>がこぼれたときに<ruby>備<rt>そな</rt></ruby>えて、<ruby>油<rt>あぶら</rt></ruby><ruby>吸着<rt>きゅうちやく</rt></ruby>マットを<ruby>現場<rt>げんば</rt></ruby>に<ruby>置<rt>お</rt></ruby>いておく。"
+      "<ruby>建設業<rt>けんせつぎょう</rt></ruby>の<ruby>死亡災害<rt>しぼうさいがい</rt></ruby>で<ruby>最<rt>もっと</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いのは「<ruby>墜落<rt>ついらく</rt></ruby>・<ruby>転落<rt>てんらく</rt></ruby>」であり、<ruby>幅<rt>はば</rt></ruby>40cm<ruby>以上<rt>いじょう</rt></ruby>の<ruby>作業床<rt>さぎょうゆか</rt></ruby>やフルハーネス<ruby>型<rt>がた</rt></ruby>の<ruby>使用<rt>しよう</rt></ruby>が<ruby>原則<rt>げんそく</rt></ruby>とされている。",
+      "<ruby>現場<rt>げんば</rt></ruby>に<ruby>掲<rt>かか</rt></ruby>げる「<ruby>安全衛生旗<rt>あんぜんえいせいき</rt></ruby>」は<ruby>単<rt>たん</rt></ruby>なる<ruby>飾<rt>かざ</rt></ruby>りであり、<ruby>安全管理<rt>あんぜんかんり</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>はない。",
+      "<ruby>夏<rt>なつ</rt></ruby>の<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby><ruby>予防<rt>よぼう</rt></ruby>のために、<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>水<rt>みず</rt></ruby>や<ruby>塩飴<rt>しおあめ</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えることは<ruby>禁止<rt>きんし</rt></ruby>されている。",
+      "<ruby>高所作業<rt>こうしょさぎょう</rt></ruby>では、<ruby>安全帯<rt>あんぜんたい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに<ruby>手<rt>て</rt></ruby>すりだけに<ruby>頼<rt>たよ</rt></ruby>って<ruby>作業<rt>さぎょう</rt></ruby>するのが<ruby>基本<rt>きほん</rt></ruby>である。"
     ],
     answer: 0,
-    hintId: "Air cucian semen atau cairan berminyak dilarang keras dibuang ke saluran air tanpa penyaringan.",
-    hintNe: "सिमेन्ट धोएको पानी वा तेल मिसिएको पानी सिधै नालामा बगाउनु अपराध हो।",
-    expJa: "生コンの強アルカリ廃水や油分を含んだ水を未処理で側溝や河川へ流すことは法律で禁じられています（テキストp.21）。",
-    expId: "Air limbah semen dan cairan berminyak wajib disaring/dinetralkan terlebih dahulu.",
-    expNe: "कंक्रीट धोएको पानी र तेल मिसिएको पानी प्रशोधन नगरी खोलानालामा मिसाउन पाइँदैन।"
+    hintId: "Penyebab kematian tertinggi di konstruksi adalah 'Jatuh/Terjatuh' (Tsuiraku/Tenraku), wajib lantai kerja min 40cm dan full-harness.",
+    hintNe: "निर्माण क्षेत्रमा मृत्युको सबैभन्दा ठूलो कारण 'खस्नु/लड्नु' हो। कम्तीमा ४० सेमीको कार्यथलो र फुल-हार्नेस अनिवार्य हुन्छ।",
+    expJa: "建設業の死亡災害は「墜落・転落」が圧倒的に多く、幅40cm以上の作業床やフルハーネス型の原則使用が義務付けられています（テキストp.11-12）。",
+    expId: "Kecelakaan jatuh/terpeleset mendominasi fatalitas di konstruksi. Lantai kerja min 40 cm dan full harness diwajibkan secara hukum.",
+    expNe: "निर्माणमा हुने मृत्युमध्ये लडेर हुने दुर्घटना सबैभन्दा धेरै हुन्छ, त्यसैले फुल-हार्नेस सेफ्टी बेल्ट लगाउनु अनिवार्य छ।"
   },
   {
     id: 8,
-    cat: "第2章：2.9 消防法 (p.21)",
-    q: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>で「<ruby>溶接<rt>ようせつ</rt></ruby>」や「<ruby>切断<rt>せつだん</rt></ruby>」などの **<ruby>火気<rt>かき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>う<ruby>作業<rt>さぎょう</rt></ruby>**を <ruby>行<rt>おこな</rt></ruby>うときの <ruby>注意<rt>ちゅうい</rt></ruby>として、<ruby>適切<rt>てきせつ</rt></ruby>なものは どれですか。",
+    cat: "2.1.3 最低賃金法 (p.13)",
+    q: "「<ruby>最低賃金法<rt>さいていちんぎんほう</rt></ruby>」についての **<ruby>正<rt>ただ</rt></ruby>しい<ruby>説明<rt>せつめい</rt></ruby>**は どれですか。",
     options: [
-      "<ruby>火花<rt>ひばな</rt></ruby>が<ruby>飛<rt>と</rt></ruby>ぶ<ruby>範囲<rt>はんい</rt></ruby>から<ruby>燃<rt>も</rt></ruby>えやすいものを<ruby>片付<rt>かたづ</rt></ruby>け、<ruby>消火器<rt>しょうかき</rt></ruby>やすぐ<ruby>使<rt>つか</rt></ruby>える<ruby>水<rt>みず</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>する。",
-      "<ruby>火花<rt>ひばな</rt></ruby>を<ruby>散<rt>ち</rt></ruby>らす<ruby>作業<rt>さぎょう</rt></ruby>のすぐ<ruby>横<rt>よこ</rt></ruby>に、ガソリンやシンナーをフタを<ruby>開<rt>あ</rt></ruby>けたまま<ruby>置<rt>お</rt></ruby>く。",
-      "<ruby>作業<rt>さぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>火気<rt>かき</rt></ruby>の<ruby>残<rt>のこ</rt></ruby>りを<ruby>確認<rt>かくにん</rt></ruby>せず すぐに<ruby>帰宅<rt>きたく</rt></ruby>する。",
-      "<ruby>現場<rt>げんば</rt></ruby>のどこでも<ruby>好<rt>す</rt></ruby>きな<ruby>場所<rt>ばしょ</rt></ruby>でタバコを<ruby>吸<rt>す</rt></ruby>いながら<ruby>作業<rt>さぎょう</rt></ruby>する。"
+      "<ruby>物価<rt>ぶっか</rt></ruby>や<ruby>賃金水準<rt>ちんぎんすいじゅん</rt></ruby>をふまえ、<ruby>都道府県単位<rt>とどうふけんたんい</rt></ruby>で「<ruby>地域別最低賃金<rt>ちいきべつさいていちんぎん</rt></ruby>」が<ruby>決<rt>き</rt></ruby>められており、すべての<ruby>雇用労働者<rt>こようろうどうしゃ</rt></ruby>に<ruby>適用<rt>てきよう</rt></ruby>される。",
+      "<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>技能実習生<rt>ぎのうじっしゅうせい</rt></ruby>や<ruby>特定技能者<rt>とくていぎのうしゃ</rt></ruby>には、<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>より<ruby>低<rt>ひく</rt></ruby>い<ruby>給料<rt>きゅうりょう</rt></ruby>を<ruby>支払<rt>しはら</rt></ruby>っても<ruby>罰則<rt>ばっそく</rt></ruby>はない。",
+      "<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>の<ruby>金額<rt>きんがく</rt></ruby>は、<ruby>全国<rt>ぜんこく</rt></ruby>どこの<ruby>県<rt>けん</rt></ruby>でも<ruby>全<rt>まった</rt></ruby>く<ruby>同<rt>おな</rt></ruby>じ1つの<ruby>金額<rt>きんがく</rt></ruby>に<ruby>統一<rt>とういつ</rt></ruby>されている。",
+      "<ruby>会社<rt>かいしゃ</rt></ruby>が「<ruby>赤字<rt>あかじ</rt></ruby>だから」と<ruby>言<rt>い</rt></ruby>えば、<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>を<ruby>下回<rt>したまわ</rt></ruby>る<ruby>給料<rt>きゅうりょう</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>き<ruby>下<rt>さ</rt></ruby>げることができる。"
     ],
     answer: 0,
-    hintId: "Saat memakai api/las, jauhkan benda mudah terbakar dan siapkan APAR (Shoukaki).",
-    hintNe: "आगो प्रयोग हुने ठाउँबाट जल्ने वस्तु हटाउने र नजिकै अग्निनियन्त्रक यन्त्र तयारी अवस्थामा राख्नुपर्छ।",
-    expJa: "火気使用時は周囲の可燃物養生・撤去、消火器の配置、作業後の残火確認が必須です（テキストp.21）。",
-    expId: "Bekerja menggunakan api membutuhkan pembersihan bahan mudah terbakar dan persiapan alat pemadam.",
-    expNe: "आगोको काम गर्दा निभाउने उपकरण साथमा राख्ने र काम सकिएपछि आगो पूर्ण निभेको यकिन गर्नुपर्छ।"
+    hintId: "Upah minimum ditetapkan per prefektur dan berlaku untuk semua pekerja tanpa terkecuali, melanggar akan dikenai sanksi pidana.",
+    hintNe: "न्यूनतम ज्याला प्रिफेक्चर अनुसार तोकिएको हुन्छ र विदेशी लगायत सबै श्रमिकलाई अनिवार्य लागु हुन्छ।",
+    expJa: "最低賃金は都道府県単位で定められ、雇用形態や職種、国籍に関係なく適用されます。下回る場合は罰則規定があります（テキストp.13）。",
+    expId: "Upah minimum ditetapkan berdasarkan wilayah prefektur dan wajib dipatuhi oleh seluruh pengusaha.",
+    expNe: "न्यूनतम ज्याला प्रिफेक्चर अनुसार फरक हुन्छ र यो भन्दा कम तलब दिनु गैरकानुनी हो।"
   },
   {
     id: 9,
-    cat: "第2章：2.10〜2.12 インフラ関連法 (p.22-23)",
-    q: "<ruby>現場<rt>げんば</rt></ruby>の <ruby>地中<rt>ちちゅう</rt></ruby>（<ruby>地面<rt>じめん</rt></ruby>の<ruby>下<rt>した</rt></ruby>）を <ruby>掘<rt>ほ</rt></ruby>り<ruby>進<rt>すす</rt></ruby>める **「<ruby>掘削<rt>くっさく</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>」**で、**<ruby>最<rt>もっと</rt></ruby>も<ruby>注意<rt>ちゅうい</rt></ruby>すべきこと**は どれですか。",
+    cat: "2.1.4 労働者災害補償保険法 (労災保険) (p.13-14)",
+    q: "「<ruby>労災保険<rt>ろうさいほけん</rt></ruby>」についての **<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>埋設<rt>まいせつ</rt></ruby>されているガス<ruby>管<rt>かん</rt></ruby>や<ruby>水道管<rt>すいどうかん</rt></ruby>の<ruby>位置<rt>いち</rt></ruby>を<ruby>図面<rt>ずめん</rt></ruby>や<ruby>試掘<rt>しくつ</rt></ruby>で<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>破損<rt>はそん</rt></ruby>による<ruby>事故<rt>じこ</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐ。",
-      "<ruby>重機<rt>じゅうき</rt></ruby>でガス<ruby>管<rt>かん</rt></ruby>を 引っ掛けて<ruby>破断<rt>はだん</rt></ruby>させても、そのまま<ruby>土<rt>つち</rt></ruby>をかぶせて<ruby>隠<rt>かく</rt></ruby>す。",
-      "<ruby>水道管<rt>すいどうかん</rt></ruby>から<ruby>水<rt>みず</rt></ruby>が<ruby>噴<rt>ふ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しても、そのまま<ruby>放置<rt>ほうち</rt></ruby>する。",
-      "<ruby>配管<rt>はいかん</rt></ruby><ruby>図面<rt>ずめん</rt></ruby>を<ruby>見<rt>み</rt></ruby>ずに、スピードだけを<ruby>重視<rt>じゅうし</rt></ruby>して<ruby>勢<rt>いきお</rt></ruby>いよく<ruby>掘<rt>ほ</rt></ruby>る。"
+      "<ruby>業務災害<rt>ぎょうむさいがい</rt></ruby>だけでなく<ruby>通勤災害<rt>つうきんさいがい</rt></ruby>も<ruby>対象<rt>たいしょう</rt></ruby>となり、<ruby>保険料<rt>ほけんりょう</rt></ruby>は「<ruby>全額事業主<rt>ぜんがくじぎょうぬし</rt></ruby>の<ruby>負担<rt>ふたん</rt></ruby>」であり、<ruby>労災<rt>ろうさい</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>す「<ruby>労災<rt>ろうさい</rt></ruby>かくし」は<ruby>犯罪<rt>はんざい</rt></ruby>である。",
+      "<ruby>労災保険<rt>ろうさいほけん</rt></ruby>の<ruby>保険料<rt>ほけんりょう</rt></ruby>は、<ruby>毎月<rt>まいつき</rt></ruby><ruby>全額<rt>ぜんがく</rt></ruby>を<ruby>労働者<rt>ろうどうしゃ</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>から<ruby>天引き<rt>てんびき</rt></ruby>して<ruby>集<rt>あつ</rt></ruby>めなければならない。",
+      "<ruby>現場<rt>げんば</rt></ruby>でケガをした<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>迷惑<rt>めいわく</rt></ruby>がかかるので<ruby>健康保険<rt>けんこうほけん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>って<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くのが<ruby>正<rt>ただ</rt></ruby>しい。",
+      "<ruby>一人親方<rt>ひとりおやかた</rt></ruby>や<ruby>中小企業<rt>ちゅうしょうきぎょう</rt></ruby>の<ruby>事業主<rt>じぎょうぬし</rt></ruby>は、どんな<ruby>場合<rt>ばあい</rt></ruby>でも<ruby>労災保険<rt>ろうさいほけん</rt></ruby>には<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>加入<rt>かにゅう</rt></ruby>できない。"
     ],
     answer: 0,
-    hintId: "Pekerjaan menggali tanah wajib memeriksa letak pipa gas dan air bawah tanah agar tidak bocor/meledak.",
-    hintNe: "जमिन खन्ने काम गर्दा ग्यास र खानेपानीको पाइप कहाँ छ भनी पहिल्यै पत्ता लगाएर दुर्घटनाबाट जोगिनुपर्छ।",
-    expJa: "埋設管破損による大事故を防ぐため、事前に図面確認や手掘りによる試掘を行います（テキストp.22-23）。",
-    expId: "Merusak pipa gas bawah tanah dapat berakibat fatal, pastikan posisi pipa sebelum menggali.",
-    expNe: "जमिनमुनिका ग्यास पाइप फुटेमा आगलागी र विस्फोट हुने खतरा हुने हुँदा होसियारीपूर्वक खन्नुपर्छ।"
+    hintId: "Premi Rousai ditanggung 100% oleh pengusaha. Menyembunyikan kecelakaan kerja (Rousai-kakushi) adalah tindak kejahatan pidana!",
+    hintNe: "रोउसाइ बिमाको प्रिमियम शतप्रतिशत कम्पनीले तिर्छ। दुर्घटना लुकाउनु (रोउसाइ काकुसी) कानुनी अपराध हो।",
+    expJa: "労災保険の保険料は全額事業主負担です。事故を隠して健康保険を使わせる「労災かくし」は安衛法違反の犯罪です。一人親方には特別加入制度があります（テキストp.13-14）。",
+    expId: "Premi asuransi kecelakaan kerja dibayar penuh oleh perusahaan. Menyembunyikan insiden kecelakaan kerja dilarang keras.",
+    expNe: "रोउसाइ बिमा प्रिमियम पूरै कम्पनीले तिर्छ। दुर्घटना भएमा ढाकछोप नगरी अनिवार्य रिपोर्ट गर्नुपर्छ।"
   },
   {
     id: 10,
-    cat: "第2章：2.13〜2.17 通信・航空・車両法等 (p.23-25)",
-    q: "<ruby>現場<rt>げんば</rt></ruby>で **クレーンを<ruby>使<rt>つか</rt></ruby>うときや 車両を<ruby>出入<rt>でい</rt></ruby>りさせるとき**の <ruby>法律<rt>ほうりつ</rt></ruby><ruby>上<rt>じょう</rt></ruby>のルールとして、<ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+    cat: "2.1.5〜2.1.7 雇用保険・建設雇用改善計画・能力開発 (p.15-17)",
+    q: "<ruby>雇用保険<rt>こようほけん</rt></ruby>や <ruby>技能検定<rt>ぎのうけんてい</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
     options: [
-      "<ruby>空港<rt>くうこう</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くでは<ruby>航空法<rt>こうくうほう</rt></ruby>による<ruby>高<rt>たか</rt></ruby>さ<ruby>制限<rt>せいげん</rt></ruby>を<ruby>守<rt>まも</rt></ruby>り、<ruby>道路<rt>どうろ</rt></ruby>に<ruby>工事<rt>こうじ</rt></ruby><ruby>車両<rt>しゃりょう</rt></ruby>を<ruby>違法<rt>いほう</rt></ruby><ruby>駐車<rt>ちゅうしゃ</rt></ruby>してはならない。",
-      "<ruby>クレーン<rt>くれーん</rt></ruby>は、<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>飛<rt>と</rt></ruby>んでいても<ruby>好<rt>す</rt></ruby>きな<ruby>高<rt>たか</rt></ruby>さまで<ruby>何<rt>なん</rt></ruby>メートルでも<ruby>上<rt>あ</rt></ruby>げてよい。",
-      "<ruby>現場<rt>げんば</rt></ruby>が<ruby>狭<rt>せま</rt></ruby>いときは、<ruby>近所<rt>きんじょ</rt></ruby>の<ruby>交差点<rt>こうさてん</rt></ruby>にダンプカーを<ruby>勝手<rt>かって</rt></ruby>に<ruby>止<rt>と</rt></ruby>めてよい。",
-      "<ruby>無線機<rt>むせんき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うときは、ルールを<ruby>守<rt>まも</rt></ruby>らずに<ruby>違法<rt>いほう</rt></ruby>な<ruby>強<rt>つよ</rt></ruby>い<ruby>電波<rt>でんぱ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>すのがよい。"
+      "<ruby>特定技能外国人<rt>とくていぎのうがいこくじん</rt></ruby>も<ruby>雇用保険<rt>こようほけん</rt></ruby>の<ruby>給付<rt>きゅうふ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けることができ、<ruby>国<rt>くに</rt></ruby>の「<ruby>技能検定<rt>ぎのうけんてい</rt></ruby>」に<ruby>合格<rt>ごうかく</rt></ruby>すると「<ruby>技能士<rt>ぎのうし</rt></ruby>」と<ruby>名乗<rt>なの</rt></ruby>ることができる。",
+      "<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>失業<rt>しつぎょう</rt></ruby>したときは、その<ruby>日<rt>ひ</rt></ruby>のうちに<ruby>必<rt>かなら</rt></ruby>ず<ruby>母国<rt>ぼこく</rt></ruby>へ<ruby>強制帰国<rt>きょうせいきこく</rt></ruby>しなければならない。",
+      "<ruby>雇用保険<rt>こようほけん</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>だけが<ruby>加入<rt>かにゅう</rt></ruby>でき、<ruby>外国人<rt>がいこくじん</rt></ruby>は<ruby>加入<rt>かにゅう</rt></ruby>することが<ruby>禁止<rt>きんし</rt></ruby>されている。",
+      "<ruby>建設業<rt>けんせつぎょう</rt></ruby>では<ruby>若者<rt>わかもの</rt></ruby>や<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>育成<rt>いくせい</rt></ruby>のために<ruby>職業訓練<rt>しょくぎょうくんれん</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>ってはならないと<ruby>定<rt>さだ</rt></ruby>められている。"
     ],
     answer: 0,
-    hintId: "Patuhi batas tinggi derek di dekat bandara dan jangan parkir liar di jalan umum.",
-    hintNe: "विमानस्थल नजिकै क्रेनको उचाइ सीमा मान्नुपर्छ र बाटोमा अवैध पार्किङ गर्न पाइँदैन।",
-    expJa: "航空法による高さ制限や、電波法・道路交通法を守った適正な車両管理が求められます（テキストp.24-25）。",
-    expId: "Penggunaan alat berat derek dan kendaraan proyek wajib mematuhi aturan penerbangan dan lalu lintas.",
-    expNe: "हवाई ऐन अनुसार क्रेनको उचाइ सीमा र सडक यातायात नियम अनिवार्य पालना गर्नुपर्छ।"
+    hintId: "Pekerja asing Tokutei Ginou berhak atas tunjangan asuransi pengangguran, dan lulus ujian keterampilan berhak bergelar Ginoushi.",
+    hintNe: "तोकुतेइ गिनौ कामदारले पनि बेरोजगारी बिमा सुविधा पाउँछन् र सीप परीक्षा पास गरेमा 'गिनौशी' (दक्ष प्राविधिक) को उपाधि पाउँछन्।",
+    expJa: "特定技能外国人も失業時に給付を受けることが可能です。技能検定に合格すると合格証書が交付され「技能士」と名乗ることができます（テキストp.15-17）。",
+    expId: "Pekerja asing berhak atas manfaat asuransi pengangguran dan sertifikasi negara Ginoushi setelah lulus uji kompetensi.",
+    expNe: "विदेशी कामदारले पनि काम छुटेमा बेरोजगारी भत्ता पाउने अधिकार हुन्छ र सीप परीक्षा उत्तीर्ण भएपछि राष्ट्रिय प्रमाणपत्र पाइन्छ।"
   }
 ];
 
@@ -347,7 +347,8 @@ function updateMenuBadges() {
   const keys = [
     { id: "badge-shokucho", key: "score_shokucho" },
     { id: "badge-gakka1", key: "score_gakka1" },
-    { id: "badge-gakka1-2", key: "score_gakka1_2" }
+    { id: "badge-gakka1-2", key: "score_gakka1_2" },
+    { id: "badge-gakka2", key: "score_gakka2" }
   ];
   keys.forEach(item => {
     const val = localStorage.getItem(item.key);
