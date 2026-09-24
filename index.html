@@ -3,427 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 建設 対策テスト（職長・安全管理編）</title>
+  <title>特定技能2号 建設 学科試験対策ポータル</title>
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #1e293b;
       --text-sub: #64748b;
       --border: #cbd5e1;
-      --success: #15803d;
-      --danger: #b91c1c;
-      --warning-bg: #fffbeb;
-      --warning-border: #fde68a;
+      --success: #16a34a;
+      --danger: #dc2626;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
-    .container { max-width: 740px; margin: 0 auto; position: relative; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px 16px; line-height: 1.6; }
+    .container { max-width: 680px; margin: 0 auto; }
     
-    /* ヘッダー・メニューバー */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .app-title-sub { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
-    .btn-menu-open { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .btn-menu-open:hover { background: #f1f5f9; }
+    header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #e2e8f0; }
+    .site-tag { font-size: 0.85rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; }
+    h1 { font-size: 1.35rem; color: #0f172a; margin-top: 4px; }
+    p.sub { font-size: 0.9rem; color: var(--text-sub); margin-top: 6px; }
 
-    /* サイドメニュー（ドロワー） */
-    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; }
-    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: #fff; z-index: 100; box-shadow: -2px 0 8px rgba(0,0,0,0.15); transition: right 0.25s ease; display: flex; flex-direction: column; }
-    .drawer.open { right: 0; }
-    .drawer-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-    .drawer-header h2 { font-size: 1rem; color: var(--text); }
-    .btn-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-sub); }
-    .drawer-body { padding: 16px; overflow-y: auto; flex: 1; }
-    .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: #fff; font-size: 0.88rem; font-weight: 600; transition: all 0.2s; }
-    .menu-item:hover { background: #f8fafc; border-color: var(--primary); }
-    .menu-item.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
-    .badge-score { font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; background: #22c55e; color: #fff; font-weight: 700; }
-    .badge-none { font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; background: #e2e8f0; color: #64748b; font-weight: 500; }
+    .module-group-title { font-size: 0.95rem; font-weight: 700; color: #475569; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+    .module-group-title::before { content: ""; display: inline-block; width: 4px; height: 16px; background: var(--primary); border-radius: 2px; }
 
-    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
-    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
-    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
-    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .nav-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-    .nav-btn.answered { background: #e2e8f0; color: #475569; }
-    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #93c5fd; }
-    .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
-    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
-    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 2.1; }
-    ruby { ruby-position: over; }
-    ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
-    .hints-group { display: flex; gap: 8px; margin-bottom: 18px; }
-    .btn-hint { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }
-    .hint-box { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; color: #92400e; margin-bottom: 16px; display: none; line-height: 1.5; }
-    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .option-btn { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.96rem; cursor: pointer; transition: all 0.2s; line-height: 1.9; }
-    .option-btn:hover { border-color: #94a3b8; background: #f8fafc; }
-    .option-btn.selected { border-color: var(--primary); background: #eff6ff; color: var(--primary); font-weight: 600; }
-    .btn-group { display: flex; gap: 10px; }
-    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
-    .btn-primary { background: var(--primary); color: #fff; border: none; }
-    .btn-primary:hover { background: var(--primary-hover); }
-    #result-view { display: none; }
-    .score-card { text-align: center; padding: 24px; background: #eff6ff; border-radius: 12px; border: 1px solid #bfdbfe; margin-bottom: 20px; }
-    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
-    .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
-    .review-item:last-child { border-bottom: none; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-    .badge-ok { background: #dcfce7; color: var(--success); }
-    .badge-ng { background: #fee2e2; color: var(--danger); }
-    .review-ans { font-size: 0.95rem; margin-top: 6px; line-height: 1.9; }
-    .review-exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 0.9rem; line-height: 1.9; }
-    .review-multi-exp { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+    .module-list { display: flex; flex-direction: column; gap: 12px; }
+    .module-card {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg); padding: 18px 20px; border-radius: 12px;
+      border: 1px solid var(--border); text-decoration: none; color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s ease;
+    }
+    .module-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(2, 132, 199, 0.1); }
+    
+    .card-info { display: flex; flex-direction: column; gap: 4px; }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+    .card-meta { font-size: 0.82rem; color: var(--text-sub); }
+
+    .status-area { text-align: right; min-width: 85px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+    .badge-yet { background: #f1f5f9; color: #64748b; }
+    .badge-pass { background: #dcfce7; color: var(--success); }
+    .badge-fail { background: #fee2e2; color: var(--danger); }
+
+    footer { text-align: center; font-size: 0.8rem; color: var(--text-sub); margin-top: 36px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部バー（三本線メニュー付き） -->
-  <div class="top-bar">
-    <span class="app-title-sub">特定技能2号 建設 対策プラットフォーム</span>
-    <button class="btn-menu-open" onclick="openMenu()">☰ 学習メニュー</button>
-  </div>
+  <header>
+    <span class="site-tag">SPECIFIED SKILLED WORKER (ii)</span>
+    <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>ポータル</h1>
+    <p class="sub">1<ruby>日<rt>にち</rt></ruby>10<ruby>問<rt>もん</rt></ruby>！ コツコツ<ruby>学<rt>まな</rt></ruby>んで <ruby>合格<rt>ごうかく</rt></ruby>を<ruby>目指<rt>めざ</rt></ruby>しましょう</p>
+  </header>
 
-  <!-- スライドメニュー（ドロワー） -->
-  <div class="drawer-overlay" id="overlay" onclick="closeMenu()"></div>
-  <div class="drawer" id="drawer">
-    <div class="drawer-header">
-      <h2>学習単元一覧</h2>
-      <button class="btn-close" onclick="closeMenu()">✕</button>
-    </div>
-    <div class="drawer-body">
-      <a href="index.html" class="menu-item active">
-        <span>📘 職長・安全管理編 (5問)</span>
-        <span class="badge-score" id="badge-shokucho" style="display:none;"></span>
-      </a>
-      <a href="gakka1.html" class="menu-item">
-        <span>📗 学科1：Day 1 (基本・労働 10問)</span>
-        <span class="badge-score" id="badge-gakka1" style="display:none;"></span>
-      </a>
-      <a href="gakka1-2.html" class="menu-item">
-        <span>📗 学科1：Day 2 (業法・環境 10問)</span>
-        <span class="badge-score" id="badge-gakka1-2" style="display:none;"></span>
-      </a>
-    </div>
-  </div>
-
-  <div id="quiz-view">
-    <header>
-      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>対策<rt>たいさく</rt></ruby>テスト（<ruby>職長<rt>しょくちょう</rt></ruby>・<ruby>安全管理編<rt>あんぜんかんりへん</rt></ruby>）</h1>
-      <div class="status-bar">
-        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">5</span> <ruby>問<rt>もん</rt></ruby></span>
-        <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
+  <!-- 基礎分野 -->
+  <div class="module-group-title"><ruby>共通基礎<rt>きょうつうきそ</rt></ruby>・<ruby>安全管理<rt>あんぜんかんり</rt></ruby></div>
+  <div class="module-list">
+    <a href="quiz.html?day=shokucho" class="module-card">
+      <div class="card-info">
+        <span class="card-title">📘 <ruby>職長<rt>しょくちょう</rt></ruby>・<ruby>安全衛生管理編<rt>あんぜんえいせいかんりへん</rt></ruby></span>
+        <span class="card-meta">5問 | 職長の役割・KYK・安全衛生管理</span>
       </div>
-      <div class="nav-grid" id="nav-grid"></div>
-    </header>
-
-    <div class="card">
-      <div class="q-meta" id="q-category"></div>
-      <div class="q-text" id="q-text"></div>
-
-      <div class="hints-group">
-        <button class="btn-hint" onclick="toggleHint('id')">💡 インドネシア語ヒント</button>
-        <button class="btn-hint" onclick="toggleHint('ne')">💡 ネパール語ヒント</button>
+      <div class="status-area" id="status-shokucho">
+        <span class="badge badge-yet">未挑戦</span>
       </div>
-      <div class="hint-box" id="hint-id"></div>
-      <div class="hint-box" id="hint-ne"></div>
-
-      <div class="options" id="options-box"></div>
-
-      <div class="btn-group">
-        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
-        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
-        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
-      </div>
-    </div>
+    </a>
   </div>
 
-  <div id="result-view">
-    <div class="score-card">
-      <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
-      <div class="score-num" id="score-text"></div>
-      <p id="pass-msg"></p>
-    </div>
-    <div class="card">
-      <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
-      <div id="review-box"></div>
-      <button class="btn-nav btn-primary" style="width: 100%; margin-top: 20px;" onclick="location.reload()">もう一度解く</button>
-    </div>
+  <!-- 学科テキスト 第1章・第2章 -->
+  <div class="module-group-title"><ruby>法令<rt>ほうれい</rt></ruby>・<ruby>現場基本<rt>げんばきほん</rt></ruby>（テキスト2）</div>
+  <div class="module-list">
+    <a href="quiz.html?day=1" class="module-card">
+      <div class="card-info">
+        <span class="card-title">📗 Day 1：<ruby>現場基本<rt>げんばきほん</rt></ruby>・チームワーク</span>
+        <span class="card-meta">10問 | 第1章（施工体制・CCUS・朝礼・KY）</span>
+      </div>
+      <div class="status-area" id="status-day1">
+        <span class="badge badge-yet">未挑戦</span>
+      </div>
+    </a>
+
+    <a href="quiz.html?day=2" class="module-card">
+      <div class="card-info">
+        <span class="card-title">📗 Day 2：<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>・<ruby>労働法編<rt>ろうどうほうへん</rt></ruby></span>
+        <span class="card-meta">10問 | 第2章 2.1（均等・パワハラ・有休・労災）</span>
+      </div>
+      <div class="status-area" id="status-day2">
+        <span class="badge badge-yet">未挑戦</span>
+      </div>
+    </a>
+
+    <a href="quiz.html?day=3" class="module-card">
+      <div class="card-info">
+        <span class="card-title">📙 Day 3：<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>・<ruby>環境法令編<rt>かんきょうほうれいへん</rt></ruby></span>
+        <span class="card-meta">10問 | 第2章 2.2〜2.17（建築基準法・リサイクル・電波・航空法）</span>
+      </div>
+      <div class="status-area" id="status-day3">
+        <span class="badge badge-yet">未挑戦</span>
+      </div>
+    </a>
   </div>
+
+  <footer>
+    &copy; 特定技能2号 建設 合格支援プラットフォーム
+  </footer>
 </div>
 
 <script>
-const MODULE_KEY = "score_shokucho";
-
-const questions = [
-  {
-    id: 1,
-    cat: "職長の役割と責任",
-    q: "<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を <ruby>決<rt>き</rt></ruby>めるとき、<ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>行動<rt>こうどう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
-    options: [
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>第一<rt>だいいち</rt></ruby>に<ruby>考<rt>かんが</rt></ruby>え、<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>手順書<rt>てじゅんしょ</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>共有<rt>きょうゆう</rt></ruby>・<ruby>確認<rt>かくにん</rt></ruby>する。",
-      "<ruby>工期<rt>こうき</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れているため、<ruby>安全<rt>あんぜん</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>の<ruby>工程<rt>こうてい</rt></ruby>をすべて<ruby>省略<rt>しょうりゃく</rt></ruby>して<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>急<rt>いそ</rt></ruby>がせる。",
-      "<ruby>経験<rt>けいけん</rt></ruby>の<ruby>浅<rt>あさ</rt></ruby>い<ruby>作業員<rt>さぎょういん</rt></ruby>にだけ<ruby>危険<rt>きけん</rt></ruby>な<ruby>高所<rt>こうしょ</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>を<ruby>任<rt>まか</rt></ruby>せ、<ruby>自分<rt>じぶん</rt></ruby>は<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>さずに<ruby>見<rt>み</rt></ruby>ている。",
-      "<ruby>当日<rt>とうじつ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>を<ruby>朝礼<rt>ちょうれい</rt></ruby>で<ruby>伝<rt>つた</rt></ruby>えず、<ruby>各自<rt>かくじ</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>で<ruby>自由<rt>じゆう</rt></ruby>に<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めさせる。"
-    ],
-    answer: 0,
-    hintId: "Prioritas utama seorang mandor adalah keselamatan pekerja melalui prosedur kerja yang jelas.",
-    hintNe: "कार्यनेताको मुख्य जिम्मेवारी कामदारको सुरक्षालाई प्राथमिकता दिएर कार्यविधि पालना गराउनु हो।",
-    expJa: "<ruby>職長<rt>しょくちょう</rt></ruby>は<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>と<ruby>健康<rt>けんこう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るため、<ruby>無理<rt>むり</rt></ruby>のない<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>め、<ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>徹底<rt>てってい</rt></ruby>させる<ruby>責任<rt>せきにん</rt></ruby>があります。",
-    expId: "Mandor bertanggung jawab memastikan seluruh tim memahami instruksi kerja dan mengutamakan keselamatan daripada ketergesaan waktu.",
-    expNe: "कार्यनेताले सबै टोलीलाई कार्यविधि स्पष्ट रूपमा बुझाएर दुर्घटना हुन नदिन सुरक्षालाई पहिलो प्राथमिकता दिनुपर्छ।"
-  },
-  {
-    id: 2,
-    cat: "労働安全衛生法",
-    q: "<ruby>労働安全衛生法<rt>ろうどうあんぜんえいせいほう</rt></ruby>において、<ruby>職長<rt>しょくちょう</rt></ruby>が <ruby>行<rt>おこな</rt></ruby>うべき **<ruby>職務<rt>しょくむ</rt></ruby>として<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
-    options: [
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>適性<rt>てきせい</rt></ruby>や<ruby>健康<rt>けんこう</rt></ruby><ruby>状態<rt>じょうたい</rt></ruby>に<ruby>応<rt>おう</rt></ruby>じた<ruby>人員<rt>じんいん</rt></ruby><ruby>配置<rt>はいち</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
-      "<ruby>設備<rt>せつび</rt></ruby>や<ruby>工具<rt>こうぐ</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby><ruby>点検<rt>てんけん</rt></ruby>を<ruby>定期的<rt>ていきてき</rt></ruby>に<ruby>実施<rt>じっし</rt></ruby>する。",
-      "<ruby>現場<rt>げんば</rt></ruby>で<ruby>労働災害<rt>ろうどうさいがい</rt></ruby>が<ruby>発生<rt>はっせい</rt></ruby>したとき、<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>せず<ruby>隠<rt>かく</rt></ruby>す。",
-      "<ruby>労働者<rt>ろうどうしゃ</rt></ruby>に<ruby>対<rt>たい</rt></ruby>する<ruby>安全<rt>あんぜん</rt></ruby><ruby>衛生<rt>えいせい</rt></ruby><ruby>教育<rt>きょういく</rt></ruby>や<ruby>指導<rt>しどう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。"
-    ],
-    answer: 2,
-    hintId: "Menyembunyikan kecelakaan kerja adalah pelanggaran hukum berat!",
-    hintNe: "दुर्घटना लुकाउनु कानुनी रूपमा गम्भीर अपराध हो।",
-    expJa: "<ruby>災害<rt>さいがい</rt></ruby>が<ruby>発生<rt>はっせい</rt></ruby>したときは、ただちに<ruby>応急<rt>おうきゅう</rt></ruby><ruby>手当<rt>てあて</rt></ruby>と<ruby>元請<rt>もとうけ</rt></ruby>への<ruby>報告<rt>ほうこく</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>い、<ruby>再発<rt>さいはつ</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>を<ruby>図<rt>はか</rt></ruby>る<ruby>義務<rt>ぎむ</rt></ruby>があります。<ruby>隠蔽<rt>いんぺい</rt></ruby>は<ruby>違法<rt>いほう</rt></ruby>です。",
-    expId: "Jika terjadi kecelakaan kerja, mandor wajib segera melapor ke kontraktor utama dan memberi pertolongan pertama, tidak boleh disembunyikan.",
-    expNe: "दुर्घटना भएमा तुरुन्त प्राथमिक उपचार गरी माथिल्लो निकायमा खबर गर्नुपर्छ, यसलाई लुकाउन पाइँदैन।"
-  },
-  {
-    id: 3,
-    cat: "作業危険予知活動（KYK）",
-    q: "<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>（KYK）を <ruby>行<rt>おこな</rt></ruby>う **<ruby>一番<rt>いちばん</rt></ruby>の<ruby>目的<rt>もくてき</rt></ruby>**は 何ですか。",
-    options: [
-      "<ruby>作業前<rt>さぎょうまえ</rt></ruby>に<ruby>潜<rt>ひそ</rt></ruby>む<ruby>危険<rt>きけん</rt></ruby>を<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>い、<ruby>事故<rt>じこ</rt></ruby>を<ruby>未然<rt>みぜん</rt></ruby>に<ruby>防<rt>ふせ</rt></ruby>ぐため。",
-      "<ruby>朝<rt>あさ</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>潰<rt>つぶ</rt></ruby>して<ruby>作業<rt>さぎょう</rt></ruby><ruby>開始<rt>かいし</rt></ruby>を<ruby>遅<rt>おく</rt></ruby>らせるため。",
-      "<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>提出<rt>ていしゅつ</rt></ruby>する<ruby>書類<rt>しょるい</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めることだけが<ruby>目的<rt>もくてき</rt></ruby>である。",
-      "<ruby>作業員<rt>さぎょういん</rt></ruby>のミスの<ruby>責任<rt>せきにん</rt></ruby>を<ruby>特定<rt>とくてい</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>押<rt>お</rt></ruby>し<ruby>付<rt>つ</rt></ruby>けるため。"
-    ],
-    answer: 0,
-    hintId: "KYK bertujuan memprediksi dan mencegah bahaya sebelum pekerjaan dimulai.",
-    hintNe: "KYK को मुख्य उद्देश्य काम सुरु हुनु अघि सम्भावित खतराहरू पहिचान गरी रोक्नु हो।",
-    expJa: "KYKは「どんな<ruby>危険<rt>きけん</rt></ruby>があるか」を<ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>い、<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて<ruby>事故<rt>じこ</rt></ruby>をゼロにするための<ruby>活動<rt>かつどう</rt></ruby>です。",
-    expId: "Aktivitas KYK dilakukan untuk menemukan potensi bahaya dan menentukan tindakan pencegahan bersama seluruh pekerja.",
-    expNe: "KYK सबै कामदार मिलेर कार्यस्थलको जोखिम पहिचान गर्ने र सुरक्षित काम गर्ने उपाय निकाल्ने महत्त्वपूर्ण गतिविधि हो।"
-  },
-  {
-    id: 4,
-    cat: "高所作業と墜落防止",
-    q: "<ruby>高所<rt>こうしょ</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>における <ruby>フルハーネス<rt>ふるはーねす</rt></ruby><ruby>型<rt>がた</rt></ruby><ruby>安全帯<rt>あんぜんたい</rt></ruby>（<ruby>墜落制止用器具<rt>ついらくせいしようきぐ</rt></ruby>）の <ruby>使用<rt>しよう</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
-    options: [
-      "<ruby>高<rt>たか</rt></ruby>さ2m<ruby>以上<rt>いじょう</rt></ruby>で<ruby>手<rt>て</rt></ruby>すり等がない<ruby>箇所<rt>かしょ</rt></ruby>では、<ruby>原則<rt>げんそく</rt></ruby>としてフルハーネス<ruby>型<rt>がた</rt></ruby>を<ruby>着用<rt>ちゃくよう</rt></ruby>しフックを<ruby>掛<rt>か</rt></ruby>ける。",
-      "<ruby>面倒<rt>めんどう</rt></ruby>なときはフックをどこにも<ruby>掛<rt>か</rt></ruby>けずに<ruby>作業<rt>さぎょう</rt></ruby>してもよい。",
-      "<ruby>胴<rt>どう</rt></ruby>ベルト<ruby>型<rt>がた</rt></ruby>（1<ruby>本<rt>ぽん</rt></ruby>つり）であれば、どんな<ruby>高<rt>たか</rt></ruby>さでもフルハーネスより<ruby>安全<rt>あんぜん</rt></ruby>である。",
-      "<ruby>足場<rt>あしば</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>では<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>落<rt>お</rt></ruby>ちないので、<ruby>安全帯<rt>あんぜんたい</rt></ruby>を<ruby>着<rt>つ</rt></ruby>ける<ruby>必要<rt>ひつよう</rt></ruby>はない。"
-    ],
-    answer: 0,
-    hintId: "Ketinggian 2 meter atau lebih tanpa pagar wajib menggunakan sabuk pengaman full-harness.",
-    hintNe: "२ मिटर भन्दा अग्लो स्थानमा काम गर्दा फुल-हार्नेस सेफ्टी बेल्ट अनिवार्य प्रयोग गर्नुपर्छ।",
-    expJa: "<ruby>高<rt>たか</rt></ruby>さ2m<ruby>以上<rt>いじょう</rt></ruby>の<ruby>作業床<rt>さぎょうゆか</rt></ruby>がない<ruby>箇所<rt>かしょ</rt></ruby>等では、<ruby>墜落<rt>ついらく</rt></ruby><ruby>制止<rt>せいし</rt></ruby><ruby>用<rt>よう</rt></ruby><ruby>器具<rt>きぐ</rt></ruby>（フルハーネス<ruby>型<rt>がた</rt></ruby>）の<ruby>使用<rt>しよう</rt></ruby>が<ruby>義務<rt>ぎむ</rt></ruby>づけられています。",
-    expId: "Pada pekerjaan di atas 2 meter tanpa pembatas, penggunaan full-harness yang dikaitkan dengan benar adalah kewajiban hukum untuk mencegah jatuh fatal.",
-    expNe: "२ मिटरभन्दा अग्लो जोखिमपूर्ण ठाउँमा काम गर्दा सुरक्षित रूपमा फुल हार्नेस बेल्टको हुक अड्काएर मात्र काम गर्नुपर्छ।"
-  },
-  {
-    id: 5,
-    cat: "異常時・緊急時の措置",
-    q: "<ruby>作業<rt>さぎょう</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きな<ruby>地震<rt>じしん</rt></ruby>が <ruby>発生<rt>はっせい</rt></ruby>しました。<ruby>職長<rt>しょくちょう</rt></ruby>が **<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>取<rt>と</rt></ruby>るべき<ruby>行動<rt>こうどう</rt></ruby>**は どれですか。",
-    options: [
-      "<ruby>直<rt>ただ</rt></ruby>ちに<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>中止<rt>ちゅうし</rt></ruby>させ、<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>へ<ruby>避難<rt>ひなん</rt></ruby>させて<ruby>点呼<rt>てんこ</rt></ruby>を<ruby>取<rt>と</rt></ruby>る。",
-      "<ruby>工期<rt>こうき</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わなくなるので、そのまま<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>続行<rt>ぞっこう</rt></ruby>させる。",
-      "<ruby>自分<rt>じぶん</rt></ruby>だけ<ruby>一人<rt>ひとり</rt></ruby>で<ruby>現場<rt>げんば</rt></ruby>から<ruby>逃<rt>に</rt></ruby>げ<ruby>出<rt>だ</rt></ruby>し、<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>何<rt>なに</rt></ruby>も<ruby>伝<rt>つた</rt></ruby>えない。",
-      "<ruby>落<rt>お</rt></ruby>ちてきそうな<ruby>資材<rt>しざい</rt></ruby>を<ruby>手<rt>て</rt></ruby>で<ruby>押<rt>お</rt></ruby>さえるよう<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>命<rt>めい</rt></ruby>じる。"
-    ],
-    answer: 0,
-    hintId: "Saat bencana gempa, utamakan evakuasi pekerja ke tempat aman dan hitung jumlah anggota tim.",
-    hintNe: "भूकम्प आउँदा तुरुन्त काम रोकेर सुरक्षित स्थानमा जानु र टोलीका सबै सदस्य गन्ती गर्नु पहिलो काम हो।",
-    expJa: "<ruby>緊急時<rt>きんきゅうじ</rt></ruby>は<ruby>作業<rt>さぎょう</rt></ruby><ruby>中止<rt>ちゅうし</rt></ruby>と<ruby>人命<rt>じんめい</rt></ruby><ruby>第一<rt>だいいち</rt></ruby>の<ruby>避難<rt>ひなん</rt></ruby>が<ruby>最優先<rt>さいゆうせん</rt></ruby>です。<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>で<ruby>点呼<rt>てんこ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>い、<ruby>全員<rt>ぜんいん</rt></ruby>の<ruby>無事<rt>ぶじ</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>します。",
-    expId: "Tindakan pertama saat gempa adalah menghentikan pekerjaan seketika, mengarahkan pekerja ke area evakuasi, dan mengecek kelengkapan personil.",
-    expNe: "आपतकालीन अवस्थामा काम तुरुन्त रोकेर सुरक्षित ठाउँमा जाने र आफ्ना सबै कामदार सकुशल छन् कि छैनन् भनी यकिन गर्नुपर्छ।"
-  }
-];
-
-let currentIndex = 0;
-let userAnswers = new Array(questions.length).fill(null);
-
-function openMenu() {
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("overlay").style.display = "block";
-}
-
-function closeMenu() {
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("overlay").style.display = "none";
-}
-
-function updateMenuBadges() {
-  const keys = [
-    { id: "badge-shokucho", key: "score_shokucho" },
-    { id: "badge-gakka1", key: "score_gakka1" },
-    { id: "badge-gakka1-2", key: "score_gakka1_2" }
+  // 点数バッジの自動判定・表示
+  const modules = [
+    { targetId: "status-shokucho", key: "score_shokucho", passScore: 80 },
+    { targetId: "status-day1", key: "score_gakka1", passScore: 70 },
+    { targetId: "status-day2", key: "score_gakka1_2", passScore: 70 },
+    { targetId: "status-day3", key: "score_gakka2", passScore: 70 }
   ];
-  keys.forEach(item => {
-    const val = localStorage.getItem(item.key);
-    const badge = document.getElementById(item.id);
-    if (val && badge) {
-      badge.textContent = `✔ ${val}点`;
-      badge.style.display = "inline-block";
+
+  modules.forEach(m => {
+    const score = localStorage.getItem(m.key);
+    const target = document.getElementById(m.targetId);
+    if (score !== null && target) {
+      const num = parseInt(score, 10);
+      const isPass = num >= m.passScore;
+      target.innerHTML = `<span class="badge ${isPass ? 'badge-pass' : 'badge-fail'}">${isPass ? '✔ ' : ''}${num}点</span>`;
     }
   });
-}
-
-function renderNav() {
-  const grid = document.getElementById("nav-grid");
-  grid.innerHTML = "";
-  questions.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
-    btn.textContent = i + 1;
-    btn.onclick = () => { currentIndex = i; loadQuestion(); };
-    grid.appendChild(btn);
-  });
-  document.getElementById("current-num").textContent = currentIndex + 1;
-  document.getElementById("total-num").textContent = questions.length;
-  const answered = userAnswers.filter(a => a !== null).length;
-  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
-}
-
-function loadQuestion() {
-  renderNav();
-  const q = questions[currentIndex];
-  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
-  document.getElementById("q-text").innerHTML = q.q;
-
-  document.getElementById("hint-id").textContent = q.hintId;
-  document.getElementById("hint-id").style.display = "none";
-  document.getElementById("hint-ne").textContent = q.hintNe;
-  document.getElementById("hint-ne").style.display = "none";
-
-  const optBox = document.getElementById("options-box");
-  optBox.innerHTML = "";
-  q.options.forEach((opt, idx) => {
-    const btn = document.createElement("button");
-    btn.className = `option-btn ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
-    btn.innerHTML = `<strong>${idx + 1}.</strong> <span>${opt}</span>`;
-    btn.onclick = () => selectOption(idx);
-    optBox.appendChild(btn);
-  });
-
-  document.getElementById("btn-prev").disabled = currentIndex === 0;
-  const isLast = currentIndex === questions.length - 1;
-  const btnNext = document.getElementById("btn-next");
-  btnNext.textContent = isLast ? "採点する" : "次へ";
-}
-
-function selectOption(idx) {
-  userAnswers[currentIndex] = idx;
-  loadQuestion();
-}
-
-function toggleHint(lang) {
-  const el = document.getElementById(`hint-${lang}`);
-  el.style.display = el.style.display === "block" ? "none" : "block";
-}
-
-function prevQuestion() {
-  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
-}
-
-function nextQuestion() {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    loadQuestion();
-  } else {
-    finishQuiz();
-  }
-}
-
-function skipQuestion() {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    loadQuestion();
-  } else {
-    const firstUnanswered = userAnswers.findIndex(a => a === null);
-    if (firstUnanswered !== -1) {
-      currentIndex = firstUnanswered;
-      loadQuestion();
-    } else {
-      finishQuiz();
-    }
-  }
-}
-
-function finishQuiz() {
-  const unanswered = userAnswers.filter(a => a === null).length;
-  if (unanswered > 0) {
-    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
-      const firstUnanswered = userAnswers.findIndex(a => a === null);
-      if (firstUnanswered !== -1) {
-        currentIndex = firstUnanswered;
-        loadQuestion();
-      }
-      return;
-    }
-  }
-
-  document.getElementById("quiz-view").style.display = "none";
-  document.getElementById("result-view").style.display = "block";
-
-  let score = 0;
-  const reviewBox = document.getElementById("review-box");
-  reviewBox.innerHTML = "";
-
-  questions.forEach((q, i) => {
-    const isCorrect = userAnswers[i] === q.answer;
-    if (isCorrect) score++;
-
-    const item = document.createElement("div");
-    item.className = "review-item";
-    
-    const yourChoiceText = userAnswers[i] !== null 
-      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]]}` 
-      : "（<ruby>未解答<rt>みかいとう</rt></ruby>）";
-      
-    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer]}`;
-
-    item.innerHTML = `
-      <div style="margin-bottom: 8px;">
-        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
-        <strong style="margin-left: 8px;"><ruby>問<rt>もん</rt></ruby> ${i + 1}</strong>
-        <span style="font-size: 0.8rem; color: var(--text-sub); margin-left: 8px;">(${q.cat})</span>
-      </div>
-      <div style="font-size: 0.98rem; margin-bottom: 8px; line-height: 2.0;">${q.q}</div>
-      <div class="review-ans" style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
-        あなたの<ruby>解答<rt>かいとう</rt></ruby>: ${yourChoiceText}
-      </div>
-      ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
-      <div class="review-exp-box">
-        <div>💡 <strong><ruby>解説<rt>かいせつ</rt></ruby>:</strong> ${q.expJa}</div>
-        <div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>
-        <div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>
-      </div>
-    `;
-    reviewBox.appendChild(item);
-  });
-
-  const finalScore = score * 20;
-  localStorage.setItem(MODULE_KEY, finalScore);
-  updateMenuBadges();
-
-  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
-  const passMsg = document.getElementById("pass-msg");
-  if (finalScore >= 80) {
-    passMsg.innerHTML = "<strong style='color: var(--success);'>合格ライン達成です！素晴らしい！</strong>";
-  } else {
-    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
-  }
-}
-
-updateMenuBadges();
-loadQuestion();
 </script>
 </body>
 </html>
