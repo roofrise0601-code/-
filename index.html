@@ -22,10 +22,11 @@
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
     .container { max-width: 740px; margin: 0 auto; }
     
-    /* テキスト切り替えナビゲーション */
-    .menu-bar { display: flex; gap: 8px; margin-bottom: 14px; }
-    .menu-link { flex: 1; text-align: center; padding: 10px; background: #e2e8f0; color: #334155; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; transition: all 0.2s; border: 1px solid var(--border); }
+    /* テキスト切り替えナビゲーション（3分割・バッジ対応） */
+    .menu-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .menu-link { flex: 1; min-width: 140px; text-align: center; padding: 10px 8px; background: #e2e8f0; color: #334155; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.85rem; transition: all 0.2s; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
     .menu-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .badge-tab { font-size: 0.72rem; padding: 1px 6px; border-radius: 10px; background: #22c55e; color: #fff; font-weight: normal; }
 
     header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
     h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
@@ -66,10 +67,20 @@
 <body>
 
 <div class="container">
-  <!-- 教材切り替えボタン -->
+  <!-- 教材切り替えタブ（3種） -->
   <div class="menu-bar">
-    <a href="index.html" class="menu-link active">職長・安全管理</a>
-    <a href="gakka1.html" class="menu-link">学科テキスト1（現場・法令）</a>
+    <a href="index.html" class="menu-link active" id="tab-shokucho">
+      <span>職長・安全管理</span>
+      <span class="badge-tab" id="badge-shokucho" style="display:none;"></span>
+    </a>
+    <a href="gakka1.html" class="menu-link" id="tab-gakka1">
+      <span>学科1(前半：基本・労働)</span>
+      <span class="badge-tab" id="badge-gakka1" style="display:none;"></span>
+    </a>
+    <a href="gakka1-2.html" class="menu-link" id="tab-gakka1-2">
+      <span>学科1(後半：業法・環境)</span>
+      <span class="badge-tab" id="badge-gakka1-2" style="display:none;"></span>
+    </a>
   </div>
 
   <div id="quiz-view">
@@ -118,6 +129,8 @@
 </div>
 
 <script>
+const MODULE_KEY = "score_shokucho";
+
 const questions = [
   {
     id: 1,
@@ -208,6 +221,22 @@ const questions = [
 
 let currentIndex = 0;
 let userAnswers = new Array(questions.length).fill(null);
+
+function updateTabBadges() {
+  const keys = [
+    { id: "badge-shokucho", key: "score_shokucho" },
+    { id: "badge-gakka1", key: "score_gakka1" },
+    { id: "badge-gakka1-2", key: "score_gakka1_2" }
+  ];
+  keys.forEach(item => {
+    const val = localStorage.getItem(item.key);
+    const badge = document.getElementById(item.id);
+    if (val && badge) {
+      badge.textContent = `✔ ${val}点`;
+      badge.style.display = "inline-block";
+    }
+  });
+}
 
 function renderNav() {
   const grid = document.getElementById("nav-grid");
@@ -343,16 +372,20 @@ function finishQuiz() {
     reviewBox.appendChild(item);
   });
 
-  const percentage = Math.round((score / questions.length) * 100);
-  document.getElementById("score-text").textContent = `${score} / ${questions.length} 点 (${percentage}%)`;
+  const finalScore = score * 20;
+  localStorage.setItem(MODULE_KEY, finalScore);
+  updateTabBadges();
+
+  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
   const passMsg = document.getElementById("pass-msg");
-  if (percentage >= 75) {
-    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準（75%以上）達成！素晴らしいです！</strong>";
+  if (finalScore >= 80) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格ライン達成です！素晴らしい！</strong>";
   } else {
-    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。解説を読んで復習しましょう！</strong>";
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
 }
 
+updateTabBadges();
 loadQuestion();
 </script>
 </body>
