@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 学科対策（テキスト1：現場基本・法令編）</title>
+  <title>特定技能2号 学科1：Day 1（現場基本・労働法編）</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -20,12 +20,26 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
-    .container { max-width: 740px; margin: 0 auto; }
+    .container { max-width: 740px; margin: 0 auto; position: relative; }
     
-    /* テキスト切り替えナビゲーション */
-    .menu-bar { display: flex; gap: 8px; margin-bottom: 14px; }
-    .menu-link { flex: 1; text-align: center; padding: 10px; background: #e2e8f0; color: #334155; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; transition: all 0.2s; border: 1px solid var(--border); }
-    .menu-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    /* ヘッダー・メニューバー */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .app-title-sub { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+    .btn-menu-open { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .btn-menu-open:hover { background: #f1f5f9; }
+
+    /* サイドメニュー（ドロワー） */
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; }
+    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: #fff; z-index: 100; box-shadow: -2px 0 8px rgba(0,0,0,0.15); transition: right 0.25s ease; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+    .drawer-header h2 { font-size: 1rem; color: var(--text); }
+    .btn-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-sub); }
+    .drawer-body { padding: 16px; overflow-y: auto; flex: 1; }
+    .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: #fff; font-size: 0.88rem; font-weight: 600; transition: all 0.2s; }
+    .menu-item:hover { background: #f8fafc; border-color: var(--primary); }
+    .menu-item.active { border-color: var(--primary); background: #f0f9ff; color: var(--primary); }
+    .badge-score { font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; background: #22c55e; color: #fff; font-weight: 700; }
 
     header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
     h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
@@ -66,17 +80,40 @@
 <body>
 
 <div class="container">
-  <!-- 教材切り替えボタン -->
-  <div class="menu-bar">
-    <a href="index.html" class="menu-link">職長・安全管理</a>
-    <a href="gakka1.html" class="menu-link active">学科テキスト1（現場・法令）</a>
+  <!-- 上部バー（三本線メニュー付き） -->
+  <div class="top-bar">
+    <span class="app-title-sub">特定技能2号 建設 対策プラットフォーム</span>
+    <button class="btn-menu-open" onclick="openMenu()">☰ 学習メニュー</button>
+  </div>
+
+  <!-- スライドメニュー（ドロワー） -->
+  <div class="drawer-overlay" id="overlay" onclick="closeMenu()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h2>学習単元一覧</h2>
+      <button class="btn-close" onclick="closeMenu()">✕</button>
+    </div>
+    <div class="drawer-body">
+      <a href="index.html" class="menu-item">
+        <span>📘 職長・安全管理編 (5問)</span>
+        <span class="badge-score" id="badge-shokucho" style="display:none;"></span>
+      </a>
+      <a href="gakka1.html" class="menu-item active">
+        <span>📗 学科1：Day 1 (基本・労働 10問)</span>
+        <span class="badge-score" id="badge-gakka1" style="display:none;"></span>
+      </a>
+      <a href="gakka1-2.html" class="menu-item">
+        <span>📗 学科1：Day 2 (業法・環境 10問)</span>
+        <span class="badge-score" id="badge-gakka1-2" style="display:none;"></span>
+      </a>
+    </div>
   </div>
 
   <div id="quiz-view">
     <header>
-      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>（テキスト1：<ruby>現場基本<rt>げんばきほん</rt></ruby>・<ruby>法令編<rt>ほうれいへん</rt></ruby>）</h1>
+      <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>（テキスト1：<ruby>現場基本<rt>げんばきほん</rt></ruby>・<ruby>労働法編<rt>ろうどうほうへん</rt></ruby>）</h1>
       <div class="status-bar">
-        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">13</span> <ruby>問<rt>もん</rt></ruby></span>
+        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">10</span> <ruby>問<rt>もん</rt></ruby></span>
         <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
       </div>
       <div class="nav-grid" id="nav-grid"></div>
@@ -118,6 +155,8 @@
 </div>
 
 <script>
+const MODULE_KEY = "score_gakka1";
+
 const questions = [
   {
     id: 1,
@@ -132,7 +171,7 @@ const questions = [
     answer: 0,
     hintId: "Kerja sama antar-subkontraktor dan koordinasi dengan pengawas lapangan (Genba Kantoku) adalah kunci kelancaran proyek.",
     hintNe: "विभिन्न ठेकेदारहरू बीचको टिमवर्क र सुपरभाइजरसँगको छलफल नै काम सुरक्षित तरिकाले अघि बढाउने मुख्य आधार हो।",
-    expJa: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>工事<rt>こうじ</rt></ruby>は<ruby>多<rt>おお</rt></ruby>くの<ruby>工程<rt>こうてい</rt></ruby>がつながっています。<ruby>現場監督<rt>げんばかんとく</rt></ruby>との<ruby>打合<rt>うちあわ</rt></ruby>せや<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby><ruby>間<rt>かん</rt></ruby>のチームワークを<ruby>大切<rt>たいせつ</rt></ruby>にし、<ruby>後輩<rt>こうはい</rt></ruby>へアドバイスしながら<ruby>進<rt>すす</rt></ruby>めます（テキストp.1）。",
+    expJa: "建設工事は多くの工程がつながっています。現場監督との打合せや専門工事業者間のチームワークを大切にし、後輩へアドバイスしながら進めます（テキストp.1）。",
     expId: "Proyek konstruksi terdiri dari banyak tahapan yang saling berhubungan. Mandor harus berkoordinasi dengan pengawas dan menjaga kerja sama antartim serta membimbing bawahan.",
     expNe: "निर्माण कार्य धेरै चरणहरूमा जोडिएको हुन्छ। सुपरभाइजरसँग नियमित छलफल र अन्य टोलीसँगको सहकार्य गर्दै जुनियरलाई सिकाउनु नै कार्यनेताको काम हो।"
   },
@@ -288,62 +327,37 @@ const questions = [
     expJa: "労災保険は業務中のケガ（業務災害）だけでなく、合理的な通勤途上の事故（通勤災害）も対象です。なお保険料は事業主（会社）が全額負担します（テキストp.13-14）。",
     expId: "Rousai Hoken menanggung kecelakaan kerja dan kecelakaan dalam perjalanan dinas/pulang-pergi kerja. Premi asuransi ini ditanggung sepenuhnya oleh perusahaan.",
     expNe: "रोउसाइ बिमाले काम गर्दा लागेको चोटका साथै काममा आउँदा-जाँदा बाटोमा भएको दुर्घटनालाई पनि समेट्छ। यसको प्रिमियम शतप्रतिशत कम्पनीले तिर्छ।"
-  },
-  {
-    id: 11,
-    cat: "第2章：2.1.5 雇用保険法 (p.15)",
-    q: "「<ruby>雇用保険<rt>こようほけん</rt></ruby>」の **<ruby>主<rt>おも</rt></ruby>な<ruby>目的<rt>もくてき</rt></ruby>や<ruby>役割<rt>やくわり</rt></ruby>**として <ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
-    options: [
-      "<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が<ruby>失業<rt>しつぎょう</rt></ruby>した（<ruby>仕事<rt>しごと</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>った）ときに、<ruby>次<rt>つぎ</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>を<ruby>探<rt>さが</rt></ruby>すまでの<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>えるための<ruby>給付<rt>きゅうふ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
-      "<ruby>現場<rt>げんば</rt></ruby>で<ruby>使<rt>つか</rt></ruby>うヘルメットや<ruby>安全帯<rt>あんぜんたい</rt></ruby>を<ruby>買<rt>か</rt></ruby>うための<ruby>費用<rt>ひよう</rt></ruby>を<ruby>国<rt>くに</rt></ruby>が<ruby>全額<rt>ぜんがく</rt></ruby>プレゼントする。",
-      "<ruby>風邪<rt>かぜ</rt></ruby>や<ruby>腹痛<rt>ふくつう</rt></ruby>で<ruby>病院<rt>びょういん</rt></ruby>に<ruby>行<rt>い</rt></ruby>ったときの<ruby>医療費<rt>いりょうひ</rt></ruby>を7<ruby>割<rt>わり</rt></ruby><ruby>負担<rt>ふたん</rt></ruby>してくれる（<ruby>健康保険<rt>けんこうほけん</rt></ruby>）。",
-      "70<ruby>歳<rt>さい</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎて<ruby>引退<rt>いんたい</rt></ruby>した<ruby>後<rt>あと</rt></ruby>に、<ruby>老後<rt>ろうご</rt></ruby>の<ruby>年金<rt>ねんきん</rt></ruby>を<ruby>毎月<rt>まいつき</rt></ruby><ruby>口座<rt>こうざ</rt></ruby>に<ruby>振<rt>ふ</rt></ruby>り<ruby>込<rt>こ</rt></ruby>んでくれる（<ruby>厚生年金<rt>こうせいねんきん</rt></ruby>）。"
-    ],
-    answer: 0,
-    hintId: "Asuransi Ketenagakerjaan (Koyou Hoken) memberikan tunjangan pengangguran bagi pekerja yang kehilangan pekerjaan agar kebutuhan hidupnya terlindungi.",
-    hintNe: "कोयोउ बिमा (रोजगार बिमा) ले जागिर छुटेको अवस्थामा अर्को काम नपाउञ्जेल जीवनयापनका लागि बेरोजगार भत्ता प्रदान गर्छ।",
-    expJa: "雇用保険は、労働者が倒産や自己都合等で離職した際に基本手当（失業給付）を支給し、生活の安定と再就職を支援する制度です（テキストp.15）。",
-    expId: "Koyou Hoken bertujuan memberikan tunjangan keuangan saat pekerja menganggur agar mereka tetap bisa hidup layak sambil mencari pekerjaan baru.",
-    expNe: "कोयोउ बिमाले कामदार बेरोजगार हुँदा नयाँ काम नखोजेसम्म बाँच्नका लागि आवश्यक आर्थिक सहयोग (बेरोजगार भत्ता) उपलब्ध गराउँछ।"
-  },
-  {
-    id: 12,
-    cat: "第2章：2.1.6 建設労働者雇用改善法 (p.16)",
-    q: "「<ruby>建設労働者<rt>けんせつろうどうしゃ</rt></ruby><ruby>雇用<rt>こよう</rt></ruby><ruby>改善法<rt>かいぜんほう</rt></ruby>」に <ruby>基<rt>もと</rt></ruby>づき、<ruby>建設<rt>けんせつ</rt></ruby><ruby>業者<rt>ぎょうしゃ</rt></ruby>に **<ruby>求<rt>もと</rt></ruby>められている<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>み**は どれですか。",
-    options: [
-      "<ruby>雇用管理責任者<rt>こようかんりせきにんしゃ</rt></ruby>を<ruby>選任<rt>せんにん</rt></ruby>し、<ruby>書面<rt>しょめん</rt></ruby>で<ruby>労働<rt>ろうどう</rt></ruby><ruby>条件<rt>じょうけん</rt></ruby>を<ruby>明示<rt>めいじ</rt></ruby>するなど<ruby>雇用<rt>こよう</rt></ruby><ruby>管理<rt>かんり</rt></ruby>の<ruby>改善<rt>かいぜん</rt></ruby>と<ruby>福利厚生<rt>ふくりこうせい</rt></ruby>を<ruby>充実<rt>じゅうじつ</rt></ruby>させる。",
-      "<ruby>現場<rt>げんば</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めるときは、<ruby>契約書<rt>けいやくしょ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>らずに<ruby>口約束<rt>くちやくそく</rt></ruby>だけで<ruby>働<rt>はたら</rt></ruby>かせる。",
-      "<ruby>建設<rt>けんせつ</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby><ruby>講習<rt>こうしゅう</rt></ruby>や<ruby>資格<rt>しかく</rt></ruby><ruby>取得<rt>しゅとく</rt></ruby>を<ruby>禁止<rt>きんし</rt></ruby>し、<ruby>単純<rt>たんじゅん</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>だけを<ruby>続<rt>つづ</rt></ruby>けさせる。",
-      "<ruby>給料<rt>きゅうりょう</rt></ruby>の<ruby>未払<rt>みばら</rt></ruby>いが<ruby>起<rt>お</rt></ruby>きても、<ruby>元請<rt>もとうけ</rt></ruby>や<ruby>役所<rt>やくしょ</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>してはならないと<ruby>規則<rt>きそく</rt></ruby>を<ruby>作<rt>つく</rt></ruby>る。"
-    ],
-    answer: 0,
-    hintId: "Undang-Undang Perbaikan Ketenagakerjaan Konstruksi mewajibkan penunjukan manajer ketenagakerjaan dan kejelasan kontrak kerja demi melindungi pekerja.",
-    hintNe: "निर्माण कामदार रोजगार सुधार ऐनले कामदारको हितका लागि रोजगार प्रबन्धक तोक्न र लिखित सम्झौता गर्न अनिवार्य गरेको छ।",
-    expJa: "建設業における労働力不足の改善と定着のため、雇用管理責任者の選任、適正な労働条件の明示、技能向上支援などを定めています（テキストp.16）。",
-    expId: "UU ini mewajibkan pengusaha konstruksi menunjuk penanggung jawab manajemen tenaga kerja, memperjelas surat kontrak, dan meningkatkan kesejahteraan pekerja.",
-    expNe: "यस ऐनले निर्माण क्षेत्रका कामदारको कार्य वातावरण सुधार्न, रोजगार प्रबन्धक राख्न र स्पष्ट लिखित सम्झौता गर्न कम्पनीलाई बाध्य पारेको छ।"
-  },
-  {
-    id: 13,
-    cat: "第2章：2.1.7 職業能力開発促進法 (p.17)",
-    q: "「<ruby>職業能力開発促進法<rt>しょくぎょうのうりょくかいはつそくしんほう</rt></ruby>」に <ruby>基<rt>もと</rt></ruby>づく **「<ruby>技能検定<rt>ぎのうけんてい</rt></ruby>」などの<ruby>仕組<rt>しく</rt></ruby>み**について <ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
-    options: [
-      "<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が<ruby>段階的<rt>だんかいてき</rt></ruby>に<ruby>技能<rt>ぎのう</rt></ruby>を<ruby>習得<rt>しゅうとく</rt></ruby>できるよう、<ruby>国<rt>くに</rt></ruby>が<ruby>統一<rt>とういつ</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>で<ruby>技能<rt>ぎのう</rt></ruby>を<ruby>評価<rt>ひょうか</rt></ruby>・<ruby>証明<rt>しょうめい</rt></ruby>する<ruby>国家検定制度<rt>こっかけんていせいど</rt></ruby>がある。",
-      "<ruby>一度<rt>いちど</rt></ruby><ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>入社<rt>にゅうしゃ</rt></ruby>したら、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>技術<rt>ぎじゅつ</rt></ruby>を<ruby>学<rt>まな</rt></ruby>ぶことは<ruby>法律<rt>ほうりつ</rt></ruby>で<ruby>禁止<rt>きんし</rt></ruby>されている。",
-      "<ruby>技能検定<rt>ぎのうけんてい</rt></ruby>の<ruby>資格<rt>しかく</rt></ruby>をとっても、<ruby>現場<rt>げんば</rt></ruby>での<ruby>評価<rt>ひょうか</rt></ruby>や<ruby>給料<rt>きゅうりょう</rt></ruby>の<ruby>昇給<rt>しょうきゅう</rt></ruby>に<ruby>反映<rt>はんえい</rt></ruby>させてはならない。",
-      "<ruby>技能実習生<rt>ぎのうじっしゅうせい</rt></ruby>や<ruby>特定技能者<rt>とくていぎのうしゃ</rt></ruby>は、<ruby>日本<rt>にほん</rt></ruby>の<ruby>国家検定<rt>こっかけんてい</rt></ruby>を<ruby>受験<rt>じゅけん</rt></ruby>する<ruby>資格<rt>しかく</rt></ruby>が<ruby>与<rt>あた</rt></ruby>えられていない。"
-    ],
-    answer: 0,
-    hintId: "Undang-undang ini mengatur Sertifikasi Keterampilan Nasional (Ginou Kentei) untuk menguji dan mengakui keahlian pekerja secara resmi.",
-    hintNe: "यो ऐनले कामदारको सीप परीक्षण गरी राष्ट्रिय रूपमा प्रमाणित गर्ने सीप परीक्षण प्रणाली (गिनौ केन्तेई) को व्यवस्था गरेको छ।",
-    expJa: "職業能力開発促進法では、技能検定（1級・2級・随時試験等）を通じて労働者の技能を公証し、キャリア形成や処遇向上を後押ししています（テキストp.17）。",
-    expId: "UU ini mendukung peningkatan keterampilan pekerja secara bertahap melalui sistem ujian keterampilan nasional (Ginou Kentei) yang diakui oleh pemerintah.",
-    expNe: "यस ऐनले कामदारको क्षमता बढाउन सरकारी स्तरबाट सीप परीक्षण (गिनौ केन्तेई) गरी योग्यता प्रमाणित गर्ने अवसर प्रदान गर्छ।"
   }
 ];
 
 let currentIndex = 0;
 let userAnswers = new Array(questions.length).fill(null);
+
+function openMenu() {
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("overlay").style.display = "block";
+}
+
+function closeMenu() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("overlay").style.display = "none";
+}
+
+function updateMenuBadges() {
+  const keys = [
+    { id: "badge-shokucho", key: "score_shokucho" },
+    { id: "badge-gakka1", key: "score_gakka1" },
+    { id: "badge-gakka1-2", key: "score_gakka1_2" }
+  ];
+  keys.forEach(item => {
+    const val = localStorage.getItem(item.key);
+    const badge = document.getElementById(item.id);
+    if (val && badge) {
+      badge.textContent = `✔ ${val}点`;
+      badge.style.display = "inline-block";
+    }
+  });
+}
 
 function renderNav() {
   const grid = document.getElementById("nav-grid");
@@ -479,16 +493,20 @@ function finishQuiz() {
     reviewBox.appendChild(item);
   });
 
-  const percentage = Math.round((score / questions.length) * 100);
-  document.getElementById("score-text").textContent = `${score} / ${questions.length} 点 (${percentage}%)`;
+  const finalScore = score * 10;
+  localStorage.setItem(MODULE_KEY, finalScore);
+  updateMenuBadges();
+
+  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
   const passMsg = document.getElementById("pass-msg");
-  if (percentage >= 75) {
-    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準（75%以上）達成！素晴らしいです！</strong>";
+  if (finalScore >= 70) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準達成です！素晴らしい！</strong>";
   } else {
-    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。解説を読んで復習しましょう！</strong>";
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
 }
 
+updateMenuBadges();
 loadQuestion();
 </script>
 </body>
