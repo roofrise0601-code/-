@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特定技能2号 学科対策テスト</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-sub: #64748b;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
+    .container { max-width: 740px; margin: 0 auto; position: relative; }
+    
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .btn-portal-back { font-size: 0.88rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .btn-portal-back:hover { text-decoration: underline; }
+    .btn-menu-open { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .btn-menu-open:hover { background: #f1f5f9; }
+
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; }
+    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: #fff; z-index: 100; box-shadow: -2px 0 8px rgba(0,0,0,0.15); transition: right 0.25s ease; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+    .drawer-header h2 { font-size: 1rem; color: var(--text); }
+    .btn-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-sub); }
+    .drawer-body { padding: 16px; overflow-y: auto; flex: 1; }
+    .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: #fff; font-size: 0.88rem; font-weight: 600; transition: all 0.2s; }
+    .menu-item:hover { background: #f8fafc; border-color: var(--primary); }
+    .menu-item.active { border-color: var(--primary); background: #f0f9ff; color: var(--primary); }
+    .badge-score { font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; background: #22c55e; color: #fff; font-weight: 700; }
+
+    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
+    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .nav-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .nav-btn.answered { background: #e2e8f0; color: #475569; }
+    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #7dd3fc; }
+    .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
+    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
+    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 2.1; }
+    ruby { ruby-position: over; }
+    ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
+    .hints-group { display: flex; gap: 8px; margin-bottom: 18px; }
+    .btn-hint { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }
+    .hint-box { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; color: #92400e; margin-bottom: 16px; display: none; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.96rem; cursor: pointer; transition: all 0.2s; line-height: 1.9; }
+    .option-btn:hover { border-color: #94a3b8; background: #f8fafc; }
+    .option-btn.selected { border-color: var(--primary); background: #f0f9ff; color: var(--primary); font-weight: 600; }
+    .btn-group { display: flex; gap: 10px; }
+    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    #result-view { display: none; }
+    .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
+    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+    .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .review-item:last-child { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-ok { background: #dcfce7; color: var(--success); }
+    .badge-ng { background: #fee2e2; color: var(--danger); }
+    .review-ans { font-size: 0.95rem; margin-top: 6px; line-height: 1.9; }
+    .review-exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 0.9rem; line-height: 1.9; }
+    .review-multi-exp { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <a href="index.html" class="btn-portal-back">🏠 ポータル（目次）へ戻る</a>
+    <button class="btn-menu-open" onclick="openMenu()">☰ 学習メニュー</button>
+  </div>
+
+  <div class="drawer-overlay" id="overlay" onclick="closeMenu()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h2>学習単元一覧</h2>
+      <button class="btn-close" onclick="closeMenu()">✕</button>
+    </div>
+    <div class="drawer-body">
+      <a href="quiz.html?day=shokucho" class="menu-item" id="m-shokucho">
+        <span>📘 職長・安全衛生管理編 (5問)</span>
+        <span class="badge-score" id="badge-shokucho" style="display:none;"></span>
+      </a>
+      <a href="quiz.html?day=1" class="menu-item" id="m-day1">
+        <span>📗 Day 1：現場基本・チームワーク (10問)</span>
+        <span class="badge-score" id="badge-day1" style="display:none;"></span>
+      </a>
+      <a href="quiz.html?day=2" class="menu-item" id="m-day2">
+        <span>📗 Day 2：労働基準法・労働法編 (10問)</span>
+        <span class="badge-score" id="badge-day2" style="display:none;"></span>
+      </a>
+      <a href="quiz.html?day=3" class="menu-item" id="m-day3">
+        <span>📙 Day 3：建設業法・環境法令編 (10問)</span>
+        <span class="badge-score" id="badge-day3" style="display:none;"></span>
+      </a>
+    </div>
+  </div>
+
+  <div id="quiz-view">
+    <header>
+      <h1 id="title-text"></h1>
+      <div class="status-bar">
+        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">10</span> <ruby>問<rt>もん</rt></ruby></span>
+        <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
+      </div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </header>
+
+    <div class="card">
+      <div class="q-meta" id="q-category"></div>
+      <div class="q-text" id="q-text"></div>
+
+      <div class="hints-group">
+        <button class="btn-hint" onclick="toggleHint('id')">💡 インドネシア語ヒント</button>
+        <button class="btn-hint" onclick="toggleHint('ne')">💡 ネパール語ヒント</button>
+      </div>
+      <div class="hint-box" id="hint-id"></div>
+      <div class="hint-box" id="hint-ne"></div>
+
+      <div class="options" id="options-box"></div>
+
+      <div class="btn-group">
+        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
+        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
+        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-view">
+    <div class="score-card">
+      <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
+      <div class="score-num" id="score-text"></div>
+      <p id="pass-msg"></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
+      <div id="review-box"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn-nav btn-primary" style="flex: 1;" onclick="location.reload()">もう一度解く</button>
+        <a href="index.html" class="btn-nav" style="flex: 1; text-decoration: none; line-height: 22px;">ポータルへ戻る</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// URLパラメータ取得（?day=〇〇）
+const urlParams = new URLSearchParams(window.location.search);
+const currentDay = urlParams.get('day') || 'shokucho';
+
+// 各単元の全問題データベース
+const DB = {
+  shokucho: {
+    title: "特定技能2号 職長・安全管理対策テスト（5問）",
+    key: "score_shokucho",
+    passScore: 80,
+    questions: [
+      {
+        id: 1,
+        cat: "職長の役割・現場管理",
+        q: "<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めるにあたり、<ruby>職長<rt>しょくちょう</rt></ruby>が<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>すときの<ruby>対応<rt>たいおう</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**はどれですか。",
+        options: [
+          "<ruby>作業手順書<rt>さぎょうてじゅんしょ</rt></ruby>に<ruby>基<rt>づ</rt></ruby>き、<ruby>危険<rt>きけん</rt></ruby>のポイントと<ruby>安全<rt>あんぜん</rt></ruby>ルールを<ruby>具体的<rt>ぐたいてき</rt></ruby>に<ruby>伝<rt>つた</rt></ruby>え、<ruby>理解<rt>りかい</rt></ruby>できたかを<ruby>復唱<rt>ふくしょう</rt></ruby>させて<ruby>確認<rt>かくにん</rt></ruby>する。",
+          "「いつも<ruby>通<rt>とお</rt></ruby>りやっておいて」とだけ<ruby>言<rt>い</rt></ruby>い、<ruby>詳しい<rt>くわしい</rt></ruby><ruby>作業内容<rt>さぎょうないよう</rt></ruby>や<ruby>危険箇所の<rt>きけんかしょの</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>は<ruby>省略<rt>しょうりゃく</rt></ruby>する。",
+          "<ruby>新入り<rt>しんいり</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>何<rt>なに</rt></ruby>も<ruby>教<rt>おし</rt></ruby>えず、<ruby>失敗<rt>しっぱい</rt></ruby>してから<ruby>怒<rt>おこ</rt></ruby>って<ruby>覚<rt>おぼ</rt></ruby>えさせる。",
+          "<ruby>工期<rt>こうき</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れているため、<ruby>保護具<rt>ほごぐ</rt></ruby>の<ruby>着用<rt>ちゃくよう</rt></ruby><ruby>点検<rt>てんけん</rt></ruby>を<ruby>省<rt>はぶ</rt></ruby>いてすぐに<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>開始<rt>かいし</rt></ruby>させる。"
+        ],
+        answer: 0,
+        hintId: "Mandor harus menjelaskan poin bahaya sesuai SOP dan meminta pekerja mengulang instruksi.",
+        hintNe: "कार्यनेताले सुरक्षा नियम बुझाएर कामदारलाई दोहोर्याउन लगाउनुपर्छ।",
+        expJa: "職長は作業手順書に基づき、危険予知や保護具の着用を具体的に指示し、理解を確認する義務があります。",
+        expId: "Mandor wajib memberikan arahan keselamatan yang jelas sesuai SOP dan memastikan pekerja memahaminya.",
+        expNe: "कार्यनेताले काम सुरु गर्नु अघि सुरक्षा निर्देशन स्पष्टसँग दिनुपर्छ।"
+      },
+      {
+        id: 2,
+        cat: "安全衛生法・作業基準",
+        q: "<ruby>労働安全衛生法<rt>ろうどうあんぜんえいせいほう</rt></ruby>において、<ruby>事業主<rt>じぎょうぬし</rt></ruby>や<ruby>職長<rt>しょくちょう</rt></ruby>が「<ruby>高所作業<rt>こうしょさぎょう</rt></ruby>（<ruby>墜落<rt>ついらく</rt></ruby>の<ruby>危険<rt>きけん</rt></ruby>がある<ruby>場所<rt>ばしょ</rt></ruby>）」で<ruby>講<rt>こう</rt></ruby>ずべき<ruby>措置<rt>そち</rt></ruby>として、**<ruby>誤<rt>あやま</rt></ruby>っているもの**はどれですか。",
+        options: [
+          "<ruby>高さ<rt>たかさ</rt></ruby>が1.5mの<ruby>箇所<rt>かしょ</rt></ruby>であれば、<ruby>足場<rt>あしば</rt></ruby>や<ruby>手すり<rt>てすり</rt></ruby>などの<ruby>墜落防止設備<rt>ついらくぼうしせつび</rt></ruby>は<ruby>一切<rt>いっさい</rt></ruby><ruby>不要<rt>ふよう</rt></ruby>である。",
+          "<ruby>高さ<rt>たかさ</rt></ruby>2m<ruby>以上<rt>いじょう</rt></ruby>の<ruby>箇所<rt>かしょ</rt></ruby>で<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>うときは、<ruby>作業床<rt>さぎょうゆか</rt></ruby>を<ruby>設<rt>もう</rt></ruby>け、<ruby>手すり<rt>てすり</rt></ruby>や<ruby>囲い<rt>かこい</rt></ruby>を<ruby>設置<rt>せっち</rt></ruby>しなければならない。",
+          "<ruby>作業床<rt>さぎょうゆか</rt></ruby>の<ruby>設置<rt>せっち</rt></ruby>が<ruby>困難<rt>こんなん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>では、フルハーネス<ruby>型<rt>がた</rt></ruby><ruby>墜落制止用器具<rt>ついらくせいしようきぐ</rt></ruby>を<ruby>確実<rt>かくじつ</rt></ruby>に<ruby>使用<rt>しよう</rt></ruby>させる。",
+          "<ruby>強風<rt>きょうふう</rt></ruby>・<ruby>大雨<rt>おおあめ</rt></ruby>などの<ruby>悪天候<rt>あくてんこう</rt></ruby>で<ruby>危険<rt>きけん</rt></ruby>が<ruby>予想<rt>よそう</rt></ruby>されるときは、<ruby>高所作業<rt>こうしょさぎょう</rt></ruby>を<ruby>中止<rt>ちゅうし</rt></ruby>しなければならない。"
+        ],
+        answer: 0,
+        hintId: "Ketinggian 2m atau lebih diwajibkan memasang pengaman/harness. Namun ketinggian di bawah 2m pun tetap wajib mempertimbangkan keselamatan.",
+        hintNe: "२ मिटरभन्दा अग्लो ठाउँमा कार्यथलो र रेलिङ अनिवार्य हुन्छ।",
+        expJa: "労働安全衛生規則では、高さ2m以上の箇所で墜落防止措置（作業床や手すり）が義務付けられています。",
+        expId: "Tinggi 2 meter ke atas wajib ada pijakan kerja dan pagar pengaman serta sabuk pengaman.",
+        expNe: "२ मिटरभन्दा अग्लो ठाउँमा दुर्घटना रोक्न सुरक्षात्मक उपायहरू अपनाउनु अनिवार्य छ।"
+      },
+      {
+        id: 3,
+        cat: "危険予知活動（KYK）",
+        q: "<ruby>作業前<rt>さぎょうまえ</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>う「KY<ruby>活動<rt>かつどう</rt></ruby>（<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>）」の<ruby>進め方<rt>すすめかた</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**はどれですか。",
+        options: [
+          "<ruby>作業員<rt>さぎょういん</rt></ruby><ruby>全員<rt>ぜんいん</rt></ruby>で「どんな<ruby>危険<rt>きけん</rt></ruby>がひそんでいるか」を<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>い、<ruby>具体策<rt>ぐたいさく</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>で<ruby>確認<rt>かくにん</rt></ruby>する。",
+          "<ruby>職長<rt>しょくちょう</rt></ruby>が1<ruby>人<rt>にん</rt></ruby>でKYシートを<ruby>書<rt>か</rt></ruby>き、<ruby>作業員<rt>さぎょういん</rt></ruby>には<ruby>内容<rt>ないよう</rt></ruby>を<ruby>伝<rt>つた</rt></ruby>えずに<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めさせる。",
+          "<ruby>昨日<rt>きのう</rt></ruby>と<ruby>同<rt>おな</rt></ruby>じ<ruby>作業<rt>さぎょう</rt></ruby>であれば、<ruby>危険<rt>きけん</rt></ruby>はないのでKY<ruby>活動<rt>かつどう</rt></ruby>は<ruby>省略<rt>しょうりゃく</rt></ruby>してよい。",
+          "<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からない<ruby>外国人<rt>がいこくじん</rt></ruby><ruby>労働者<rt>ろうどうしゃ</rt></ruby>はKY<ruby>活動<rt>かつどう</rt></ruby>に<ruby>参加<rt>さんか</rt></ruby>させなくてよい。"
+        ],
+        answer: 0,
+        hintId: "KYK wajib dilakukan oleh SEMUA pekerja secara bersama-sama, mendiskusikan bahaya dan solusinya.",
+        hintNe: "सबै कामदार मिलेर खतरा पहिचान गरी औंलाले देखाउँदै नारा लगाउनुपर्छ।",
+        expJa: "KY活動は作業員全員が参加し、潜在危険を洗い出し、行動目標を決めて指差し唱和で共有することが基本です。",
+        expId: "Semua pekerja harus ikut serta dalam aktivitas KY, mendiskusikan potensi bahaya dan membuat target tindakan aman.",
+        expNe: "KY गतिविधिमा सबै कामदार सहभागी भई खतरा पत्ता लगाएर सुरक्षाको वाचा गर्नुपर्छ।"
+      },
+      {
+        id: 4,
+        cat: "フルハーネス型安全帯の点検",
+        q: "「フルハーネス<ruby>型<rt>がた</rt></ruby><ruby>墜落制止用器具<rt>ついらくせいしようきぐ</rt></ruby>」の<ruby>日常点検<rt>にちじょうてんけん</rt></ruby>において、**<ruby>使用<rt>しよう</rt></ruby>を<ruby>中止<rt>ちゅうし</rt></ruby>すべき<ruby>状態<rt>じょうたい</rt></ruby>**はどれですか。",
+        options: [
+          "ベルトに<ruby>切<rt>き</rt></ruby>れ<ruby>目<rt>め</rt></ruby>や<ruby>著<rt>いちじる</rt></ruby>しい<ruby>摩耗<rt>まもう</rt></ruby>があり、フックのバネの<ruby>戻<rt>もど</rt></ruby>りが<ruby>悪<rt>わる</rt></ruby>い。",
+          "ベルトの<ruby>色<rt>いろ</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>汚<rt>よご</rt></ruby>れているが、<ruby>破<rt>やぶ</rt></ruby>れや<ruby>傷<rt>きず</rt></ruby>はない。",
+          "フックの外れ止め装置がしっかりとロックされる。",
+          "ショックアブソーバ（緩衝器）が破断（展開）していない。"
+        ],
+        answer: 0,
+        hintId: "Harness yang sabuknya sobek atau per pengaitnya rusak tidak boleh digunakan sama sekali.",
+        hintNe: "बेल्ट च्यातिएको वा हुक राम्रोसँग नअड्किने उपकरण तुरुन्त फेर्नुपर्छ।",
+        expJa: "ベルトの傷・摩耗やフックの不具合は命に関わります。直ちに使用を中止し廃棄または交換しなければなりません。",
+        expId: "Tali yang robek atau pengait yang macet sangat berbahaya saat jatuh. Jangan gunakan harness tersebut.",
+        expNe: "बेल्टमा क्षति पुगेको वा हुक नलाग्ने सेफ्टी बेल्ट कहिल्यै प्रयोग गर्नुहुँदैन।"
+      },
+      {
+        id: 5,
+        cat: "異常時・緊急時対応",
+        q: "<ruby>作業中<rt>さぎょうちゅう</rt></ruby>に<ruby>同僚<rt>どうりょう</rt></ruby>が<ruby>高所<rt>こうしょ</rt></ruby>から<ruby>墜落<rt>ついらく</rt></ruby>し、<ruby>意識<rt>いしき</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>っているのを<ruby>発見<rt>はっけん</rt></ruby>しました。<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>初動対応<rt>しょどうたいおう</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**はどれですか。",
+        options: [
+          "<ruby>二次災害<rt>にじさいがい</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐため<ruby>周囲<rt>しゅうい</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>大声<rt>おおごえ</rt></ruby>で<ruby>応援<rt>おうえん</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>び、119<ruby>番通報<rt>ばんつうほう</rt></ruby>（<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>）と<ruby>元請<rt>もとうけ</rt></ruby>への<ruby>報告<rt>ほうこく</rt></ruby>を<ruby>迅速<rt>じんそく</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>う。",
+          "<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>怒<rt>おこ</rt></ruby>られるのを<ruby>防<rt>ふせ</rt></ruby>ぐため、<ruby>事故<rt>じこ</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>して<ruby>何<rt>なに</rt></ruby>もなかったことにして<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>ける。",
+          "<ruby>意識<rt>いしき</rt></ruby>のない<ruby>被災者<rt>ひさいしゃ</rt></ruby>を1<ruby>人<rt>にん</rt></ruby>で<ruby>抱<rt>かか</rt></ruby>え<ruby>上<rt>あ</rt></ruby>げ、<ruby>無理<rt>むり</rt></ruby>やり<ruby>立<rt>た</rt></ruby>たせようとする。",
+          "<ruby>病院<rt>びょういん</rt></ruby>には<ruby>連絡<rt>れんらく</rt></ruby>せず、<ruby>本人<rt>ほんにん</rt></ruby>の<ruby>意識<rt>いしき</rt></ruby>が<ruby>戻<rt>もど</rt></ruby>るまでその<ruby>場<rt>ば</rt></ruby>に<ruby>放置<rt>ほうち</rt></ruby>する。"
+        ],
+        answer: 0,
+        hintId: "Pastikan keselamatan sekitar untuk cegah bahaya susulan, panggil bantuan, hubungi 119 dan lapor ke pengawas utama.",
+        hintNe: "वरपरको सुरक्षा जाँच्ने, सहयोग माग्ने, ११९ मा एम्बुलेन्स बोलाउने र तुरुन्त मुख्य कम्पनीलाई खबर गर्ने।",
+        expJa: "緊急時はまず二次災害防止・救護優先です。大声で周知し、119番通報と元請への連絡を最優先で行います。",
+        expId: "Tindakan darurat pertama: pastikan area aman dari bahaya susulan, panggil ambulans (119), dan lapor ke pimpinan proyek.",
+        expNe: "आपतकालीन अवस्थामा दोस्रो दुर्घटना हुन नदिने, सहयोग बोलाउने र ११९ मा फोन गरी घाइतेको उद्धार गर्नुपर्छ।"
+      }
+    ]
+  },
+  1: {
+    title: "特定技能2号 学科：Day 1（第1章 現場基本・チームワーク）",
+    key: "score_gakka1",
+    passScore: 70,
+    questions: [
+      {
+        id: 1,
+        cat: "第1章：1.1 チームワーク (p.1)",
+        q: "<ruby>複数<rt>ふくすう</rt></ruby>の <ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>が <ruby>同<rt>おな</rt></ruby>じ<ruby>現場<rt>げんば</rt></ruby>で <ruby>工事<rt>こうじ</rt></ruby>を <ruby>進<rt>すす</rt></ruby>めています。<ruby>工事<rt>こうじ</rt></ruby>を スムーズに <ruby>安全<rt>あんぜん</rt></ruby>に <ruby>進<rt>すす</rt></ruby>めるための <ruby>職長<rt>しょくちょう</rt></ruby>の <ruby>行動<rt>こうどう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>現場監督<rt>げんばかんとく</rt></ruby>と<ruby>綿密<rt>めんみつ</rt></ruby>に<ruby>打合<rt>うちあわ</rt></ruby>せをし、<ruby>次<rt>つぎ</rt></ruby>の<ruby>工程<rt>こうてい</rt></ruby>の<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>とも<ruby>連携<rt>れんけい</rt></ruby>して<ruby>技能者<rt>ぎのうしゃ</rt></ruby>に<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>す。",
+          "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>工種<rt>こうしゅ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>スピードだけを<ruby>優先<rt>ゆうせん</rt></ruby>し、<ruby>他<rt>ほか</rt></ruby>の<ruby>業者<rt>ぎょうしゃ</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>エリアを<ruby>先<rt>さき</rt></ruby>に<ruby>塞<rt>ふさ</rt></ruby>いで<ruby>施工<rt>せこう</rt></ruby>する。",
+          "<ruby>経験<rt>けいけん</rt></ruby>の<ruby>少<rt>すく</rt></ruby>ない<ruby>後輩<rt>こうはい</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>には<ruby>何<rt>なに</rt></ruby>もアドバイスせず、<ruby>失敗<rt>しっぱい</rt></ruby>して<ruby>自分<rt>じぶん</rt></ruby>で<ruby>覚<rt>おぼ</rt></ruby>えるまで<ruby>放置<rt>ほうち</rt></ruby>する。",
+          "<ruby>現場監督<rt>げんばかんとく</rt></ruby>からの<ruby>指示<rt>しじ</rt></ruby>は<ruby>聞<rt>き</rt></ruby>かず、<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>長年<rt>ながねん</rt></ruby>の<ruby>勘<rt>かん</rt></ruby>だけで<ruby>勝手<rt>かって</rt></ruby>に<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順<rt>てじゅん</rt></ruby>を<ruby>決<rt>き</rt></ruby>める。"
+        ],
+        answer: 0,
+        hintId: "Kerja sama antar-subkontraktor dan koordinasi dengan pengawas lapangan adalah kunci kelancaran proyek.",
+        hintNe: "विभिन्न ठेकेदारहरू बीचको टिमवर्क र सुपरभाइजरसँगको छलफल नै काम सुरक्षित तरिकाले अघि बढाउने मुख्य आधार हो।",
+        expJa: "建設工事は多くの工程がつながっています。現場監督との打合せや専門工事業者間のチームワークを大切にします。",
+        expId: "Mandor harus berkoordinasi dengan pengawas dan menjaga kerja sama antartim serta membimbing bawahan.",
+        expNe: "सुपरभाइजरसँग नियमित छलफल र अन्य टोलीसँगको सहकार्य गर्दै जुनियरलाई सिकाउनु पर्छ।"
+      },
+      {
+        id: 2,
+        cat: "第1章：1.2 施工体制 (p.1-2)",
+        q: "<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>における「<ruby>監理者<rt>かんりしゃ</rt></ruby>」の **<ruby>正<rt>ただ</rt></ruby>しい<ruby>役割<rt>やくわり</rt></ruby>**は どれですか。",
+        options: [
+          "<ruby>工事<rt>こうじ</rt></ruby>が <ruby>設計<rt>せっけい</rt></ruby><ruby>図書<rt>としょ</rt></ruby>（<ruby>図面<rt>ずめん</rt></ruby>）の<ruby>通<rt>とお</rt></ruby>りに <ruby>正<rt>ただ</rt></ruby>しく<ruby>行<rt>おこな</rt></ruby>われているかを <ruby>確認<rt>かくにん</rt></ruby>する。",
+          "<ruby>工事<rt>こうじ</rt></ruby>を<ruby>建設<rt>けんせつ</rt></ruby><ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>注文<rt>ちゅうもん</rt></ruby>し、<ruby>費用<rt>ひよう</rt></ruby>を<ruby>支払<rt>しはら</rt></ruby>う（<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>）。",
+          "<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>の<ruby>希望<rt>きぼう</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>建物<rt>たてもの</rt></ruby>の<ruby>設計<rt>せっけい</rt></ruby><ruby>図面<rt>ずめん</rt></ruby>を<ruby>描<rt>か</rt></ruby>く（<ruby>設計者<rt>せっけいしゃ</rt></ruby>）。",
+          "<ruby>専門<rt>せんもん</rt></ruby><ruby>工事業者<rt>こうじぎょうしゃ</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>手元<rt>てもと</rt></ruby>で<ruby>道具<rt>どうぐ</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>を<ruby>教<rt>おし</rt></ruby>える（<ruby>職長<rt>しょくちょう</rt></ruby>）。"
+        ],
+        answer: 0,
+        hintId: "Kanrisha (Pengawas Konstruksi) bertugas memeriksa apakah pekerjaan di lapangan sudah sesuai gambar rencana.",
+        hintNe: "'कान्रिशा' (सुपरभाइजिङ इन्जिनियर) को काम निर्माण कार्य नक्सा अनुसार भएको छ कि छैन भनी जाँच्नु हो।",
+        expJa: "監理者は、工事が設計図書（図面）通りに適正に行われているかを確認する独立した立場の技術者です。",
+        expId: "Kanrisha bertugas memeriksa kesesuaian antara pekerjaan nyata dengan gambar arsitektur.",
+        expNe: "काम नक्सा वा डिजाइन बमोजिम सही ढङ्गले भइरहेको छ कि छैन भनेर निरीक्षण गर्ने प्राविधिक हो।"
+      },
+      {
+        id: 3,
+        cat: "第1章：1.3 建設キャリアアップシステム (p.2-3)",
+        q: "<ruby>建設<rt>けんせつ</rt></ruby>キャリアアップシステム（CCUS）の カードの<ruby>色<rt>いろ</rt></ruby>について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+        options: [
+          "「レベル1（<ruby>初級<rt>しょきゅう</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>・<ruby>見習<rt>みなら</rt></ruby>い）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ブルー** である。",
+          "「レベル2（<ruby>中堅<rt>ちゅうけん</rt></ruby><ruby>技能者<rt>ぎのうしゃ</rt></ruby>・<ruby>一人前<rt>いちにんまえ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ブルー** である。",
+          "「レベル3（<ruby>職長<rt>しょくちょう</rt></ruby>として<ruby>現場<rt>げんば</rt></ruby>に<ruby>従事<rt>じゅうじ</rt></ruby>できる<ruby>技能者<rt>ぎのうしゃ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **シルバー** である。",
+          "「レベル4（<ruby>高度<rt>こうど</rt></ruby>なマネジメント<ruby>能力<rt>のうりょく</rt></ruby>を<ruby>有<rt>ゆう</rt></ruby>する<ruby>技能者<rt>ぎのうしゃ</rt></ruby>）」のカードの<ruby>色<rt>いろ</rt></ruby>は **ゴールド** である。"
+        ],
+        answer: 0,
+        hintId: "Level 1 untuk pemula warnanya PUTIH (White), bukan biru. Level 2 baru Biru (Blue).",
+        hintNe: "तह १ (सुरुवाती कामदार) को कार्डको रङ सेतो हुन्छ, नीलो होइन। तह २ चाहिँ नीलो हुन्छ।",
+        expJa: "レベル1（初級技能者）は「ホワイト」です。レベル2は「ブルー」、レベル3は「シルバー」、レベル4は「ゴールド」です。",
+        expId: "Tingkat kartu CCUS: Level 1 (Putih/Pemula), Level 2 (Biru), Level 3 (Perak), Level 4 (Emas).",
+        expNe: "CCUS कार्डका रङहरू: तह १ (सेतो), तह २ (नीलो), तह ३ (चाँदी), तह ४ (सुनौलो) हुन्।"
+      },
+      {
+        id: 4,
+        cat: "第1章：1.4 現場のあいさつ (p.3)",
+        q: "<ruby>日本<rt>にほん</rt></ruby>の <ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>で「あいさつ」を <ruby>毎日<rt>まいにち</rt></ruby> <ruby>徹底<rt>てってい</rt></ruby>する **<ruby>最<rt>もっと</rt></ruby>も<ruby>大<rt>おお</rt></ruby>きな<ruby>目的<rt>もくてき</rt></ruby>**は どれですか。",
+        options: [
+          "<ruby>作業員<rt>さぎょういん</rt></ruby>どうしのコミュニケーションと<ruby>一体感<rt>いったいかん</rt></ruby>を<ruby>生<rt>う</rt></ruby>み、<ruby>建設<rt>けんせつ</rt></ruby><ruby>現場<rt>げんば</rt></ruby>での「<ruby>事故<rt>じこ</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐ」ため。",
+          "<ruby>声<rt>こえ</rt></ruby>の<ruby>大<rt>おお</rt></ruby>きさを<ruby>競<rt>きそ</rt></ruby>い<ruby>合<rt>あ</rt></ruby>って、<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>序列<rt>じょれつ</rt></ruby>や<ruby>上下<rt>じょうげ</rt></ruby><ruby>関係<rt>かんけい</rt></ruby>をはっきりさせるため。",
+          "<ruby>元請<rt>もとうけ</rt></ruby>の<ruby>監督<rt>かんとく</rt></ruby>に<ruby>怒<rt>おこ</rt></ruby>られないよう、<ruby>形<rt>かたち</rt></ruby>だけのマナーとして<ruby>義務<rt>ぎむ</rt></ruby>づけられているため。",
+          "<ruby>他<rt>ほか</rt></ruby>の<ruby>業者<rt>ぎょうしゃ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しかけられないように、あらかじめ<ruby>先手<rt>せんて</rt></ruby>を<ruby>打<rt>う</rt></ruby>ってあいさつで<ruby>切<rt>き</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げるため。"
+        ],
+        answer: 0,
+        hintId: "Tujuan utama salam di lokasi kerja bukan sekadar formalitas, melainkan membangun rasa kebersamaan demi 'Mencegah Kecelakaan Kerja'.",
+        hintNe: "अभिवादनको मुख्य उद्देश्य टोलीमा एकता ल्याएर 'दुर्घटना हुनबाट रोक्नु' हो।",
+        expJa: "現場であいさつを交わす一番の目的は「現場での事故を防ぐこと」です。声を掛け合える関係が安全施工につながります。",
+        expId: "Tujuan terpenting dari saling menyapa di proyek adalah mencegah kecelakaan.",
+        expNe: "कार्यस्थलमा अभिवादन गर्नुको मुख्य उद्देश्य 'दुर्घटना रोक्नु' हो।"
+      },
+      {
+        id: 5,
+        cat: "第1章：1.5.1 全体朝礼 (p.4-5)",
+        q: "<ruby>朝<rt>あさ</rt></ruby>の「<ruby>全体<rt>ぜんたい</rt></ruby><ruby>朝礼<rt>ちょうれい</rt></ruby>」で、<ruby>各社<rt>かくしゃ</rt></ruby>の <ruby>職長<rt>しょくちょう</rt></ruby>が <ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>向<rt>む</rt></ruby>けて <ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>や <ruby>人員<rt>じんいん</rt></ruby>を <ruby>発表<rt>はっぴょう</rt></ruby>します。この<ruby>理由<rt>りゆう</rt></ruby>として **<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>他<rt>ほか</rt></ruby>の<ruby>職種<rt>しょくしゅ</rt></ruby>が どんな<ruby>作業<rt>さぎょう</rt></ruby>をするかを<ruby>知<rt>し</rt></ruby>ることで、お<ruby>互<rt>たが</rt></ruby>いの<ruby>危険<rt>きけん</rt></ruby>や<ruby>自分<rt>じぶん</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>への<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐため。",
+          "<ruby>他<rt>ほか</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>よりも<ruby>多<rt>おお</rt></ruby>くの<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>連<rt>つ</rt></ruby>れてきていることを<ruby>見<rt>み</rt></ruby>せつけてアピールするため。",
+          "<ruby>作業<rt>さぎょう</rt></ruby><ruby>内容<rt>ないよう</rt></ruby>を<ruby>発表<rt>はっぴょう</rt></ruby>しておけば、<ruby>作業<rt>さぎょう</rt></ruby><ruby>手順書<rt>てじゅんしょ</rt></ruby>の<ruby>作成<rt>さくせい</rt></ruby>や<ruby>安全<rt>あんぜん</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>を<ruby>省略<rt>しょうりゃく</rt></ruby>できるため。",
+          "<ruby>現場監督<rt>げんばかんとく</rt></ruby>の<ruby>代<rt>か</rt></ruby>わりに、<ruby>職長<rt>しょくちょう</rt></ruby>が<ruby>工事<rt>こうじ</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>責任<rt>せきにん</rt></ruby>をすべて<ruby>引<rt>ひ</rt></ruby>き<ruby>受<rt>う</rt></ruby>けることを<ruby>宣言<rt>せんげん</rt></ruby>するため。"
+        ],
+        answer: 0,
+        hintId: "Mengetahui apa yang dikerjakan tim lain sangat penting untuk menghindari bahaya tabrakan atau gangguan kerja antar-spesialisasi.",
+        hintNe: "अन्य टोलीले के काम गर्दैछन् भनी थाहा पाउँदा एकअर्काको काममा पर्ने असर र सम्भावित खतराबाट जोगिन सकिन्छ।",
+        expJa: "異なる工種の作業内容を知ることで、作業エリアの重複や上下作業による危険を未然に防ぎます。",
+        expId: "Dengan saling mengetahui apa yang dikerjakan tim lain, pekerja bisa mengantisipasi bahaya silang.",
+        expNe: "अन्य कामदारको कार्यतालिका बुझ्दा दुर्घटना र खतरालाई पहिले नै रोक्न मद्दत पुग्छ।"
+      },
+      {
+        id: 6,
+        cat: "第1章：1.5.2 職種ごとの朝礼とKY活動 (p.6-7)",
+        q: "<ruby>職種<rt>しょくしゅ</rt></ruby>ごとの <ruby>朝礼<rt>ちょうれい</rt></ruby>で <ruby>行<rt>おこな</rt></ruby>う「KY<ruby>活動<rt>かつどう</rt></ruby>（<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>）」の **<ruby>正<rt>ただ</rt></ruby>しい<ruby>手順<rt>てじゅん</rt></ruby>**は どれですか。",
+        options: [
+          "【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】➔【<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>で かけ<ruby>声<rt>ごえ</rt></ruby>】",
+          "【かけ<ruby>声<rt>ごえ</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】",
+          "【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】➔【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【タッチアンドコール】",
+          "【<ruby>対策<rt>たいさく</rt></ruby>の<ruby>検討<rt>けんとう</rt></ruby>】➔【<ruby>危険<rt>きけん</rt></ruby>の<ruby>発見<rt>はっけん</rt></ruby>】➔【<ruby>指差<rt>ゆびさ</rt></ruby>し<ruby>唱和<rt>しょうわ</rt></ruby>】➔【<ruby>行動<rt>こうどう</rt></ruby><ruby>目標<rt>もくひょう</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>】"
+        ],
+        answer: 0,
+        hintId: "Urutan KYK yang benar: Temukan Bahaya -> Bahas Solusi -> Tentukan Target Tim -> Teriakkan Slogan.",
+        hintNe: "KY गतिविधिको सही क्रम: खतरा पत्ता लगाउने -> समाधान छलफल गर्ने -> कार्य लक्ष्य तय गर्ने -> औंलाले देखाउँदै नारा लगाउने।",
+        expJa: "KY活動は、①危険の発見 ➔ ②対策の検討 ➔ ③行動目標の決定 ➔ ④指差し唱和の順序で行います。",
+        expId: "Urutan KY: 1. Temukan bahaya -> 2. Bahas solusi -> 3. Tentukan target -> 4. Teriakkan sasaran bersama.",
+        expNe: "KY को सही प्रक्रिया: १. खतरा पत्ता लगाउने -> २. उपायबारे छलफल -> ३. लक्ष्य तय -> ४. औंला देखाएर दोहोर्याउने।"
+      },
+      {
+        id: 7,
+        cat: "第1章：1.5.3 作業間の連絡調整 (p.7)",
+        q: "<ruby>作業間連絡調整<rt>さぎょうかんれんらくちょうせい</rt></ruby><ruby>会議<rt>かいぎ</rt></ruby>について、**<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>元請<rt>もとうけ</rt></ruby>と<ruby>各社<rt>かくしゃ</rt></ruby>の<ruby>職長<rt>しょくちょう</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まり、<ruby>翌日<rt>よくじつ</rt></ruby>の<ruby>作業エリア<rt>さぎょうえりあ</rt></ruby>や<ruby>クレーン<rt>くれーん</rt></ruby>の<ruby>使用時間<rt>しようじかん</rt></ruby>、<ruby>搬入<rt>はんにゅう</rt></ruby><ruby>予定<rt>よてい</rt></ruby>を<ruby>調整<rt>ちょうせい</rt></ruby>する。",
+          "<ruby>職長<rt>しょくちょう</rt></ruby>は<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>出<rt>で</rt></ruby>る<ruby>必要<rt>ひつよう</rt></ruby>はなく、<ruby>当日<rt>とうじつ</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>に<ruby>早<rt>はや</rt></ruby>い<ruby>者<rt>もの</rt></ruby><ruby>勝<rt>が</rt></ruby>ちで<ruby>重機<rt>じゅうき</rt></ruby>を<ruby>奪<rt>うば</rt></ruby>い<ruby>合<rt>あ</rt></ruby>う。",
+          "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>が<ruby>使<rt>つか</rt></ruby>う<ruby>通路<rt>つうろ</rt></ruby>を、<ruby>他<rt>ほか</rt></ruby>の<ruby>業者<rt>ぎょうしゃ</rt></ruby>に<ruby>黙<rt>だま</rt></ruby>って<ruby>資材<rt>しざい</rt></ruby>で<ruby>塞<rt>ふさ</rt></ruby>いで<ruby>通行止<rt>つうこうど</rt></ruby>めにしてよい。",
+          "<ruby>危険作業<rt>きけんさぎょう</rt></ruby>（<ruby>上<rt>うえ</rt></ruby>で<ruby>鉄骨<rt>てっこつ</rt></ruby>を<ruby>組<rt>く</rt></ruby>むなど）をするときも、<ruby>下<rt>した</rt></ruby>にいる<ruby>業者<rt>ぎょうしゃ</rt></ruby>には<ruby>知<rt>し</rt></ruby>らせずに<ruby>作業<rt>さぎょう</rt></ruby>する。"
+        ],
+        answer: 0,
+        hintId: "Rapat koordinasi antar-mandor bertugas mengatur jadwal penggunaan derek, jalur material, dan mencegah bahaya silang besok harinya.",
+        hintNe: "समन्वय बैठकमा भोलिको काम गर्ने ठाउँ, क्रेन प्रयोग र सामान ल्याउने समयबारे छलफल गरी मिलाइन्छ।",
+        expJa: "作業間連絡調整会議では、翌日の工程や揚重機（クレーン）の使用時間、作業エリアの重複を防ぐ調整を行います。",
+        expId: "Rapat koordinasi harian membahas pembagian area kerja, jadwal alat berat, dan jalur angkut barang untuk esok hari.",
+        expNe: "कार्यनेताहरू बीचको बैठकले भोलिको काम जुध्न नदिई सुरक्षित रूपमा अघि बढाउन मद्दत गर्छ।"
+      },
+      {
+        id: 8,
+        cat: "第1章：1.5.4 巡視・点検 (p.7)",
+        q: "<ruby>職長<rt>しょくちょう</rt></ruby>による **<ruby>現場巡視<rt>げんばじゅんし</rt></ruby>（<ruby>見回<rt>みまわ</rt></ruby>り）**で <ruby>確認<rt>かくにん</rt></ruby>すべきこととして、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>手順書<rt>てじゅんしょ</rt></ruby><ruby>通<rt>とお</rt></ruby>りに<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>作業<rt>さぎょう</rt></ruby>しているか、<ruby>保護具<rt>ほごぐ</rt></ruby>を<ruby>正<rt>ただ</rt></ruby>しく<ruby>着<rt>つ</rt></ruby>けているか、<ruby>不安全<rt>ふあんぜん</rt></ruby>な<ruby>箇所<rt>かしょ</rt></ruby>がないかを<ruby>確認<rt>かくにん</rt></ruby>する。",
+          "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>顔色<rt>かおいろ</rt></ruby>だけを<ruby>遠<rt>とお</rt></ruby>くから<ruby>眺<rt>なが</rt></ruby>め、<ruby>不安全行動<rt>ふあんぜんこうどう</rt></ruby>を<ruby>見<rt>み</rt></ruby>つけても<ruby>注意<rt>ちゅうい</rt></ruby>せず<ruby>無視<rt>むし</rt></ruby>する。",
+          "<ruby>休憩所<rt>きゅうけいじょ</rt></ruby>にずっと<ruby>座<rt>すわ</rt></ruby>ったままで、1<ruby>日<rt>にち</rt></ruby>中<ruby>現場<rt>げんば</rt></ruby>には<ruby>見回<rt>みまわ</rt></ruby>りに<ruby>行<rt>い</rt></ruby>かない。",
+          "<ruby>他社<rt>たしゃ</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>とのおしゃべりだけを<ruby>楽<rt>たの</rt></ruby>しみ、<ruby>安全点検<rt>あんぜんてんけん</rt></ruby>は<ruby>行<rt>おこな</rt></ruby>わない。"
+        ],
+        answer: 0,
+        hintId: "Saat patroli lapangan, mandor harus memastikan APD dipakai dengan benar dan SOP keselamatan dipatuhi secara nyata.",
+        hintNe: "कार्यस्थल निरीक्षण गर्दा सुरक्षा उपकरण सही ढङ्गले लगाएको र सुरक्षित प्रक्रिया अनुसार काम भएको जाँच्नुपर्छ।",
+        expJa: "現場巡視では、作業標準の遵守状況、保護具の適正使用、不安全行動や不安全状態の是正を直接確認します。",
+        expId: "Mandor wajib berpatroli untuk melihat kepatuhan APD dan menghentikan tindakan tidak aman para pekerja secara langsung.",
+        expNe: "कार्यस्थलमा घुम्दा कामदारले तोकिएका सुरक्षा नियम पालना गरेका छन् कि छैनन् भनी यकिन गर्नुपर्छ।"
+      },
+      {
+        id: 9,
+        cat: "第1章：1.5.5 後片付けと清掃 (5S) (p.7)",
+        q: "<ruby>作業終了時<rt>さぎょうしゅうりょうじ</rt></ruby>の「<ruby>後片付<rt>あとかたづ</rt></ruby>け」や「5S」について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>作業後<rt>さぎょうご</rt></ruby>は<ruby>道具<rt>どうぐ</rt></ruby>や<ruby>材料<rt>ざいりょう</rt></ruby>を<ruby>決<rt>き</rt></ruby>められた<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>片付<rt>かたづ</rt></ruby>け、<ruby>清掃<rt>せいそう</rt></ruby>・<ruby>整理整頓<rt>せいりせいとん</rt></ruby>をして<ruby>翌日<rt>よくじつ</rt></ruby>の<ruby>転倒<rt>てんとう</rt></ruby>や<ruby>事故<rt>じこ</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐ。",
+          "<ruby>使<rt>つか</rt></ruby>った<ruby>電動工具<rt>でんどうこうぐ</rt></ruby>はスイッチを入れたまま、<ruby>通路<rt>つうろ</rt></ruby>の<ruby>真ん中<rt>まんなか</rt></ruby>に<ruby>散<rt>ち</rt></ruby>らかして<ruby>帰<rt>かえ</rt></ruby>る。",
+          "<ruby>掃除<rt>そうじ</rt></ruby>や<ruby>片付<rt>かたづ</rt></ruby>けは<ruby>元請<rt>もとうけ</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>なので、<ruby>下請<rt>したうけ</rt></ruby>の<ruby>職長<rt>しょくちょう</rt></ruby>や<ruby>作業員<rt>さぎょういん</rt></ruby>は<ruby>何<rt>なに</rt></ruby>も片付けなくてよい。",
+          "<ruby>余<rt>あま</rt></ruby>ったクギやビスは、<ruby>拾<rt>ひろ</rt></ruby>わずに<ruby>足場<rt>あしば</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>にバラまいたままにしておく。"
+        ],
+        answer: 0,
+        hintId: "Membersihkan tempat kerja dan merapikan alat (5S) mencegah kecelakaan tersandung/terpeleset besok harinya.",
+        hintNe: "काम सकिएपछि औजार मिलाएर राख्ने र सरसफाइ गर्दा लड्ने वा चोट लाग्ने जोखिमबाट बच्न सकिन्छ।",
+        expJa: "作業終了後の整理整頓・清掃（5S）は、つまずき転倒災害や落下事故を防ぎ、翌日の安全施工につながります。",
+        expId: "Merapikan alat kerja dan sisa material adalah kewajiban dasar untuk mencegah kecelakaan di hari berikutnya.",
+        expNe: "काम सकिएपछि सामान ठिक ठाउँमा थन्क्याउनु र सरसफाइ गर्नु सुरक्षित कार्यस्थलको पहिलो नियम हो।"
+      },
+      {
+        id: 10,
+        cat: "第1章：1.5.6 終業時の報告 (p.7)",
+        q: "1<ruby>日<rt>にち</rt></ruby>の <ruby>作業<rt>さぎょう</rt></ruby>が <ruby>終<rt>お</rt></ruby>わったときの **<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>行動<rt>こうどう</rt></ruby>**として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>怪我<rt>けが</rt></ruby>や<ruby>体調<rt>たいちょう</rt></ruby>の<ruby>有無<rt>うむ</rt></ruby>、<ruby>本日の<rt>ほんじつの</rt></ruby><ruby>進捗<rt>しんちょく</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>現場監督<rt>げんばかんとく</rt></ruby>へ<ruby>作業終了<rt>さぎょうしゅうりょう</rt></ruby>の<ruby>報告<rt>ほうこく</rt></ruby>をしてから<ruby>退場<rt>たいじょう</rt></ruby>する。",
+          "<ruby>現場監督<rt>げんばかんとく</rt></ruby>には<ruby>何<rt>なに</rt></ruby>も<ruby>言<rt>い</rt></ruby>わず、<ruby>時間<rt>じかん</rt></ruby>が<ruby>来<rt>き</rt></ruby>たら<ruby>勝手<rt>かって</rt></ruby>に<ruby>作業員<rt>さぎょういん</rt></ruby>を<ruby>連<rt>つ</rt></ruby>れて<ruby>帰<rt>かえ</rt></ruby>る。",
+          "<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>軽<rt>かる</rt></ruby>いケガをしていたが、<ruby>面倒<rt>めんどう</rt></ruby>なので<ruby>元請<rt>もとうけ</rt></ruby>には<ruby>報告<rt>ほうこく</rt></ruby>せず<ruby>隠<rt>かく</rt></ruby>す。",
+          "<ruby>現場<rt>げんば</rt></ruby>の<ruby>戸締<rt>とじ</rt></ruby>まりや<ruby>火気<rt>かき</rt></ruby>・<ruby>電源<rt>でんげん</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby>をせずに、そのまま<ruby>放置<rt>ほうち</rt></ruby>して<ruby>帰宅<rt>きたく</rt></ruby>する。"
+        ],
+        answer: 0,
+        hintId: "Periksa kondisi tubuh pekerja, pastikan api/listrik aman, dan lapor selesai kerja ke pengawas lapangan sebelum pulang.",
+        hintNe: "कामदारको स्वास्थ्य जाँच्ने, आगो/बिजुली बन्द भएको यकिन गर्ने र सुपरभाइजरलाई रिपोर्ट गरेर मात्र घर फर्कने।",
+        expJa: "終業時は作業員全員の無事・進捗、火気・戸締まりを確認し、元請監督へ作業終了報告を行います。",
+        expId: "Mandor wajib memeriksa keselamatan pekerja dan memastikan alat kerja aman sebelum melaporkan kepulangan ke kantor proyek.",
+        expNe: "कामको अन्त्यमा सबै सुरक्षित रहेको यकिन गरी सुपरभाइजरलाई काम सकिएको जानकारी दिनुपर्छ।"
+      }
+    ]
+  },
+  2: {
+    title: "特定技能2号 学科：Day 2（第2章 2.1 労働法編）",
+    key: "score_gakka1_2",
+    passScore: 70,
+    questions: [
+      {
+        id: 1,
+        cat: "2.1.1 労働基準法：労働条件の決定 (p.8)",
+        q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>における「<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>の<ruby>決定<rt>けってい</rt></ruby>」について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>は、<ruby>使用者<rt>しようしゃ</rt></ruby>と<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が「<ruby>対等<rt>たいとう</rt></ruby>の<ruby>立場<rt>たちば</rt></ruby>」において<ruby>決定<rt>けってい</rt></ruby>すべきものであり、お<ruby>互<rt>たが</rt></ruby>いに<ruby>約束事<rt>やくそくごと</rt></ruby>をしっかり<ruby>守<rt>まも</rt></ruby>る<ruby>必要<rt>ひつよう</rt></ruby>がある。",
+          "<ruby>会社<rt>かいしゃ</rt></ruby>（<ruby>使用者<rt>しようしゃ</rt></ruby>）の<ruby>立場<rt>たちば</rt></ruby>のほうが<ruby>強<rt>つよ</rt></ruby>いため、<ruby>会社<rt>かいしゃ</rt></ruby>が<ruby>一方的<rt>いっぽうてき</rt></ruby>にどんなに<ruby>不利<rt>ふり</rt></ruby>な<ruby>条件<rt>じょうけん</rt></ruby>でも<ruby>決<rt>き</rt></ruby>めてよい。",
+          "<ruby>法律<rt>ほうりつ</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>していない<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>であっても、<ruby>労働者<rt>ろうどうしゃ</rt></ruby>が<ruby>同意<rt>どうい</rt></ruby>すればその<ruby>契約<rt>けいやく</rt></ruby>は<ruby>有効<rt>ゆうこう</rt></ruby>になる。",
+          "<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>とは「<ruby>賃金<rt>ちんぎん</rt></ruby>」のことだけをいい、<ruby>労働時間<rt>ろうどうじかん</rt></ruby>や<ruby>安全衛生<rt>あんぜんえいせい</rt></ruby>は<ruby>含<rt>ふく</rt></ruby>まれない。"
+        ],
+        answer: 0,
+        hintId: "Kondisi kerja harus diputuskan atas dasar kedudukan setara antara pengusaha dan pekerja.",
+        hintNe: "कामको सर्तहरू रोजगारदाता र श्रमिक दुवै समान हैसियतमा रहेर तय गर्नुपर्छ र पालना गर्नुपर्छ।",
+        expJa: "労働条件は使用者と労働者が対等の立場において決定すべきものです。基準に達しない部分は違法となり労働基準法が適用されます（テキストp.8）。",
+        expId: "Syarat kerja harus disepakati secara setara antara perusahaan dan pekerja, tidak boleh di bawah standar hukum.",
+        expNe: "श्रम मानक ऐन अनुसार कामको सर्त रोजगारदाता र कामदारले बराबरीको हैसियतमा तय गर्नुपर्छ।"
+      },
+      {
+        id: 2,
+        cat: "2.1.1 労働基準法：均等・強制労働禁止・パワハラ防止 (p.8)",
+        q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>および<ruby>労働施策総合推進法<rt>ろうどうしさくそうごうすいしんほう</rt></ruby>（パワハラ<ruby>防止法<rt>ぼうしほう</rt></ruby>）について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+        options: [
+          "<ruby>外国人<rt>がいこくじん</rt></ruby>であることを<ruby>理由<rt>りゆう</rt></ruby>にして、<ruby>賃金<rt>ちんぎん</rt></ruby>や<ruby>労働条件<rt>ろうどうじょうけん</rt></ruby>で<ruby>差別的取扱<rt>さべつてきとりあつかい</rt></ruby>をしてもよい。",
+          "<ruby>暴行<rt>ぼうこう</rt></ruby>、<ruby>脅迫<rt>きょうはく</rt></ruby>、<ruby>監禁<rt>かんきん</rt></ruby>などで<ruby>労働者<rt>ろうどうしゃ</rt></ruby>の<ruby>意思<rt>いし</rt></ruby>に<ruby>反<rt>はん</rt></ruby>して<ruby>労働<rt>ろうどう</rt></ruby>を<ruby>強制<rt>きょうせい</rt></ruby>してはならない。",
+          "<ruby>職場<rt>しょくば</rt></ruby>での<ruby>優位性<rt>ゆういせい</rt></ruby>を<ruby>利用<rt>りよう</rt></ruby>して<ruby>業務<rt>ぎょうむ</rt></ruby>の<ruby>適正<rt>てきせい</rt></ruby>な<ruby>範囲<rt>はんい</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えて<ruby>苦痛<rt>くつう</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えるパワハラは<ruby>禁止<rt>きんし</rt></ruby>されている。",
+          "<ruby>会社<rt>かいしゃ</rt></ruby>はパワハラを<ruby>防止<rt>ぼうし</rt></ruby>するため、<ruby>相談窓口<rt>そうだんまどぐち</rt></ruby>を<ruby>設<rt>もう</rt></ruby>けるなどの<ruby>措置<rt>そち</rt></ruby>を<ruby>講<rt>こう</rt></ruby>じることが<ruby>義務<rt>ぎむ</rt></ruby>づけられている。"
+        ],
+        answer: 0,
+        hintId: "Diskriminasi upah atau perlakuan berdasarkan kebangsaan asing sangat dilarang!",
+        hintNe: "विदेशी भएकै कारणले तलब वा कामको सुविधामा भेदभाव गर्नु गैरकानुनी हो।",
+        expJa: "国籍、信条、社会的身分を理由とする差別的取扱いは禁止されています（テキストp.8）。",
+        expId: "Pengusaha dilarang memperlakukan pekerja secara diskriminatif berdasarkan kebangsaan asing.",
+        expNe: "श्रम मानक ऐनले राष्ट्रियता वा धार्मिक आस्थाका आधारमा भेदभाव गर्न पूर्ण रोक लगाएको छ।"
+      },
+      {
+        id: 3,
+        cat: "2.1.1 労働基準法：労働条件の明示 (p.8-9)",
+        q: "<ruby>使用者<rt>しようしゃ</rt></ruby>（<ruby>会社<rt>かいしゃ</rt></ruby>）が <ruby>労働者<rt>ろうどうしゃ</rt></ruby>に **<ruby>必<rt>かなら</rt></ruby>ず<ruby>明示<rt>めいじ</rt></ruby>（<ruby>知<rt>し</rt></ruby>らせる）しなければならない6<ruby>項目<rt>こうもく</rt></ruby>**に <ruby>含<rt>ふく</rt></ruby>まれないものは どれですか。",
+        options: [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>役員<rt>やくいん</rt></ruby>や<ruby>職長<rt>しょくちょう</rt></ruby>の「<ruby>趣味<rt>しゅみ</rt></ruby>や<ruby>家族<rt>かぞく</rt></ruby><ruby>構成<rt>こうせい</rt></ruby>」",
+          "<ruby>労働契約<rt>ろうどうけいやく</rt></ruby>の<ruby>期間<rt>きかん</rt></ruby>、および<ruby>契約<rt>けいやく</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>する<ruby>場合<rt>ばあい</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>",
+          "<ruby>就業場所<rt>しゅうぎょうばしょ</rt></ruby>、および<ruby>従事<rt>じゅうじ</rt></ruby>する<ruby>業務<rt>ぎょうむ</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>",
+          "<ruby>終業<rt>しゅうぎょう</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>、<ruby>残業<rt>ざんぎょう</rt></ruby>の<ruby>有無<rt>うむ</rt></ruby>、<ruby>休憩時間<rt>きゅうけいじかん</rt></ruby>、<ruby>休日<rt>きゅうじつ</rt></ruby>、<ruby>休暇<rt>きゅうか</rt></ruby>、<ruby>賃金<rt>ちんぎん</rt></ruby>、<ruby>退職<rt>たいしょく</rt></ruby>・<ruby>解雇<rt>かいこ</rt></ruby>に<ruby>関<rt>かん</rt></ruby>する<ruby>事項<rt>じこう</rt></ruby>"
+        ],
+        answer: 0,
+        hintId: "Poin yang wajib dinyatakan meliputi periode kontrak, lokasi kerja, jenis tugas, jam kerja, upah, dan aturan PHK.",
+        hintNe: "काम सम्झौतामा कामको ठाउँ, कामको विवरण, तलब, कामको समय र बिदा आदि अनिवार्य लेखिएको हुनुपर्छ।",
+        expJa: "明示義務があるのは、契約期間、更新基準、就業場所・業務内容、労働時間・休日、賃金、退職・解雇の6項目です（テキストp.8-9）。",
+        expId: "Pemberi kerja wajib menyatakan 6 butir persyaratan kerja utama secara tertulis saat merekrut pekerja.",
+        expNe: "कम्पनीले कामदार भर्ना गर्दा कामको सर्त सम्बन्धी ६ बुँदा अनिवार्य रूपमा स्पष्ट खुलाउनुपर्छ।"
+      },
+      {
+        id: 4,
+        cat: "2.1.1 労働基準法：賠償予定の禁止・解雇・賃金5原則 (p.9)",
+        q: "<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>の ルールについて、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>解雇<rt>かいこ</rt></ruby>は<ruby>少<rt>すく</rt></ruby>なくとも30<ruby>日前<rt>にちまえ</rt></ruby>に<ruby>予告<rt>よこく</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>であり、<ruby>賃金<rt>ちんぎん</rt></ruby>は「<ruby>通貨<rt>つうか</rt></ruby>で、<ruby>直接<rt>ちょくせつ</rt></ruby>、<ruby>全額<rt>ぜんがく</rt></ruby>を、<ruby>毎月<rt>まいつき</rt></ruby>1<ruby>回以上<rt>かいいじょう</rt></ruby>、<ruby>一定<rt>いってい</rt></ruby>の<ruby>期日<rt>きじつ</rt></ruby>に」<ruby>支払<rt>しはら</rt></ruby>わなければならない。",
+          "「<ruby>仕事<rt>しごと</rt></ruby>をやめたら<ruby>違約金<rt>いやくきん</rt></ruby>として50<ruby>万円<rt>まんえん</rt></ruby><ruby>払<rt>はら</rt></ruby>う」という<ruby>契約<rt>けいやく</rt></ruby>をあらかじめ<ruby>結<rt>むす</rt></ruby>んでもよい。",
+          "<ruby>仕事中<rt>しごとちゅう</rt></ruby>のケガで<ruby>休業<rt>きゅうぎょう</rt></ruby>している<ruby>期間中<rt>きかんちゅう</rt></ruby>であっても、<ruby>会社<rt>かいしゃ</rt></ruby>はいつでも<ruby>即日<rt>そくじつ</rt></ruby><ruby>解雇<rt>かいこ</rt></ruby>できる。",
+          "<ruby>給料<rt>きゅうりょう</rt></ruby>は<ruby>現金<rt>げんきん</rt></ruby>ではなく、お<ruby>米<rt>こめ</rt></ruby>や<ruby>商品券<rt>しょうひんけん</rt></ruby>などの<ruby>品物<rt>しなもの</rt></ruby>だけで<ruby>支払<rt>しはら</rt></ruby>うことができる。"
+        ],
+        answer: 0,
+        hintId: "PHK butuh pemberitahuan 30 hari sebelumnya, dan upah wajib dibayar mata uang tunai secara penuh langsung ke pekerja.",
+        hintNe: "कामबाट निकाल्न ३० दिन अघि सूचना दिनुपर्छ र तलब ५ नियम अनुसार नगद मुद्रामा सिधै दिनुपर्छ।",
+        expJa: "解雇は30日前の予告が必要で、賃金支払いの5原則が定められています。賠償予定は違法です（テキストp.9）。",
+        expId: "PHK wajib diberitahukan minimal 30 hari sebelumnya, dan upah harus dibayarkan tunai sesuai 5 prinsip upah.",
+        expNe: "कामबाट हटाउँदा ३० दिन अघि पूर्वसूचना दिनुपर्छ र तलब जापानी मुद्रामा कामदारलाई सिधै पूरै भुक्तानी गर्नुपर्छ।"
+      },
+      {
+        id: 5,
+        cat: "2.1.1 労働基準法：労働時間・休憩・36協定割増 (p.9-10)",
+        q: "<ruby>法定労働時間<rt>ほうていろうどうじかん</rt></ruby>と <ruby>残業<rt>ざんぎょう</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>労働時間<rt>ろうどうじかん</rt></ruby>は<ruby>原則<rt>げんそく</rt></ruby>「1<ruby>週<rt>しゅう</rt></ruby>40<ruby>時間<rt>じかん</rt></ruby>、1<ruby>日<rt>にち</rt></ruby>8<ruby>時間<rt>じかん</rt></ruby>」以内で、<ruby>残業<rt>ざんぎょう</rt></ruby>には36<ruby>協定<rt>きょうてい</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>であり、<ruby>通常残業<rt>つうじょうざんぎょう</rt></ruby>は25％<ruby>以上<rt>いじょう</rt></ruby>、<ruby>休日出勤<rt>きゅうじつしゅっきん</rt></ruby>は35％<ruby>以上<rt>いじょう</rt></ruby>の<ruby>割増賃金<rt>わりましちんぎん</rt></ruby>となる。",
+          "<ruby>労働時間<rt>ろうどうじかん</rt></ruby>が8<ruby>時間<rt>じかん</rt></ruby>を<ruby>超<rt>こ</rt></ruby>える<ruby>場合<rt>ばあい</rt></ruby>でも、<ruby>休憩時間<rt>きゅうけいじかん</rt></ruby>は15<ruby>分<rt>ふん</rt></ruby>だけ<ruby>与<rt>あた</rt></ruby>えればよい。",
+          "<ruby>休日<rt>きゅうじつ</rt></ruby>に<ruby>出勤<rt>しゅっきん</rt></ruby>して<ruby>働<rt>はたら</rt></ruby>いたときでも、<ruby>平日<rt>へいじつ</rt></ruby>と<ruby>全<rt>まった</rt></ruby>く<ruby>同<rt>おな</rt></ruby>じ<ruby>時給<rt>じきゅう</rt></ruby>（<ruby>割増<rt>わりまし</rt></ruby>なし）でよい。",
+          "<ruby>会社<rt>かいしゃ</rt></ruby>は36<ruby>協定<rt>きょうてい</rt></ruby>を<ruby>結<rt>むす</rt></ruby>んでいなくても、1<ruby>日<rt>にち</rt></ruby>15<ruby>時間<rt>じかん</rt></ruby>まで<ruby>自由<rt>じゆう</rt></ruby>に<ruby>残業<rt>ざんぎょう</rt></ruby>させてよい。"
+        ],
+        answer: 0,
+        hintId: "Jam kerja legal 8 jam/hari (40 jam/minggu). Lembur butuh Perjanjian 36 (+25%), kerja di hari libur resmi (+35%).",
+        hintNe: "कामको समय दिनको ८ घण्टा हो। ओभरटाइमका लागि ३६ सम्झौता चाहिन्छ र सामान्य ओभरटाइममा २५% तथा बिदाको काममा ३५% थप ज्याला पाउनुपर्छ।",
+        expJa: "労働時間は原則週40時間・1日8時間です。通常残業は25%以上、休日出勤は35%以上の割増が必要です（テキストp.9-10）。",
+        expId: "Batas kerja standar 8 jam/hari. Lembur biasa minimal +25%, kerja hari libur minimal +35%.",
+        expNe: "कानुनी कामको समय दिनको ८ घण्टा हो र ओभरटाइम गर्दा कानुनी रूपमा अतिरिक्त पारिश्रमिक पाउनुपर्छ।"
+      },
+      {
+        id: 6,
+        cat: "2.1.1 労働基準法：年次有給休暇 (p.10)",
+        q: "「<ruby>年次有給休暇<rt>ねんじゆうきゅうきゅうか</rt></ruby>」の ルールとして、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>雇<rt>やと</rt></ruby>い<ruby>入<rt>い</rt></ruby>れから6か月<ruby>間継続勤務<rt>かんけいぞくきんむ</rt></ruby>し、<ruby>全労働日<rt>ぜんろうどうび</rt></ruby>の8<ruby>割以上出勤<rt>わりいじょうしゅっきん</rt></ruby>した<ruby>労働者<rt>ろうどうしゃ</rt></ruby>には「10<ruby>労働日<rt>ろうどうび</rt></ruby>」の<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>が<ruby>与<rt>あた</rt></ruby>えられ、<ruby>有休<rt>ゆうきゅう</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>取<rt>と</rt></ruby>りは<ruby>違法<rt>いほう</rt></ruby>である。",
+          "<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>は<ruby>使<rt>つか</rt></ruby>わせずに、すべて<ruby>会社<rt>かいしゃ</rt></ruby>がお<ruby>金<rt>かね</rt></ruby>で<ruby>強制買<rt>きょうせいか</rt></ruby>い<ruby>取<rt>と</rt></ruby>りすることが<ruby>法律<rt>ほうりつ</rt></ruby>で<ruby>義務<rt>ぎむ</rt></ruby>づけられている。",
+          "<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>技能者<rt>ぎのうしゃ</rt></ruby>には、<ruby>何年<rt>なんねん</rt></ruby><ruby>働<rt>はたら</rt></ruby>いても<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>を1<ruby>日<rt>にち</rt></ruby>も<ruby>与<rt>あた</rt></ruby>えなくてよい。",
+          "<ruby>有給休暇<rt>ゆうきゅうきゅうか</rt></ruby>を<ruby>取得<rt>しゅとく</rt></ruby>して<ruby>休<rt>やす</rt></ruby>んだ<ruby>日<rt>ひ</rt></ruby>は、その<ruby>日<rt>ひ</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>をゼロ（<ruby>無給<rt>むきゅう</rt></ruby>）にしなければならない。"
+        ],
+        answer: 0,
+        hintId: "Bekerja 6 bulan berturut-turut dengan kehadiran 80% berhak mendapat cuti berbayar 10 hari. Cuti tidak boleh dibeli paksa.",
+        hintNe: "६ महिना काम गरी ८०% उपस्थिति भएमा १० दिन सवेतन बिदा पाइन्छ। यसलाई पैसामा किन्न पाइँदैन।",
+        expJa: "6か月継続勤務・8割以上出勤で10日が付与されます。使用者による有給休暇の買い取りは違法です（テキストp.10）。",
+        expId: "Pekerja berhak atas 10 hari cuti tahunan berbayar (Yukyu) setelah 6 bulan masa kerja.",
+        expNe: "६ महिना काम गरेपछि १० दिनको तलबसहित बिदा पाउनुपर्छ र यो बिदा पैसामा साट्न पाइँदैन।"
+      },
+      {
+        id: 7,
+        cat: "2.1.2 労働安全衛生法：安全衛生旗と労災原因 (p.11-12)",
+        q: "<ruby>労働安全衛生法<rt>ろうどうあんぜんえいせいほう</rt></ruby>および <ruby>建設業<rt>けんせつぎょう</rt></ruby>の <ruby>安全対策<rt>あんぜんたいさく</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>建設業<rt>けんせつぎょう</rt></ruby>の<ruby>死亡災害<rt>しぼうさいがい</rt></ruby>で<ruby>最<rt>もっと</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いのは「<ruby>墜落<rt>ついらく</rt></ruby>・<ruby>転落<rt>てんらく</rt></ruby>」であり、<ruby>幅<rt>はば</rt></ruby>40cm<ruby>以上<rt>いじょう</rt></ruby>の<ruby>作業床<rt>さぎょうゆか</rt></ruby>やフルハーネス<ruby>型<rt>がた</rt></ruby>の<ruby>使用<rt>しよう</rt></ruby>が<ruby>原則<rt>げんそく</rt></ruby>とされている。",
+          "<ruby>現場<rt>げんば</rt></ruby>に<ruby>掲<rt>かか</rt></ruby>げる「<ruby>安全衛生旗<rt>あんぜんえいせいき</rt></ruby>」は<ruby>単<rt>たん</rt></ruby>なる<ruby>飾<rt>かざ</rt></ruby>りであり、<ruby>安全管理<rt>あんぜんかんり</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>はない。",
+          "<ruby>夏<rt>なつ</rt></ruby>の<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby><ruby>予防<rt>よぼう</rt></ruby>のために、<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>水<rt>みず</rt></ruby>や<ruby>塩飴<rt>しおあめ</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えることは<ruby>禁止<rt>きんし</rt></ruby>されている。",
+          "<ruby>高所作業<rt>こうしょさぎょう</rt></ruby>では、<ruby>安全帯<rt>あんぜんたい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに<ruby>手<rt>て</rt></ruby>すりだけに<ruby>頼<rt>たよ</rt></ruby>って<ruby>作業<rt>さぎょう</rt></ruby>するのが<ruby>基本<rt>きほん</rt></ruby>である。"
+        ],
+        answer: 0,
+        hintId: "Penyebab kematian tertinggi di konstruksi adalah 'Jatuh/Terjatuh', wajib lantai kerja min 40cm dan full-harness.",
+        hintNe: "निर्माण क्षेत्रमा मृत्युको सबैभन्दा ठूलो कारण 'खस्नु/लड्नु' हो। कम्तीमा ४० सेमीको कार्यथलो र फुल-हार्नेस अनिवार्य हुन्छ।",
+        expJa: "建設業の死亡災害は「墜落・転落」が圧倒的に多く、幅40cm以上の作業床やフルハーネス型の原則使用が義務付けられています（テキストp.11-12）。",
+        expId: "Kecelakaan jatuh/terpeleset mendominasi fatalitas di konstruksi. Lantai kerja min 40 cm dan full harness diwajibkan secara hukum.",
+        expNe: "निर्माणमा हुने मृत्युमध्ये लडेर हुने दुर्घटना सबैभन्दा धेरै हुन्छ, त्यसैले फुल-हार्नेस सेफ्टी बेल्ट लगाउनु अनिवार्य छ।"
+      },
+      {
+        id: 8,
+        cat: "2.1.3 最低賃金法 (p.13)",
+        q: "「<ruby>最低賃金法<rt>さいていちんぎんほう</rt></ruby>」についての **<ruby>正<rt>ただ</rt></ruby>しい<ruby>説明<rt>せつめい</rt></ruby>**は どれですか。",
+        options: [
+          "<ruby>物価<rt>ぶっか</rt></ruby>や<ruby>賃金水準<rt>ちんぎんすいじゅん</rt></ruby>をふまえ、<ruby>都道府県単位<rt>とどうふけんたんい</rt></ruby>で「<ruby>地域別最低賃金<rt>ちいきべつさいていちんぎん</rt></ruby>」が<ruby>決<rt>き</rt></ruby>められており、すべての<ruby>雇用労働者<rt>こようろうどうしゃ</rt></ruby>に<ruby>適用<rt>てきよう</rt></ruby>される。",
+          "<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>技能実習生<rt>ぎのうじっしゅうせい</rt></ruby>や<ruby>特定技能者<rt>とくていぎのうしゃ</rt></ruby>には、<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>より<ruby>低<rt>ひく</rt></ruby>い<ruby>給料<rt>きゅうりょう</rt></ruby>を<ruby>支払<rt>しはら</rt></ruby>っても<ruby>罰則<rt>ばっそく</rt></ruby>はない。",
+          "<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>の<ruby>金額<rt>きんがく</rt></ruby>は、<ruby>全国<rt>ぜんこく</rt></ruby>どこの<ruby>県<rt>けん</rt></ruby>でも<ruby>全<rt>まった</rt></ruby>く<ruby>同<rt>おな</rt></ruby>じ1つの<ruby>金額<rt>きんがく</rt></ruby>に<ruby>統一<rt>とういつ</rt></ruby>されている。",
+          "<ruby>会社<rt>かいしゃ</rt></ruby>が「<ruby>赤字<rt>あかじ</rt></ruby>だから」と<ruby>言<rt>い</rt></ruby>えば、<ruby>最低賃金<rt>さいていちんぎん</rt></ruby>を<ruby>下回<rt>したまわ</rt></ruby>る<ruby>給料<rt>きゅうりょう</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>き<ruby>下<rt>さ</rt></ruby>げることができる。"
+        ],
+        answer: 0,
+        hintId: "Upah minimum ditetapkan per prefektur dan berlaku untuk semua pekerja tanpa terkecuali, melanggar akan dikenai sanksi pidana.",
+        hintNe: "न्यूनतम ज्याला प्रिफेक्चर अनुसार तोकिएको हुन्छ र विदेशी लगायत सबै श्रमिकलाई अनिवार्य लागु हुन्छ।",
+        expJa: "最低賃金は都道府県単位で定められ、雇用形態や職種、国籍に関係なく適用されます。下回る場合は罰則規定があります（テキストp.13）。",
+        expId: "Upah minimum ditetapkan berdasarkan wilayah prefektur dan wajib dipatuhi oleh seluruh pengusaha.",
+        expNe: "न्यूनतम ज्याला प्रिफेक्चर अनुसार फरक हुन्छ र यो भन्दा कम तलब दिनु गैरकानुनी हो।"
+      },
+      {
+        id: 9,
+        cat: "2.1.4 労働者災害補償保険法 (労災保険) (p.13-14)",
+        q: "「<ruby>労災保険<rt>ろうさいほけん</rt></ruby>」についての **<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>業務災害<rt>ぎょうむさいがい</rt></ruby>だけでなく<ruby>通勤災害<rt>つうきんさいがい</rt></ruby>も<ruby>対象<rt>たいしょう</rt></ruby>となり、<ruby>保険料<rt>ほけんりょう</rt></ruby>は「<ruby>全額事業主<rt>ぜんがくじぎょうぬし</rt></ruby>の<ruby>負担<rt>ふたん</rt></ruby>」であり、<ruby>労災<rt>ろうさい</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>す「<ruby>労災<rt>ろうさい</rt></ruby>かくし」は<ruby>犯罪<rt>はんざい</rt></ruby>である。",
+          "<ruby>労災保険<rt>ろうさいほけん</rt></ruby>の<ruby>保険料<rt>ほけんりょう</rt></ruby>は、<ruby>毎月<rt>まいつき</rt></ruby><ruby>全額<rt>ぜんがく</rt></ruby>を<ruby>労働者<rt>ろうどうしゃ</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>から<ruby>天引き<rt>てんびき</rt></ruby>して<ruby>集<rt>あつ</rt></ruby>めなければならない。",
+          "<ruby>現場<rt>げんば</rt></ruby>でケガをした<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>元請<rt>もとうけ</rt></ruby>に<ruby>迷惑<rt>めいわく</rt></ruby>がかかるので<ruby>健康保険<rt>けんこうほけん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>って<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くのが<ruby>正<rt>ただ</rt></ruby>しい。",
+          "<ruby>一人親方<rt>ひとりおやかた</rt></ruby>や<ruby>中小企業<rt>ちゅうしょうきぎょう</rt></ruby>の<ruby>事業主<rt>じぎょうぬし</rt></ruby>は、どんな<ruby>場合<rt>ばあい</rt></ruby>でも<ruby>労災保険<rt>ろうさいほけん</rt></ruby>には<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>加入<rt>かにゅう</rt></ruby>できない。"
+        ],
+        answer: 0,
+        hintId: "Premi Rousai ditanggung 100% oleh pengusaha. Menyembunyikan kecelakaan kerja adalah tindak kejahatan pidana!",
+        hintNe: "रोउसाइ बिमाको प्रिमियम शतप्रतिशत कम्पनीले तिर्छ। दुर्घटना लुकाउनु कानुनी अपराध हो।",
+        expJa: "労災保険の保険料は全額事業主負担です。事故を隠す「労災かくし」は犯罪です。一人親方には特別加入制度があります（テキストp.13-14）。",
+        expId: "Premi asuransi kecelakaan kerja dibayar penuh oleh perusahaan. Menyembunyikan insiden kecelakaan kerja dilarang keras.",
+        expNe: "रोउसाइ बिमा प्रिमियम पूरै कम्पनीले तिर्छ। दुर्घटना भएमा ढाकछोप नगरी अनिवार्य रिपोर्ट गर्नुपर्छ।"
+      },
+      {
+        id: 10,
+        cat: "2.1.5〜2.1.7 雇用保険・建設雇用改善計画・能力開発 (p.15-17)",
+        q: "<ruby>雇用保険<rt>こようほけん</rt></ruby>や <ruby>技能検定<rt>ぎのうけんてい</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>特定技能外国人<rt>とくていぎのうがいこくじん</rt></ruby>も<ruby>雇用保険<rt>こようほけん</rt></ruby>の<ruby>給付<rt>きゅうふ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けることができ、<ruby>国<rt>くに</rt></ruby>の「<ruby>技能検定<rt>ぎのうけんてい</rt></ruby>」に<ruby>合格<rt>ごうかく</rt></ruby>すると「<ruby>技能士<rt>ぎのうし</rt></ruby>」と<ruby>名乗<rt>なの</rt></ruby>ることができる。",
+          "<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>失業<rt>しつぎょう</rt></ruby>したときは、その<ruby>日<rt>ひ</rt></ruby>のうちに<ruby>必<rt>かなら</rt></ruby>ず<ruby>母国<rt>ぼこく</rt></ruby>へ<ruby>強制帰国<rt>きょうせいきこく</rt></ruby>しなければならない。",
+          "<ruby>雇用保険<rt>こようほけん</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>だけが<ruby>加入<rt>かにゅう</rt></ruby>でき、<ruby>外国人<rt>がいこくじん</rt></ruby>は<ruby>加入<rt>かにゅう</rt></ruby>することが<ruby>禁止<rt>きんし</rt></ruby>されている。",
+          "<ruby>建設業<rt>けんせつぎょう</rt></ruby>では<ruby>若者<rt>わかもの</rt></ruby>や<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>育成<rt>いくせい</rt></ruby>のために<ruby>職業訓練<rt>しょくぎょうくんれん</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>ってはならないと<ruby>定<rt>さだ</rt></ruby>められている。"
+        ],
+        answer: 0,
+        hintId: "Pekerja asing Tokutei Ginou berhak atas tunjangan asuransi pengangguran, dan lulus ujian keterampilan berhak bergelar Ginoushi.",
+        hintNe: "तोकुतेइ गिनौ कामदारले पनि बेरोजगारी बिमा सुविधा पाउँछन् र सीप परीक्षा पास गरेमा 'गिनौशी' को उपाधि पाउँछन्।",
+        expJa: "特定技能外国人も失業時に給付を受けることが可能です。技能検定に合格すると「技能士」と名乗ることができます（テキストp.15-17）。",
+        expId: "Pekerja asing berhak atas manfaat asuransi pengangguran dan sertifikasi negara Ginoushi setelah lulus uji kompetensi.",
+        expNe: "विदेशी कामदारले पनि काम छुटेमा बेरोजगारी भत्ता पाउने अधिकार हुन्छ र सीप परीक्षा उत्तीर्ण भएपछि राष्ट्रिय प्रमाणपत्र पाइन्छ।"
+      }
+    ]
+  },
+  3: {
+    title: "特定技能2号 学科：Day 3（第2章 2.2〜2.17 建設業法・環境法令編）",
+    key: "score_gakka2",
+    passScore: 70,
+    questions: [
+      {
+        id: 1,
+        cat: "2.2 建設業法 (p.18)",
+        q: "<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>の **<ruby>目的<rt>もくてき</rt></ruby>や ルール**として、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+        options: [
+          "<ruby>請<rt>う</rt></ruby>け<ruby>負<rt>お</rt></ruby>った<ruby>工事<rt>こうじ</rt></ruby>の<ruby>全部<rt>ぜんぶ</rt></ruby>を、そのまま<ruby>他<rt>ほか</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>丸投<rt>まるな</rt></ruby>げする「<ruby>一括下請負<rt>いっかつしたうけおい</rt></ruby>」を<ruby>自由<rt>じゆう</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>ってよい。",
+          "<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>で<ruby>許可<rt>きょか</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>になる<ruby>業種<rt>ぎょうしゅ</rt></ruby>は、<ruby>屋根<rt>やね</rt></ruby>、<ruby>板金<rt>ばんきん</rt></ruby>、<ruby>大工<rt>だいく</rt></ruby>など「29<ruby>種類<rt>しゅるい</rt></ruby>」ある。",
+          "<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>と<ruby>専門工事業者<rt>せんもんこうじぎょうしゃ</rt></ruby>の<ruby>双方<rt>そうほう</rt></ruby>が<ruby>適切<rt>てきせつ</rt></ruby>な<ruby>契約<rt>けいやく</rt></ruby>を<ruby>交<rt>か</rt></ruby>わし、<ruby>公共<rt>こうきょう</rt></ruby>の<ruby>福祉<rt>ふくし</rt></ruby>の<ruby>増進<rt>ぞうしん</rt></ruby>に<ruby>寄与<rt>きよ</rt></ruby>することを<ruby>目的<rt>もくてき</rt></ruby>としている。",
+          "<ruby>施工<rt>せこう</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>には、<ruby>適正<rt>てきせい</rt></ruby>な<ruby>施工<rt>せこう</rt></ruby>を<ruby>確保<rt>かくほ</rt></ruby>するために「<ruby>主任技術者<rt>しゅにんぎじゅつしゃ</rt></ruby>」などを<ruby>配置<rt>はいち</rt></ruby>しなければならない。"
+        ],
+        answer: 0,
+        hintId: "Ikkatsu Shitaukeoi (melempar seluruh borongan ke pihak lain / marunage) dilarang keras oleh UU Jasa Konstruksi.",
+        hintNe: "निर्माण व्यवसाय ऐनले काम अरूलाई पूरै जिम्मा लगाउने (इक्कात्सु सिताउकेओइ) पूर्ण रूपमा निषेध गरेको छ।",
+        expJa: "建設業法では、「一括下請負（丸投げ）」を禁止しています。業種は29種類あります（テキストp.18）。",
+        expId: "UU Konstruksi melarang keras melempar seluruh kontrak ke subkontraktor lain tanpa pengerjaan sendiri demi integritas kerja.",
+        expNe: "निर्माण व्यवसाय ऐन अनुसार 'इक्कात्सु सिताउकेओइ' (सबै काम अरूलाई सुम्पिने) पूर्ण निषेध छ।"
+      },
+      {
+        id: 2,
+        cat: "2.3 建築基準法 (p.19)",
+        q: "<ruby>建築基準法<rt>けんちくきじゅんほう</rt></ruby>を <ruby>構成<rt>こうせい</rt></ruby>する **2つの<ruby>規定<rt>きてい</rt></ruby>**として、<ruby>正<rt>ただ</rt></ruby>しい<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせは どれですか。",
+        options: [
+          "<ruby>建物<rt>たてもの</rt></ruby>そのものの<ruby>安全性<rt>あんぜんせい</rt></ruby>・<ruby>防火<rt>ぼうか</rt></ruby>などを<ruby>定<rt>さだ</rt></ruby>める「<ruby>単体規定<rt>たんたいきてい</rt></ruby>」と、<ruby>良好<rt>りょうこう</rt></ruby>な<ruby>市街地環境<rt>しがいちかんきょう</rt></ruby>を<ruby>確保<rt>かくほ</rt></ruby>する「<ruby>集団規定<rt>しゅうだんきてい</rt></ruby>」",
+          "<ruby>工事<rt>こうじ</rt></ruby>の<ruby>売買価格<rt>ばいばいかかく</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>価格規定<rt>かかくきてい</rt></ruby>」と、<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>給料<rt>きゅうりょう</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>賃金規定<rt>ちんぎんきてい</rt></ruby>」",
+          "<ruby>現場<rt>げんば</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>の<ruby>撮<rt>と</rt></ruby>り<ruby>方<rt>かた</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>撮影規定<rt>さつえいきてい</rt></ruby>」と、<ruby>道具<rt>どうぐ</rt></ruby>の<ruby>置<rt>お</rt></ruby>き<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>整理規定<rt>せいりきてい</rt></ruby>」",
+          "<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>在留資格<rt>ざいりゅうしかく</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>入管規定<rt>にゅうかんきてい</rt></ruby>」と、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>定<rt>さだ</rt></ruby>める「<ruby>検定規定<rt>けんていきてい</rt></ruby>」"
+        ],
+        answer: 0,
+        hintId: "UU Standar Bangunan terdiri dari Tantai Kitei (standar fisik gedung) dan Shuudan Kitei (standar tata kota).",
+        hintNe: "भवन निर्माण मानक ऐन 'तान्ताइ कितेइ' (भवनको आफ्नै मापदण्ड) र 'स्युउदान कितेइ' (सहरको वातावरण) मा आधारित छ।",
+        expJa: "建築基準法は、建物自体の安全性等を定めた「単体規定」と、良好な市街地環境を確保する「集団規定」の2つで成り立ちます（テキストp.19）。",
+        expId: "UU Bangunan memuat dua regulasi inti: Tantai Kitei (keselamatan gedung) dan Shuudan Kitei (tata kota).",
+        expNe: "भवनको सुरक्षा र सहरको योजनाबद्ध विकासका लागि २ खम्बे नियम तय गरिएको छ।"
+      },
+      {
+        id: 3,
+        cat: "2.4 廃棄物処理法 (p.19-20)",
+        q: "<ruby>現場<rt>げんば</rt></ruby>から<ruby>出<rt>で</rt></ruby>る「<ruby>産業廃棄物<rt>さんぎょうはいきぶつ</rt></ruby>」の <ruby>処理<rt>しょり</rt></ruby>について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+        options: [
+          "<ruby>処分費用<rt>しょぶんひよう</rt></ruby>を<ruby>安<rt>やす</rt></ruby>くするため、<ruby>余<rt>あま</rt></ruby>った<ruby>木材<rt>もくざい</rt></ruby>やゴミを<ruby>現場<rt>げんば</rt></ruby>の<ruby>隅<rt>すみ</rt></ruby>で<ruby>燃<rt>も</rt></ruby>やす（<ruby>野焼<rt>のや</rt></ruby>きする）。",
+          "<ruby>工事現場<rt>こうじげんば</rt></ruby>からゴミを<ruby>排出<rt>はいしゅつ</rt></ruby>するには、<ruby>原則<rt>げんそく</rt></ruby>として「<ruby>廃棄物収集運搬業<rt>はいきぶつしゅうしゅううんぱんぎょう</rt></ruby>の<ruby>許可<rt>きょか</rt></ruby>」が<ruby>必要<rt>ひつよう</rt></ruby>である。",
+          "<ruby>下請<rt>したうけ</rt></ruby><ruby>業者<rt>ぎょうしゃ</rt></ruby>も、<ruby>現場<rt>げんば</rt></ruby>における<ruby>産業廃棄物<rt>さんぎょうはいきぶつ</rt></ruby>の「<ruby>保管<rt>ほかん</rt></ruby>」に<ruby>関<rt>かん</rt></ruby>して<ruby>法律<rt>ほうりつ</rt></ruby>が<ruby>適用<rt>てきよう</rt></ruby>される。",
+          "<ruby>元請<rt>もとうけ</rt></ruby><ruby>業者<rt>ぎょうしゃ</rt></ruby>は「マニフェスト（<ruby>建設系廃棄物管理票<rt>けんせつけいはいきぶつかんりひょう</rt></ruby>）」を<ruby>作成<rt>さくせい</rt></ruby>し、<ruby>最終処分<rt>さいしゅうしょぶん</rt></ruby>まで<ruby>確認<rt>かくにん</rt></ruby>する<ruby>義務<rt>ぎむ</rt></ruby>がある。"
+        ],
+        answer: 0,
+        hintId: "Membakar sampah proyek sendiri di area konstruksi (No-yaki) dilarang keras dan melanggar hukum!",
+        hintNe: "निर्माण क्षेत्रमा फोहोर जलाउनु (नोयाकी) कानुनी रूपमा कडा प्रतिबन्धित छ।",
+        expJa: "現場でのゴミの野焼きや不法投棄は固く禁止されています。元請はマニフェストを発行し適正処理を確認します（テキストp.19-20）。",
+        expId: "Membakar limbah di lapangan proyek dilarang keras. Semua sampah industri wajib dikelola dengan manifes resmi.",
+        expNe: "कार्यस्थलमा आगो बालेर फोहोर जलाउन पाइँदैन। म्यानिफेस्टो अनुसार सही ठाउँमा पठाउनुपर्छ।"
+      },
+      {
+        id: 4,
+        cat: "2.5 建設リサイクル法 (p.20)",
+        q: "<ruby>建設<rt>けんせつ</rt></ruby>リサイクル<ruby>法<rt>ほう</rt></ruby>で、<ruby>資材<rt>しざい</rt></ruby>ごとに <ruby>分別<rt>ぶんべつ</rt></ruby>して **<ruby>再資源化<rt>さいしげんか</rt></ruby>（リサイクル）が <ruby>義務<rt>ぎむ</rt></ruby>づけられている「<ruby>特定建設資材<rt>とくていけんせつしざい</rt></ruby>」**に <ruby>含<rt>ふく</rt></ruby>まれないものは どれですか。",
+        options: [
+          "<ruby>壁紙<rt>かべがみ</rt></ruby>（クロス）や <ruby>板<rt>いた</rt></ruby>ガラスなどの <ruby>内装材<rt>ないそうざい</rt></ruby>",
+          "コンクリート",
+          "コンクリート<ruby>及<rt>およ</rt></ruby>び<ruby>鉄<rt>てつ</rt></ruby>から<ruby>成<rt>な</rt></ruby>る<ruby>建設資材<rt>けんせつしざい</rt></ruby>（<ruby>鉄筋<rt>てっきん</rt></ruby>コンクリートなど）",
+          "<ruby>木材<rt>もくざい</rt></ruby>、および アスファルト・コンクリート"
+        ],
+        answer: 0,
+        hintId: "4 material wajib daur ulang: Beton, Beton bertulang, Kayu, dan Aspal beton. Kertas dinding/kaca tidak termasuk.",
+        hintNe: "पुनर्प्रयोग अनिवार्य गरिएका ४ सामग्री: कंक्रीट, आरसीसी, काठ, र अस्फाल्ट हुन्। वालपेपर वा सिसा यसमा पर्दैनन्।",
+        expJa: "建設リサイクル法の特定建設資材は「コンクリート」「コンクリート及び鉄から成る建設資材」「木材」「アスファルト・コンクリート」の4つです（テキストp.20）。",
+        expId: "Empat material wajib pilah dan daur ulang adalah beton, beton bertulang besi, kayu, dan aspal.",
+        expNe: "कंक्रीट, फलाम-कंक्रीट, काठ र अस्फाल्ट गरी ४ वटा निर्माण सामग्रीलाई अनिवार्य छुट्याएर पुनः प्रयोग गर्नुपर्छ।"
+      },
+      {
+        id: 5,
+        cat: "2.6 大気汚染防止法 (p.20)",
+        q: "「<ruby>大気汚染防止法<rt>たいきおせんぼうしほう</rt></ruby>」において、<ruby>建築物<rt>けんちくぶつ</rt></ruby>の <ruby>解体<rt>かいたい</rt></ruby>・<ruby>改修<rt>かいしゅう</rt></ruby>のときに **<ruby>事前<rt>じぜん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>け<ruby>出<rt>で</rt></ruby>が<ruby>義務<rt>ぎむ</rt></ruby>づけられている ルール**として、<ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+        options: [
+          "アスベスト（<ruby>特定粉<rt>とくていふん</rt></ruby>じん）が<ruby>使用<rt>しよう</rt></ruby>されている<ruby>建築物<rt>けんちくぶつ</rt></ruby>を<ruby>解体<rt>かいたい</rt></ruby>・<ruby>改造<rt>かいぞう</rt></ruby>・<ruby>補修<rt>ほしゅう</rt></ruby>するときは、<ruby>作業開始<rt>さぎょうかいし</rt></ruby>の「14<ruby>日前<rt>にちまえ</rt></ruby>」までに<ruby>都道府県知事<rt>とどうふけんちじ</rt></ruby>に<ruby>届<rt>とど</rt></ruby>け<ruby>出<rt>で</rt></ruby>なければならない。",
+          "アスベストは<ruby>健康<rt>けんこう</rt></ruby>に<ruby>害<rt>がい</rt></ruby>がないため、<ruby>粉<rt>こな</rt></ruby>を<ruby>飛<rt>と</rt></ruby>ばしながらマスクをつけずに<ruby>解体<rt>かいたい</rt></ruby>してよい。",
+          "アスベストの<ruby>解体工事<rt>かいたいこうじ</rt></ruby>は、すべて<ruby>工事<rt>こうじ</rt></ruby>が<ruby>終<rt>お</rt></ruby>わった1か月<ruby>後<rt>ご</rt></ruby>に<ruby>届<rt>とど</rt></ruby>け<ruby>出<rt>で</rt></ruby>をすればよい。",
+          "<ruby>木造<rt>もくぞう</rt></ruby>の<ruby>住宅<rt>じゅうたく</rt></ruby>であれば、どんな<ruby>有害物質<rt>ゆうがいぶっしつ</rt></ruby>が<ruby>含<rt>ふく</rt></ruby>まれていても<ruby>事前調査<rt>じぜんちょうさ</rt></ruby>は<ruby>一切不要<rt>いっさいふよう</rt></ruby>である。"
+        ],
+        answer: 0,
+        hintId: "Pekerjaan asbes (Ishiwata) wajib dilaporkan ke gubernur prefektur minimal 14 hari sebelum pekerjaan dimulai.",
+        hintNe: "एस्बेस्टस भएका संरचना भत्काउँदा काम सुरु हुनुभन्दा कम्तीमा १४ दिन अगावै जानकारी दिनुपर्छ।",
+        expJa: "アスベスト（特定粉じん）排出等作業を伴う建築工事は、作業開始の日の14日前までに都道府県知事への届出が義務付けられています（テキストp.20）。",
+        expId: "Pembongkaran gedung berasbes harus didaftarkan ke pemerintah daerah minimal 14 hari sebelum pelaksanaan.",
+        expNe: "एस्बेस्टस हावामा उडेर असर गर्ने भएकाले काम सुरु गर्नु १४ दिन अघि अनिवार्य निवेदन पेश गर्नुपर्छ।"
+      },
+      {
+        id: 6,
+        cat: "2.7 騒音規制法・振動防止法 (p.21)",
+        q: "<ruby>現場<rt>げんば</rt></ruby>の「<ruby>騒音<rt>そうおん</rt></ruby>・<ruby>振動<rt>しんどう</rt></ruby>」を <ruby>低減<rt>ていげん</rt></ruby>（<ruby>減<rt>へ</rt></ruby>らす）するための **<ruby>検討事項<rt>けんとうじこう</rt></ruby>として <ruby>適切<rt>てきせつ</rt></ruby>なもの**は どれですか。",
+        options: [
+          "<ruby>低騒音<rt>ていそうおん</rt></ruby>・<ruby>低振動<rt>ていしんどう</rt></ruby>の<ruby>施工法<rt>せこうほう</rt></ruby>や<ruby>機械<rt>きかい</rt></ruby>を<ruby>選<rt>えら</rt></ruby>び、<ruby>適切<rt>てきせつ</rt></ruby>な<ruby>作業時間帯<rt>さぎょうじかんたい</rt></ruby>の<ruby>設定<rt>せってい</rt></ruby>や<ruby>防音施設<rt>ぼうおんしせつ</rt></ruby>の<ruby>設置<rt>せっち</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
+          "<ruby>音<rt>おと</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きい<ruby>工事<rt>こうじ</rt></ruby>ほど<ruby>早朝<rt>そうちょう</rt></ruby>（<ruby>朝<rt>あさ</rt></ruby>4<ruby>時<rt>じ</rt></ruby>）や<ruby>深夜<rt>しんや</rt></ruby>に<ruby>集中<rt>しゅうちゅう</rt></ruby>して<ruby>行<rt>おこな</rt></ruby>う。",
+          "<ruby>近隣<rt>きんりん</rt></ruby>の<ruby>住宅<rt>じゅうたく</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い<ruby>場所<rt>ばしょ</rt></ruby>にあえて<ruby>大<rt>おお</rt></ruby>きな<ruby>音<rt>おと</rt></ruby>の<ruby>出<rt>で</rt></ruby>る<ruby>機械<rt>きかい</rt></ruby>を<ruby>置<rt>お</rt></ruby>く。",
+          "<ruby>防音<rt>ぼうおん</rt></ruby>シートを<ruby>張<rt>は</rt></ruby>ると<ruby>費用<rt>ひよう</rt></ruby>がかかるため、どんなにうるさくても<ruby>防音対策<rt>ぼうおんたいさく</rt></ruby>はしてはならない。"
+        ],
+        answer: 0,
+        hintId: "Pilihlah mesin rendah bising/getaran, atur jam kerja agar tidak mengganggu warga sekitar.",
+        hintNe: "आवाज कम आउने मेसिन छान्ने, उपयुक्त समयमा मात्र काम गर्ने र साउन्डप्रूफ सिट प्रयोग गर्नुपर्छ।",
+        expJa: "低騒音・低振動施工法や建設機械の選択、作業時間帯・工程の設定、防音施設の設置などを検討します（テキストp.21）。",
+        expId: "Untuk mengendalikan polusi suara dan getaran, gunakan mesin tipe rendah bising dan atur jam kerja dengan bijak.",
+        expNe: "आधुनिक कम आवाज आउने मेसिन प्रयोग गर्ने र बस्ती नजिक समय मिलाएर काम गर्नुपर्छ।"
+      },
+      {
+        id: 7,
+        cat: "2.8 水質汚濁防止法 ＆ 2.9 消防法 (p.21-22)",
+        q: "<ruby>排水<rt>はいすい</rt></ruby>の ルールおよび <ruby>火気<rt>かき</rt></ruby>の <ruby>使用<rt>しよう</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "コンクリートを<ruby>伝<rt>つた</rt></ruby>わった<ruby>水<rt>みず</rt></ruby>は「<ruby>高<rt>こう</rt></ruby>アルカリ<ruby>排水<rt>はいすい</rt></ruby>」となるため<ruby>中和処理<rt>ちゅうわしょり</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>であり、<ruby>火気<rt>かき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>う<ruby>場所<rt>ばしょ</rt></ruby>には<ruby>消火器<rt>しょうかき</rt></ruby>などを<ruby>備<rt>そな</rt></ruby>える。",
+          "コンクリートを<ruby>洗<rt>あら</rt></ruby>った<ruby>水<rt>みず</rt></ruby>は、そのまま<ruby>何<rt>なに</rt></ruby>もせずに<ruby>近<rt>ちか</rt></ruby>くの<ruby>川<rt>かわ</rt></ruby>や<ruby>側溝<rt>そっこう</rt></ruby>に<ruby>流<rt>なが</rt></ruby>してよい。",
+          "<ruby>消防法<rt>しょうぼうほう</rt></ruby>では、<ruby>現場<rt>げんば</rt></ruby>に<ruby>消火器<rt>しょうかき</rt></ruby>や<ruby>避難器具<rt>ひなんきぐ</rt></ruby>を<ruby>置<rt>お</rt></ruby>くことは<ruby>禁止<rt>きんし</rt></ruby>されている。",
+          "<ruby>溶接<rt>ようせつ</rt></ruby>などの<ruby>火花<rt>ひばな</rt></ruby>が<ruby>出<rt>で</rt></ruby>る<ruby>作業<rt>さぎょう</rt></ruby>のすぐ<ruby>足元<rt>あしもと</rt></ruby>に、ガソリンのポリタンクを<ruby>開<rt>あ</rt></ruby>けて<ruby>並<rt>なら</rt></ruby>べておく。"
+        ],
+        answer: 0,
+        hintId: "Air rembesan semen bersifat alkali tinggi (butuh dinetralkan). Lokasi kerja berapi wajib sedia alat pemadam kebakaran.",
+        hintNe: "सिमेन्टको पानी कडा अल्काली हुने भएकाले केमिकलले उपचार गर्नुपर्छ र आगोको काम गर्दा अग्निनियन्त्रक राख्नुपर्छ।",
+        expJa: "コンクリート排水は高アルカリのため中和処理が必要です。火災防止のため消火設備の設置が定められています（テキストp.21-22）。",
+        expId: "Air cucian beton wajib dinetralkan sebelum dibuang. Pemadam api wajib siap di dekat pengerjaan api.",
+        expNe: "कंक्रीट मिसिएको पानी सिधै खोलामा फाल्न पाइँदैन र आगोको काम गर्दा निभाउने साधन राख्नुपर्छ।"
+      },
+      {
+        id: 8,
+        cat: "2.10 水道法 ＆ 2.11 下水道法 (p.22-23)",
+        q: "<ruby>上下水道<rt>じょうげすいどう</rt></ruby>に <ruby>関<rt>かん</rt></ruby>するルールについて、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "<ruby>下水道施設<rt>げすいどうしせつ</rt></ruby>を<ruby>腐食<rt>ふしょく</rt></ruby>させたり<ruby>有毒<rt>ゆうどく</rt>ガスが<ruby>発生<rt>はっせい</rt></ruby>するおそれのある<ruby>汚水<rt>おすい</rt></ruby>や、<ruby>重金属<rt>じゅうきんぞく</rt></ruby>・<ruby>油分<rt>あぶらぶん</rt></ruby>を<ruby>基準値以上<rt>きじゅんちいじょう</rt></ruby>に<ruby>含<rt>ふく</rt></ruby>む<ruby>水<rt>みず</rt></ruby>を<ruby>公共下水道<rt>こうきょうげすいどう</rt></ruby>に<ruby>流<rt>なが</rt></ruby>してはならない。",
+          "<ruby>水道管<rt>すいどうかん</rt></ruby>の<ruby>工事<rt>こうじ</rt></ruby>は、<ruby>専門<rt>せんもん</rt></ruby>の<ruby>技術者<rt>ぎじゅつしゃ</rt></ruby>の<ruby>指示<rt>しじ</rt></ruby>がなくても<ruby>誰<rt>だれ</rt></ruby>でも<ruby>自由<rt>じゆう</rt></ruby>に<ruby>勝手<rt>かって</rt></ruby>に<ruby>配管<rt>はいかん</rt></ruby>をつなぎ<ruby>替<rt>か</rt></ruby>えてよい。",
+          "<ruby>泥水<rt>どろみず</rt></ruby>やセメントのカスは、<ruby>下水管<rt>げすいかん</rt></ruby>がつまりそうになってもどんどん<ruby>流<rt>なが</rt></ruby>すのがよい。",
+          "<ruby>工事現場<rt>こうじげんば</rt></ruby>の<ruby>排水<rt>はいすい</rt></ruby>には<ruby>法律<rt>ほうりつ</rt></ruby>の<ruby>基準値<rt>きじゅんち</rt></ruby>はないため、どんな<ruby>薬品<rt>やくひん</rt></ruby>を<ruby>流<rt>なが</rt></ruby>しても<ruby>問題<rt>もんだい</rt></ruby>ない。"
+        ],
+        answer: 0,
+        hintId: "Air yang merusak saluran atau mengandung gas beracun/logam berat dilarang dibuang ke saluran pembuangan umum.",
+        hintNe: "ढलका संरचना बिगार्ने, विषालु ग्यास निकाल्ने वा हानिकारक धातु मिसिएको पानी ढलमा मिसाउन पाइँदैन।",
+        expJa: "下水道法では、施設を腐食させる水や有毒ガスを発生させる排水、重金属が基準値以上含まれる水の排出を禁じています（テキストp.22-23）。",
+        expId: "UU Drainase melarang pembuangan cairan korosif, gas beracun, atau logam berat ke selokan umum.",
+        expNe: "विषाक्त ग्यास निकाल्ने वा रसायनयुक्त पानी सार्वजनिक ढलमा मिसाउन कानुनले निषेध गरेको छ।"
+      },
+      {
+        id: 9,
+        cat: "2.12 ガス事業法 ＆ 2.13 電気事業法 (p.23)",
+        q: "<ruby>現場<rt>げんば</rt></ruby>における「ガス」や「<ruby>電気<rt>でんき</rt></ruby>」の <ruby>安全管理<rt>あんぜんかんり</rt></ruby>について、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+        options: [
+          "ガスの<ruby>不適切<rt>ふてきせつ</rt></ruby>な<ruby>換気<rt>かんき</rt></ruby>や<ruby>漏<rt>も</rt></ruby>れは<ruby>死亡事故<rt>しぼうじこ</rt></ruby>につながり、<ruby>電気<rt>でんき</rt></ruby>の「<ruby>漏電<rt>ろうでん</rt></ruby>」は<ruby>火災<rt>かさい</rt></ruby>や<ruby>感電<rt>かんでん</rt></ruby>など<ruby>重大<rt>じゅうだい</rt></ruby>な<ruby>災害<rt>さいがい</rt></ruby>につながるため、<ruby>厳格<rt>げんかく</rt></ruby>な<ruby>保安基準<rt>ほあんきじゅん</rt></ruby>が<ruby>定<rt>さだ</rt></ruby>められている。",
+          "<ruby>屋内<rt>おくない</rt></ruby>でガス<ruby>機器<rt>きき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うときは、<ruby>窓<rt>まど</rt></ruby>をすべて<ruby>閉<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>って<ruby>換気扇<rt>かんきせん</rt></ruby>も<ruby>止<rt>と</rt></ruby>めて<ruby>作業<rt>さぎょう</rt></ruby>しなければならない。",
+          "<ruby>濡<rt>ぬ</rt></ruby>れた<ruby>手<rt>て</rt></ruby>で<ruby>高圧<rt>こうあつ</rt></ruby>の<ruby>電気<rt>でんき</rt></ruby>コードや<ruby>傷<rt>きず</rt></ruby>のあるケーブルを<ruby>触<rt>さわ</rt></ruby>っても、<ruby>感電<rt>かんでん</rt></ruby>する<ruby>危険<rt>きけん</rt></ruby>はない。",
+          "<ruby>電気工事<rt>でんきこうじ</rt></ruby>は<ruby>資格<rt>しかく</rt></ruby>がなくても、<ruby>誰<rt>だれ</rt></ruby>でも<ruby>自分<rt>じぶん</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>で<ruby>自由<rt>じゆう</rt></ruby>に<ruby>電線<rt>でんせん</rt></ruby>を<ruby>切断<rt>せつだん</rt></ruby>・<ruby>接続<rt>せつぞく</rt></ruby>してよい。"
+        ],
+        answer: 0,
+        hintId: "Kebocoran gas memicu keracunan lemas, dan kebocoran arus listrik (Rouden) memicu kebakaran & sengatan listrik fatal.",
+        hintNe: "ग्यास चुहावटले ज्यान जान सक्छ र बिजुली सर्टले आगो लाग्ने तथा करेन्ट लाग्ने ठूलो जोखिम हुन्छ।",
+        expJa: "ガス漏れや不完全燃焼、電気の漏電による感電・火災を防ぐため、厳格な保安基準が定められています（テキストp.23）。",
+        expId: "Ventilasi mutlak dijaga saat bekerja dekat gas, dan hindari kebocoran listrik dari kabel rusak.",
+        expNe: "ग्यास र बिजुलीको असावधानीले ज्यान जाने भएकाले कडा सुरक्षा मापदण्ड अपनाउनुपर्छ।"
+      },
+      {
+        id: 10,
+        cat: "2.14〜2.17 通信・電波・航空・駐車場法 (p.24-25)",
+        q: "<ruby>現場<rt>げんば</rt></ruby>での **<ruby>無線機<rt>むせんき</rt></ruby>、クレーン、ドローン、<ruby>車両管理<rt>しゃりょうかんり</rt></ruby>の ルール**として、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+        options: [
+          "<ruby>海外製<rt>かいがいせい</rt></ruby>で<ruby>日本<rt>にほん</rt></ruby>の<ruby>認可<rt>にんか</rt></ruby>がないトランシーバーを<ruby>無免許<rt>むめんきょ</rt></ruby>で<ruby>自由<rt>じゆう</rt></ruby>に<ruby>使<rt>つか</rt></ruby>っても、<ruby>電波法<rt>でんぱほう</rt></ruby>の<ruby>違反<rt>いはん</rt></ruby>にはならない。",
+          "<ruby>地表<rt>ちひょう</rt></ruby>または<ruby>水面<rt>すいめん</rt></ruby>より「60m<ruby>以上<rt>いじょう</rt></ruby>」の<ruby>高<rt>たか</rt></ruby>さの<ruby>物件<rt>ぶっけん</rt></ruby>（クレーンなど）には、<ruby>航空障害灯<rt>こうくうしょうがいとう</rt></ruby>を<ruby>設置<rt>せっち</rt></ruby>しなければならない。",
+          "<ruby>重量<rt>じゅうりょう</rt></ruby>が「100g<ruby>以上<rt>いじょう</rt></ruby>」のドローン（<ruby>無人航空機<rt>むじんこうくうき</rt></ruby>）は<ruby>登録<rt>とうろく</rt></ruby>が<ruby>義務化<rt>ぎむか</rt></ruby>されており、<ruby>飲酒飛行<rt>いんしゅひこう</rt></ruby>や<ruby>夜間飛行<rt>やかんひこう</rt></ruby>は<ruby>禁止<rt>きんし</rt></ruby>されている。",
+          "<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>の<ruby>工事<rt>こうじ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>工事開始前<rt>こうじかいしまえ</rt></ruby>に<ruby>自治体<rt>じちたい</rt></ruby>に<ruby>届<rt>とど</rt></ruby>け<ruby>出<rt>で</rt></ruby>をしなければならない。"
+        ],
+        answer: 0,
+        hintId: "Transceiver buatan luar negeri tanpa sertifikasi resmi Jepang dilarang keras oleh UU Gelombang Radio (Denpa-hou).",
+        hintNe: "जापानमा प्रमाणीकरण नभएका विदेशी वाकीटकी प्रयोग गर्नु कानुनी अपराध हो।",
+        expJa: "電波法により認可のないトランシーバーの使用は違法です。60m以上の航空障害灯、100g以上のドローン登録も重要です（テキストp.24-25）。",
+        expId: "Radio/HT tanpa sertifikasi Jepang dilarang digunakan. Derek >60m wajib lampu peringatan udara, drone >100g wajib daftar.",
+        expNe: "जापानमा प्रमाणीकरण नभएका वायरलेस चलाउन पाइँदैन। ६० मिटरमाथिको संरचनामा बत्ती र १०० ग्राममाथिका ड्रोन दर्ता अनिवार्य छ।"
+      }
+    ]
+  }
+};
+
+// 選択中の単元データ
+const moduleData = DB[currentDay] || DB['shokucho'];
+const questions = moduleData.questions;
+const MODULE_KEY = moduleData.key;
+
+let currentIndex = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+document.getElementById("title-text").innerHTML = moduleData.title;
+
+// 現在のメニュー項目をアクティブ表示
+const activeMenuId = currentDay === 'shokucho' ? 'm-shokucho' : `m-day${currentDay}`;
+const activeMenuItem = document.getElementById(activeMenuId);
+if (activeMenuItem) activeMenuItem.classList.add('active');
+
+function openMenu() {
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("overlay").style.display = "block";
+}
+
+function closeMenu() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("overlay").style.display = "none";
+}
+
+function updateMenuBadges() {
+  const list = [
+    { id: "badge-shokucho", key: "score_shokucho" },
+    { id: "badge-day1", key: "score_gakka1" },
+    { id: "badge-day2", key: "score_gakka1_2" },
+    { id: "badge-day3", key: "score_gakka2" }
+  ];
+  list.forEach(item => {
+    const val = localStorage.getItem(item.key);
+    const badge = document.getElementById(item.id);
+    if (val && badge) {
+      badge.textContent = `✔ ${val}点`;
+      badge.style.display = "inline-block";
+    }
+  });
+}
+
+function renderNav() {
+  const grid = document.getElementById("nav-grid");
+  grid.innerHTML = "";
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
+    btn.textContent = i + 1;
+    btn.onclick = () => { currentIndex = i; loadQuestion(); };
+    grid.appendChild(btn);
+  });
+  document.getElementById("current-num").textContent = currentIndex + 1;
+  document.getElementById("total-num").textContent = questions.length;
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
+}
+
+function loadQuestion() {
+  renderNav();
+  const q = questions[currentIndex];
+  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
+  document.getElementById("q-text").innerHTML = q.q;
+
+  document.getElementById("hint-id").textContent = q.hintId;
+  document.getElementById("hint-id").style.display = "none";
+  document.getElementById("hint-ne").textContent = q.hintNe;
+  document.getElementById("hint-ne").style.display = "none";
+
+  const optBox = document.getElementById("options-box");
+  optBox.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `option-btn ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
+    btn.innerHTML = `<strong>${idx + 1}.</strong> <span>${opt}</span>`;
+    btn.onclick = () => selectOption(idx);
+    optBox.appendChild(btn);
+  });
+
+  document.getElementById("btn-prev").disabled = currentIndex === 0;
+  const isLast = currentIndex === questions.length - 1;
+  const btnNext = document.getElementById("btn-next");
+  btnNext.textContent = isLast ? "採点する" : "次へ";
+}
+
+function selectOption(idx) {
+  userAnswers[currentIndex] = idx;
+  loadQuestion();
+}
+
+function toggleHint(lang) {
+  const el = document.getElementById(`hint-${lang}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
+}
+
+function nextQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function skipQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    const firstUnanswered = userAnswers.findIndex(a => a === null);
+    if (firstUnanswered !== -1) {
+      currentIndex = firstUnanswered;
+      loadQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+}
+
+function finishQuiz() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
+      const firstUnanswered = userAnswers.findIndex(a => a === null);
+      if (firstUnanswered !== -1) {
+        currentIndex = firstUnanswered;
+        loadQuestion();
+      }
+      return;
+    }
+  }
+
+  document.getElementById("quiz-view").style.display = "none";
+  document.getElementById("result-view").style.display = "block";
+
+  let score = 0;
+  const reviewBox = document.getElementById("review-box");
+  reviewBox.innerHTML = "";
+
+  questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.answer;
+    if (isCorrect) score++;
+
+    const item = document.createElement("div");
+    item.className = "review-item";
+    
+    const yourChoiceText = userAnswers[i] !== null 
+      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]]}` 
+      : "（<ruby>未解答<rt>みかいとう</rt></ruby>）";
+      
+    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer]}`;
+
+    item.innerHTML = `
+      <div style="margin-bottom: 8px;">
+        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
+        <strong style="margin-left: 8px;"><ruby>問<rt>もん</rt></ruby> ${i + 1}</strong>
+        <span style="font-size: 0.8rem; color: var(--text-sub); margin-left: 8px;">(${q.cat})</span>
+      </div>
+      <div style="font-size: 0.98rem; margin-bottom: 8px; line-height: 2.0;">${q.q}</div>
+      <div class="review-ans" style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+        あなたの<ruby>解答<rt>かいとう</rt></ruby>: ${yourChoiceText}
+      </div>
+      ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
+      <div class="review-exp-box">
+        <div>💡 <strong><ruby>解説<rt>かいせつ</rt></ruby>:</strong> ${q.expJa}</div>
+        <div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>
+        <div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>
+      </div>
+    `;
+    reviewBox.appendChild(item);
+  });
+
+  const finalScore = Math.round((score / questions.length) * 100);
+  localStorage.setItem(MODULE_KEY, finalScore);
+  updateMenuBadges();
+
+  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
+  const passMsg = document.getElementById("pass-msg");
+  if (finalScore >= moduleData.passScore) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準達成です！素晴らしい！</strong>";
+  } else {
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
+  }
+}
+
+updateMenuBadges();
+loadQuestion();
+</script>
+</body>
+</html>
