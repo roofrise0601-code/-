@@ -76,7 +76,7 @@
 
   <div id="quiz-view">
     <header>
-      <h1 id="title-text">読み込み中...</h1>
+      <h1 id="title-text">問題データを読み込み中...</h1>
       <div class="status-bar">
         <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">--</span> <ruby>問<rt>もん</rt></ruby></span>
         <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
@@ -123,17 +123,34 @@
 </div>
 
 <script>
-// URLパラメータから実行対象のJSファイルを動的に読み込む
+// URLパラメータ解析
 const urlParams = new URLSearchParams(window.location.search);
-const currentDay = urlParams.get('day') || 'shokucho';
+let dayParam = urlParams.get('day') || 'shokucho';
+
+// day=1 なら day1.js、day=shokucho なら shokucho.js
+let targetFileName = "";
+if (dayParam === "shokucho") {
+  targetFileName = "shokucho.js";
+} else if (dayParam.startsWith("day")) {
+  targetFileName = `${dayParam}.js`;
+} else {
+  targetFileName = `day${dayParam}.js`;
+}
+
+// 現在のページの基準URLを取得して、確実に同階層の data/ から読み込む
+const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}`;
 
 const script = document.createElement('script');
-script.src = `data/${currentDay}.js`;
+script.src = finalScriptUrl;
 script.onload = () => {
   initQuiz();
 };
 script.onerror = () => {
-  document.getElementById("title-text").textContent = "問題データの読み込みに失敗しました。";
+  document.getElementById("title-text").innerHTML = 
+    `<span style="color:var(--danger)">⚠️ 読み込みに失敗しました</span><br>` +
+    `<span style="font-size:0.85rem; color:var(--text-sub)">探した場所: ${finalScriptUrl}</span><br>` +
+    `<span style="font-size:0.85rem; color:var(--text-sub)">GitHubの data フォルダ内に「${targetFileName}」が存在するか確認してください。</span>`;
 };
 document.head.appendChild(script);
 
@@ -142,7 +159,10 @@ let userAnswers = [];
 let questions = [];
 
 function initQuiz() {
-  if (typeof CURRENT_QUIZ_DATA === 'undefined') return;
+  if (typeof CURRENT_QUIZ_DATA === 'undefined') {
+    document.getElementById("title-text").textContent = "データ形式が正しくありません。";
+    return;
+  }
   
   questions = CURRENT_QUIZ_DATA.questions;
   userAnswers = new Array(questions.length).fill(null);
