@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 建設 学科試験対策ポータル</title>
+  <title>特定技能2号 建設 学科対策ポータル</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -15,34 +15,54 @@
       --border: #cbd5e1;
       --success: #16a34a;
       --danger: #dc2626;
+      --today-bg: #f0f9ff;
+      --today-border: #38bdf8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 20px 16px; line-height: 1.6; }
     .container { max-width: 680px; margin: 0 auto; }
     
-    header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #e2e8f0; }
+    header { text-align: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #e2e8f0; }
     .site-tag { font-size: 0.85rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; }
     h1 { font-size: 1.35rem; color: #0f172a; margin-top: 4px; }
     p.sub { font-size: 0.9rem; color: var(--text-sub); margin-top: 6px; }
 
-    .module-group-title { font-size: 0.95rem; font-weight: 700; color: #475569; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
-    .module-group-title::before { content: ""; display: inline-block; width: 4px; height: 16px; background: var(--primary); border-radius: 2px; }
+    /* 今日の問題エリア */
+    .today-section { margin-bottom: 24px; }
+    .today-card {
+      background: var(--today-bg); border: 2px solid var(--today-border);
+      border-radius: 14px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;
+      text-decoration: none; color: var(--text); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+      transition: all 0.2s ease;
+    }
+    .today-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.2); }
+    .today-badge-label { display: inline-block; background: #0284c7; color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; margin-bottom: 4px; }
+    .today-title { font-size: 1.15rem; font-weight: 800; color: #0c4a6e; }
+    .today-btn { background: var(--primary); color: #fff; font-weight: 700; padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; }
 
-    .module-list { display: flex; flex-direction: column; gap: 12px; }
+    /* 7日ごとのタブ切り替え */
+    .week-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+    .tab-btn {
+      padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+      background: #fff; font-size: 0.85rem; font-weight: 700; color: var(--text-sub);
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .module-list { display: flex; flex-direction: column; gap: 10px; }
     .module-card {
       display: flex; justify-content: space-between; align-items: center;
-      background: var(--card-bg); padding: 18px 20px; border-radius: 12px;
+      background: var(--card-bg); padding: 14px 18px; border-radius: 10px;
       border: 1px solid var(--border); text-decoration: none; color: var(--text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s ease;
+      transition: all 0.2s ease;
     }
-    .module-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(2, 132, 199, 0.1); }
+    .module-card:hover { border-color: var(--primary); background: #f8fafc; }
     
-    .card-info { display: flex; flex-direction: column; gap: 4px; }
-    .card-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; }
-    .card-meta { font-size: 0.82rem; color: var(--text-sub); }
+    .card-info { display: flex; flex-direction: column; gap: 2px; }
+    .card-title { font-size: 0.98rem; font-weight: 700; color: #0f172a; }
+    .card-meta { font-size: 0.8rem; color: var(--text-sub); }
 
-    .status-area { text-align: right; min-width: 85px; }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 16px; font-size: 0.75rem; font-weight: 700; }
     .badge-yet { background: #f1f5f9; color: #64748b; }
     .badge-pass { background: #dcfce7; color: var(--success); }
     .badge-fail { background: #fee2e2; color: var(--danger); }
@@ -59,87 +79,14 @@
     <p class="sub">1<ruby>日<rt>にち</rt></ruby>10<ruby>問<rt>もん</rt></ruby>！ コツコツ<ruby>学<rt>まな</rt></ruby>んで <ruby>合格<rt>ごうかく</rt></ruby>を<ruby>目指<rt>めざ</rt></ruby>しましょう</p>
   </header>
 
-  <!-- 基礎分野 -->
-  <div class="module-group-title"><ruby>共通基礎<rt>きょうつうきそ</rt></ruby>・<ruby>安全管理<rt>あんぜんかんり</rt></ruby></div>
-  <div class="module-list">
-    <a href="quiz.html?day=shokucho" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📘 <ruby>職長<rt>しょくちょう</rt></ruby>・<ruby>安全衛生管理編<rt>あんぜんえいせいかんりへん</rt></ruby></span>
-        <span class="card-meta">5問 | 職長の役割・KYK・安全衛生管理</span>
-      </div>
-      <div class="status-area" id="status-shokucho">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-  </div>
+  <!-- ① 最上部：今日の問題（未合格の一番若いDayを自動表示） -->
+  <div class="today-section" id="today-area"></div>
 
-  <!-- 学科テキスト 第1章・第2章 -->
-  <div class="module-group-title"><ruby>現場基本<rt>げんばきほん</rt></ruby>・<ruby>法令<rt>ほうれい</rt></ruby></div>
-  <div class="module-list">
-    <a href="quiz.html?day=1" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📗 Day 1：<ruby>現場基本<rt>げんばきほん</rt></ruby>・チームワーク</span>
-        <span class="card-meta">10問 | 第1章（施工体制・CCUS・朝礼・KY）</span>
-      </div>
-      <div class="status-area" id="status-day1">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
+  <!-- ② 7日ごとのタブナビゲーション -->
+  <div class="week-tabs" id="week-tabs"></div>
 
-    <a href="quiz.html?day=2" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📗 Day 2：<ruby>労働基準法<rt>ろうどうきじゅんほう</rt></ruby>・<ruby>労働法編<rt>ろうどうほうへん</rt></ruby></span>
-        <span class="card-meta">10問 | 第2章 2.1（均等・パワハラ・有休・労災）</span>
-      </div>
-      <div class="status-area" id="status-day2">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-
-    <a href="quiz.html?day=3" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📙 Day 3：<ruby>建設業法<rt>けんせつぎょうほう</rt></ruby>・<ruby>環境法令編<rt>かんきょうほうれいへん</rt></ruby></span>
-        <span class="card-meta">10問 | 第2章 2.2〜2.17（建築基準法・リサイクル・電波・航空法）</span>
-      </div>
-      <div class="status-area" id="status-day3">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-  </div>
-
-  <!-- 学科テキスト 第3章 -->
-  <div class="module-group-title"><ruby>工事<rt>こうじ</rt></ruby>の<ruby>種類<rt>しゅるい</rt></ruby>と<ruby>業務<rt>ぎょうむ</rt></ruby>（第3章）</div>
-  <div class="module-list">
-    <a href="quiz.html?day=4" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📕 Day 4：<ruby>建設工事<rt>けんせつこうじ</rt></ruby>の<ruby>種類<rt>しゅるい</rt></ruby>（土木・建築・設備）</span>
-        <span class="card-meta">10問 | 第3章 3.1（ダム・トンネル・RC/S造・耐震・ライフライン）</span>
-      </div>
-      <div class="status-area" id="status-day4">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-
-    <a href="quiz.html?day=5" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📕 Day 5：<ruby>主<rt>おも</rt></ruby>な<ruby>専門工事<rt>せんもんこうじ</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>（躯体・仕上げ）</span>
-        <span class="card-meta">10問 | 第3章 3.2（土工・杭・とび・鉄骨・鉄筋・型枠・板金・塗装）</span>
-      </div>
-      <div class="status-area" id="status-day5">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-
-    <a href="quiz.html?day=6" class="module-card">
-      <div class="card-info">
-        <span class="card-title">📕 Day 6：<ruby>仕上<rt>しあ</rt></ruby>げ・<ruby>設備工事<rt>せつびこうじ</rt></ruby>と<ruby>必要資格<rt>ひつようしかく</rt></ruby></span>
-        <span class="card-meta">10問 | 第3章 3.2後半〜3.3（タイル・防水・電気・資格・特別教育）</span>
-      </div>
-      <div class="status-area" id="status-day6">
-        <span class="badge badge-yet">未挑戦</span>
-      </div>
-    </a>
-  </div>
+  <!-- ③ 問題一覧リスト -->
+  <div class="module-list" id="module-list"></div>
 
   <footer>
     &copy; 特定技能2号 建設 合格支援プラットフォーム
@@ -147,25 +94,101 @@
 </div>
 
 <script>
-  const modules = [
-    { targetId: "status-shokucho", key: "score_shokucho", passScore: 80 },
-    { targetId: "status-day1", key: "score_gakka1", passScore: 70 },
-    { targetId: "status-day2", key: "score_gakka1_2", passScore: 70 },
-    { targetId: "status-day3", key: "score_gakka2", passScore: 70 },
-    { targetId: "status-day4", key: "score_gakka3_1", passScore: 70 },
-    { targetId: "status-day5", key: "score_gakka3_2", passScore: 70 },
-    { targetId: "status-day6", key: "score_gakka3_3", passScore: 70 }
-  ];
+// モジュール一覧（職長編を削除し、Day 1〜7の完全7日間サイクルに統一）
+const ALL_MODULES = [
+  { id: "1", title: "📗 Day 1：現場基本・チームワーク", sub: "10問 | 第1章（施工体制・CCUS・朝礼）", key: "score_gakka1", pass: 70, week: 1 },
+  { id: "2", title: "📗 Day 2：労働基準法・労働法編", sub: "10問 | 第2章 2.1（均等・パワハラ・有休）", key: "score_gakka1_2", pass: 70, week: 1 },
+  { id: "3", title: "📙 Day 3：建設業法・環境法令編", sub: "10問 | 第2章 2.2〜2.17（リサイクル・電波法）", key: "score_gakka2", pass: 70, week: 1 },
+  { id: "4", title: "📕 Day 4：建設工事の種類と業務", sub: "10問 | 第3章 3.1（ダム・トンネル・RC造）", key: "score_gakka3_1", pass: 70, week: 1 },
+  { id: "5", title: "📕 Day 5：主な専門工事の仕事", sub: "10問 | 第3章 3.2（土工・とび・鉄骨・板金）", key: "score_gakka3_2", pass: 70, week: 1 },
+  { id: "6", title: "📕 Day 6：仕上げ・設備工事と必要資格", sub: "10問 | 第3章 3.2後半〜3.3（仕上・設備・特別教育）", key: "score_gakka3_3", pass: 70, week: 1 },
+  { id: "7", title: "📓 Day 7：現場用語・マナー・共同生活", sub: "10問 | 第4章（墨出し・面一・寸法・5S）", key: "score_gakka4", pass: 70, week: 1 }
+  // ※今後 Week 2（Day 8〜14）を追加する場合はここへ書き足せます
+];
 
-  modules.forEach(m => {
-    const score = localStorage.getItem(m.key);
-    const target = document.getElementById(m.targetId);
-    if (score !== null && target) {
-      const num = parseInt(score, 10);
-      const isPass = num >= m.passScore;
-      target.innerHTML = `<span class="badge ${isPass ? 'badge-pass' : 'badge-fail'}">${isPass ? '✔ ' : ''}${num}点</span>`;
-    }
+// 1. 今日の問題を判定（未達成の中で最も若いDayを一番上に出す）
+function renderTodaySection() {
+  const todayArea = document.getElementById("today-area");
+  let target = ALL_MODULES.find(m => {
+    const s = localStorage.getItem(m.key);
+    return s === null || parseInt(s, 10) < m.pass;
   });
+
+  if (!target) {
+    todayArea.innerHTML = `
+      <div class="today-card" style="background: #f0fdf4; border-color: #86efac;">
+        <div class="card-info">
+          <span class="today-badge-label" style="background:#16a34a;">COMPLETE!</span>
+          <div class="today-title" style="color:#14532d;">🎉 全ての日程をクリアしました！</div>
+          <span class="card-meta">いつでも復習したい単元を選んで挑戦できます</span>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  todayArea.innerHTML = `
+    <a href="quiz.html?day=${target.id}" class="today-card">
+      <div class="card-info">
+        <span class="today-badge-label">🔥 今日の学習</span>
+        <div class="today-title">${target.title}</div>
+        <span class="card-meta">${target.sub}</span>
+      </div>
+      <div class="today-btn">挑戦する ➔</div>
+    </a>
+  `;
+}
+
+// 2. 7日ごと（Weekごと）のタブとリスト描画
+let currentWeek = 1;
+
+function renderTabs() {
+  const tabsContainer = document.getElementById("week-tabs");
+  const maxWeek = Math.max(...ALL_MODULES.map(m => m.week));
+  
+  tabsContainer.innerHTML = "";
+  for (let w = 1; w <= maxWeek; w++) {
+    const btn = document.createElement("button");
+    btn.className = `tab-btn ${w === currentWeek ? "active" : ""}`;
+    btn.textContent = `第${w}週 (Week ${w})`;
+    btn.onclick = () => { currentWeek = w; renderTabs(); renderList(); };
+    tabsContainer.appendChild(btn);
+  }
+}
+
+function renderList() {
+  const listContainer = document.getElementById("module-list");
+  listContainer.innerHTML = "";
+
+  const filtered = ALL_MODULES.filter(m => m.week === currentWeek);
+
+  filtered.forEach(m => {
+    const scoreVal = localStorage.getItem(m.key);
+    let badgeHtml = '<span class="badge badge-yet">未挑戦</span>';
+    
+    if (scoreVal !== null) {
+      const num = parseInt(scoreVal, 10);
+      const isPass = num >= m.pass;
+      badgeHtml = `<span class="badge ${isPass ? 'badge-pass' : 'badge-fail'}">${isPass ? '✔ ' : ''}${num}点</span>`;
+    }
+
+    const card = document.createElement("a");
+    card.href = `quiz.html?day=${m.id}`;
+    card.className = "module-card";
+    card.innerHTML = `
+      <div class="card-info">
+        <span class="card-title">${m.title}</span>
+        <span class="card-meta">${m.sub}</span>
+      </div>
+      <div>${badgeHtml}</div>
+    `;
+    listContainer.appendChild(card);
+  });
+}
+
+renderTodaySection();
+renderTabs();
+renderList();
 </script>
 </body>
 </html>
