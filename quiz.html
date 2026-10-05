@@ -15,8 +15,8 @@
       --border: #cbd5e1;
       --success: #15803d;
       --danger: #b91c1c;
-      --warning-bg: #fffbeb;
-      --warning-border: #fde68a;
+      --trans-bg: #f8fafc;
+      --trans-border: #93c5fd;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
@@ -36,19 +36,42 @@
 
     .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
     .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
-    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 2.1; }
+    .q-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 2.2; }
+    
     ruby { ruby-position: over; }
     ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
 
-    .hints-group { display: flex; gap: 8px; margin-bottom: 18px; }
-    .btn-hint { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }
-    .hint-box { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; color: #92400e; margin-bottom: 16px; display: none; line-height: 1.5; }
-    
-    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .option-btn { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.96rem; cursor: pointer; transition: all 0.2s; line-height: 1.9; }
-    .option-btn:hover { border-color: #94a3b8; background: #f8fafc; }
-    .option-btn.selected { border-color: var(--primary); background: #f0f9ff; color: var(--primary); font-weight: 600; }
-    
+    /* 翻訳用トグルボタン */
+    .trans-actions { display: flex; gap: 8px; margin-bottom: 12px; }
+    .btn-mini-trans {
+      font-size: 0.78rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+      border: 1px solid #cbd5e1; background: #f1f5f9; cursor: pointer; color: #334155;
+      transition: all 0.2s;
+    }
+    .btn-mini-trans:hover { background: #e2e8f0; border-color: #94a3b8; }
+    .trans-text-box {
+      background: var(--trans-bg); border-left: 3px solid var(--primary);
+      padding: 8px 12px; font-size: 0.9rem; color: #334155; border-radius: 0 6px 6px 0;
+      margin-bottom: 16px; line-height: 1.6; display: none;
+    }
+
+    /* 選択肢 */
+    .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .option-card {
+      border: 1px solid var(--border); border-radius: 8px; background: #fff;
+      padding: 12px 14px; transition: all 0.2s;
+    }
+    .option-card:hover { border-color: #94a3b8; background: #f8fafc; }
+    .option-card.selected { border-color: var(--primary); background: #f0f9ff; outline: 1px solid var(--primary); }
+
+    .opt-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; cursor: pointer; }
+    .opt-title { font-size: 0.98rem; font-weight: 600; line-height: 1.9; flex: 1; }
+    .opt-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .opt-trans-box {
+      font-size: 0.86rem; color: #475569; margin-top: 6px; padding: 6px 8px;
+      background: #f1f5f9; border-radius: 4px; display: none; line-height: 1.5;
+    }
+
     .btn-group { display: flex; gap: 10px; }
     .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
     .btn-primary { background: var(--primary); color: #fff; border: none; }
@@ -57,7 +80,7 @@
     #result-view { display: none; }
     .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
     .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
-    .sync-status { font-size: 0.82rem; color: var(--text-sub); margin-top: 8px; }
+    .sync-status { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-top: 8px; }
     
     .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
     .review-item:last-child { border-bottom: none; }
@@ -90,13 +113,15 @@
       <div class="q-meta" id="q-category"></div>
       <div class="q-text" id="q-text"></div>
 
-      <div class="hints-group">
-        <button class="btn-hint" onclick="toggleHint('id')">💡 インドネシア語ヒント</button>
-        <button class="btn-hint" onclick="toggleHint('ne')">💡 ネパール語ヒント</button>
+      <!-- 問題文の翻訳ボタン -->
+      <div class="trans-actions">
+        <button class="btn-mini-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
+        <button class="btn-mini-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
       </div>
-      <div class="hint-box" id="hint-id"></div>
-      <div class="hint-box" id="hint-ne"></div>
+      <div class="trans-text-box" id="q-trans-id"></div>
+      <div class="trans-text-box" id="q-trans-ne"></div>
 
+      <!-- 選択肢 -->
       <div class="options" id="options-box"></div>
 
       <div class="btn-group">
@@ -126,29 +151,22 @@
 </div>
 
 <script>
-// 発行されたGASウェブアプリURL
 const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyv6O8ol8CkqmqcL4FDhp8j025XMQq1Z02hdBStkZ2oUanfFRs_NUz7Olr6g_Tlhw_0/exec";
 
-// URLパラメータから出題日を取得
 const urlParams = new URLSearchParams(window.location.search);
 let dayParam = urlParams.get('day') || '1';
-
 let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
 
-// 相対パスを解決してJSをロード
 const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}`;
 
 const script = document.createElement('script');
 script.src = finalScriptUrl;
-script.onload = () => {
-  initQuiz();
-};
+script.onload = () => { initQuiz(); };
 script.onerror = () => {
   document.getElementById("title-text").innerHTML = 
     `<span style="color:var(--danger)">⚠️ 読み込みに失敗しました</span><br>` +
-    `<span style="font-size:0.85rem; color:var(--text-sub)">探した場所: ${finalScriptUrl}</span><br>` +
-    `<span style="font-size:0.85rem; color:var(--text-sub)">GitHubの data フォルダ内に「${targetFileName}」が存在するか確認してください。</span>`;
+    `<span style="font-size:0.85rem; color:var(--text-sub)">探した場所: ${finalScriptUrl}</span>`;
 };
 document.head.appendChild(script);
 
@@ -162,10 +180,32 @@ function initQuiz() {
     return;
   }
   
-  questions = CURRENT_QUIZ_DATA.questions;
+  // 選択肢のシャッフル処理（旧形式の文字列でも、新形式のオブジェクトでも両対応）
+  questions = CURRENT_QUIZ_DATA.questions.map(q => {
+    let optsWithMeta = q.options.map((opt, idx) => {
+      let isObj = (typeof opt === 'object' && opt !== null);
+      return {
+        ja: isObj ? (opt.ja || '') : opt,
+        id: isObj ? (opt.id || '') : '',
+        ne: isObj ? (opt.ne || '') : '',
+        isCorrect: idx === q.answer
+      };
+    });
+
+    for (let i = optsWithMeta.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optsWithMeta[i], optsWithMeta[j]] = [optsWithMeta[j], optsWithMeta[i]];
+    }
+
+    return {
+      ...q,
+      options: optsWithMeta,
+      answer: optsWithMeta.findIndex(o => o.isCorrect)
+    };
+  });
+
   userAnswers = new Array(questions.length).fill(null);
   document.getElementById("title-text").innerHTML = CURRENT_QUIZ_DATA.title;
-
   loadQuestion();
 }
 
@@ -191,19 +231,35 @@ function loadQuestion() {
   document.getElementById("q-category").textContent = `分野: ${q.cat}`;
   document.getElementById("q-text").innerHTML = q.q;
 
-  document.getElementById("hint-id").textContent = q.hintId;
-  document.getElementById("hint-id").style.display = "none";
-  document.getElementById("hint-ne").textContent = q.hintNe;
-  document.getElementById("hint-ne").style.display = "none";
+  // 問題文の翻訳セット
+  const qTransId = document.getElementById("q-trans-id");
+  const qTransNe = document.getElementById("q-trans-ne");
+  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : "（翻訳がありません）";
+  qTransId.style.display = "none";
+  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : "（अनुवाद उपलब्ध छैन）";
+  qTransNe.style.display = "none";
 
+  // 選択肢の描画
   const optBox = document.getElementById("options-box");
   optBox.innerHTML = "";
+
   q.options.forEach((opt, idx) => {
-    const btn = document.createElement("button");
-    btn.className = `option-btn ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
-    btn.innerHTML = `<strong>${idx + 1}.</strong> <span>${opt}</span>`;
-    btn.onclick = () => selectOption(idx);
-    optBox.appendChild(btn);
+    const card = document.createElement("div");
+    card.className = `option-card ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
+
+    card.innerHTML = `
+      <div class="opt-header" onclick="selectOption(${idx})">
+        <div class="opt-title"><strong>${idx + 1}.</strong> ${opt.ja}</div>
+        <div class="opt-actions" onclick="event.stopPropagation()">
+          ${opt.id ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'id')">🇮🇩</button>` : ''}
+          ${opt.ne ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'ne')">🇳🇵</button>` : ''}
+        </div>
+      </div>
+      <div class="opt-trans-box" id="opt-trans-id-${idx}">🇮🇩 ${opt.id}</div>
+      <div class="opt-trans-box" id="opt-trans-ne-${idx}">🇳🇵 ${opt.ne}</div>
+    `;
+
+    optBox.appendChild(card);
   });
 
   document.getElementById("btn-prev").disabled = currentIndex === 0;
@@ -216,8 +272,13 @@ function selectOption(idx) {
   loadQuestion();
 }
 
-function toggleHint(lang) {
-  const el = document.getElementById(`hint-${lang}`);
+function toggleQTrans(lang) {
+  const el = document.getElementById(`q-trans-${lang}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function toggleOptTrans(idx, lang) {
+  const el = document.getElementById(`opt-trans-${lang}-${idx}`);
   el.style.display = el.style.display === "block" ? "none" : "block";
 }
 
@@ -262,6 +323,7 @@ function finishQuiz() {
     }
   }
 
+  document.getElementById("quiz-view").display = "none";
   document.getElementById("quiz-view").style.display = "none";
   document.getElementById("result-view").style.display = "block";
 
@@ -277,10 +339,10 @@ function finishQuiz() {
     item.className = "review-item";
     
     const yourChoiceText = userAnswers[i] !== null 
-      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]]}` 
+      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]].ja}` 
       : "（未解答）";
       
-    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer]}`;
+    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer].ja}`;
 
     item.innerHTML = `
       <div style="margin-bottom: 8px;">
@@ -313,7 +375,6 @@ function finishQuiz() {
     passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
 
-  // ★ Googleスプレッドシートへ自動送信
   sendResultToSpreadsheet(finalScore);
 }
 
@@ -322,24 +383,16 @@ function sendResultToSpreadsheet(finalScore) {
   const dayTitle = `Day ${dayParam}`;
   const syncStatus = document.getElementById("sync-status");
 
-  fetch(GAS_ENDPOINT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: userName,
-      day: dayTitle,
-      score: finalScore
+  const postUrl = `${GAS_ENDPOINT_URL}?name=${encodeURIComponent(userName)}&day=${encodeURIComponent(dayTitle)}&score=${encodeURIComponent(finalScore)}`;
+
+  fetch(postUrl, { method: "POST", mode: "no-cors" })
+    .then(() => {
+      syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
+      syncStatus.style.color = "var(--success)";
     })
-  })
-  .then(() => {
-    syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
-    syncStatus.style.color = "var(--success)";
-  })
-  .catch((err) => {
-    console.error(err);
-    syncStatus.textContent = "※通信環境により記録をスキップしました（結果は端末に保存されています）";
-  });
+    .catch(() => {
+      syncStatus.textContent = "※通信環境により記録をスキップしました";
+    });
 }
 </script>
 </body>
