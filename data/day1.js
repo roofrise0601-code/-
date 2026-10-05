@@ -1,135 +1,399 @@
-const CURRENT_QUIZ_DATA = {
-  key: "score_gakka1",
-  passScore: 70,
-  title: "📗 Day 1：施工体制・職長の役割・安全管理（公式試験準拠）",
-  questions: [
-    {
-      q: "<ruby>日本<rt>にほん</rt></ruby>の<ruby>建設工事<rt>けんせつこうじ</rt></ruby>の<ruby>施工体制<rt>せこうたいせい</rt></ruby>における「<ruby>専門工事業者<rt>せんもんこうじぎょうしゃ</rt></ruby>」についての<ruby>説明<rt>せつめい</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**はどれですか。",
-      q_id: "Manakah yang menggambarkan kontraktor khusus dalam sistem pelaksanaan pekerjaan konstruksi di Jepang?",
-      q_ne: "जापानको निर्माण कार्य प्रणालीमा 'विशेष ठेकेदार (専門工事業者)' को बारेमा कुन भनाइ सबैभन्दा उपयुक्त छ?",
-      cat: "第1章 施工体制",
-      options: [
-        {
-          ja: "<ruby>各工事<rt>かくこうじ</rt></ruby>のプロフェッショナルであり、<ruby>職長<rt>しょくちょう</rt></ruby>の<ruby>指示<rt>しじ</rt></ruby>のもとで<ruby>複数<rt>ふくすう</rt></ruby>の<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
-          id: "Merupakan ahli dalam setiap pekerjaan, dan beberapa operator bekerja sesuai instruksi mandor.",
-          ne: "प्रत्येक कामका विज्ञ हुन्, र धेरै कामदारहरूले फोरम्यान (टोली प्रमुख) को निर्देशनमा काम गर्छन्।"
-        },
-        {
-          ja: "<ruby>建設業者<rt>けんせつぎょうしゃ</rt></ruby>に<ruby>工事<rt>こうじ</rt></ruby>を<ruby>発注<rt>はっちゅう</rt></ruby>し、<ruby>工事費用<rt>こうじひよう</rt></ruby>を<ruby>支払<rt>しはら</rt></ruby>う。",
-          id: "Memesan pekerjaan konstruksi kepada vendor konstruksi.",
-          ne: "निर्माण कम्पनीलाई कामको जिम्मा दिने र निर्माण खर्च भुक्तानी गर्ने।"
-        },
-        {
-          ja: "<ruby>発注者<rt>はっちゅうしゃ</rt></ruby>の<ruby>要望<rt>ようぼう</rt></ruby>を<ruby>実現<rt>じつげん</rt></ruby>するための<ruby>設計図書<rt>せっけいとしょ</rt></ruby>を<ruby>作成<rt>さくせい</rt></ruby>する。",
-          id: "Membuat buku desain untuk mewujudkan permintaan pemesan.",
-          ne: "अर्डर गर्ने व्यक्तिको माग अनुसारको डिजाइन नक्सा बनाउने।"
-        },
-        {
-          ja: "<ruby>大規模<rt>だいきぼ</rt></ruby>な<ruby>工事現場<rt>こうじげんば</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>統括<rt>とうかつ</rt></ruby>と<ruby>監理<rt>かんり</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う。",
-          id: "Mengawasi dan mengarahkan keseluruhan lokasi konstruksi skala besar.",
-          ne: "ठूलो निर्माण साइटको समग्र व्यवस्थापन र सुपरिवेक्षण गर्ने।"
-        }
-      ],
-      answer: 0,
-      expJa: "専門工事業者（サブコン・協力会社）は、鉄骨、板金、左官、内装などの各専門工事を行う専門家集団です。職長の指示で技能者が実作業を行います。",
-      expId: "Kontraktor khusus adalah ahli dalam bidang masing-masing (seperti besi, plat logam, plester, dll.) yang bekerja di bawah arahan mandor.",
-      expNe: "विशेष ठेकेदारहरू आफ्नो क्षेत्रका दक्ष कामदार हुन् जसले टोली प्रमुख (फोरम्यान) को नेतृत्वमा वास्तविक काम गर्छन्।"
-    },
-    {
-      q: "<ruby>建設現場<rt>けんせつげんば</rt></ruby>における「<ruby>職長<rt>しょくちょう</rt></ruby>」の<ruby>役割<rt>やくわり</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>適切<rt>てきせつ</rt></ruby>なもの**はどれですか。",
-      q_id: "Manakah dari berikut ini yang merupakan peran mandor yang tepat?",
-      q_ne: "निर्माण साइटमा 'फोरम्यान (職長)' को सही भूमिका कुन हो?",
-      cat: "第1章 職長の役割",
-      options: [
-        {
-          ja: "<ruby>作業員<rt>さぎょういん</rt></ruby>に<ruby>適切<rt>てきせつ</rt></ruby>な<ruby>指示<rt>しじ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>し、それぞれの<ruby>目標<rt>もくひょう</rt></ruby>を<ruby>達成<rt>たっせい</rt></ruby>できるよう<ruby>支援<rt>しえん</rt></ruby>・<ruby>指導<rt>しどう</rt></ruby>する。",
-          id: "Memberikan instruksi yang tepat kepada pekerja dan membantu mereka mencapai tujuan mereka.",
-          ne: "कामदारहरूलाई उचित निर्देशन दिनु र आफ्नो लक्ष्य पूरा गर्न सहयोग गर्नु।"
-        },
-        {
-          ja: "<ruby>作業員<rt>さぎょういん</rt></ruby>の<ruby>毎月<rt>まいつき</rt></ruby>の<ruby>賃金<rt>ちんぎん</rt></ruby>（<ruby>給与<rt>きゅうよ</rt></ruby>）を<ruby>計算<rt>けいさん</rt></ruby>して<ruby>口座<rt>こうざ</rt></ruby>に<ruby>振<rt>ふ</rt></ruby>り<ruby>込<rt>こ</rt></ruby>む。",
-          id: "Menghitung upah pekerja.",
-          ne: "कामदारहरूको मासिक तलब हिसाब गरेर खातामा पठाउनु।"
-        },
-        {
-          ja: "<ruby>中規模<rt>ちゅうきぼ</rt></ruby><ruby>以上<rt>いじょう</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>において、<ruby>元請<rt>もとうけ</rt></ruby>の<ruby>現場責任者<rt>げんばせきにんしゃ</rt></ruby>として<ruby>全体<rt>ぜんたい</rt></ruby>を<ruby>統括<rt>とうかつ</rt></ruby>する。",
-          id: "Mengawasi lokasi konstruksi sebagai penanggung jawab lokasi konstruksi di lokasi konstruksi berukuran sedang atau lebih.",
-          ne: "मध्यम वा ठूला निर्माण साइटमा मुख्य जिम्मेवार व्यक्तिको रूपमा सबै हेरचाह गर्नु।"
-        },
-        {
-          ja: "<ruby>施主<rt>せしゅ</rt></ruby>（<ruby>注文者<rt>ちゅうもんしゃ</rt></ruby>）と<ruby>打<rt>う</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせを<ruby>重<rt>かさ</rt></ruby>ねて、<ruby>建物<rt>たてもの</rt></ruby>の<ruby>設計図面<rt>せっけいずめん</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>く。",
-          id: "Membuat gambar desain.",
-          ne: "घरधनीसँग सल्लाह गरेर भवनको डिजाइन नक्सा कोर्नु।"
-        }
-      ],
-      answer: 0,
-      expJa: "職長は直接作業員を指揮監督し、安全確保、作業手順の指示、チームワーク向上を図るリーダーです。",
-      expId: "Mandor bertanggung jawab mengarahkan para pekerja langsung, menjaga keselamatan, dan membantu tim menyelesaikan pekerjaan.",
-      expNe: "फोरम्यानले कामदारहरूलाई प्रत्यक्ष काम सिकाउने, सुरक्षा सुनिश्चित गर्ने र काम अगाडि बढाउने नेतृत्व गर्दछ।"
-    },
-    {
-      q: "<ruby>職場<rt>しょくば</rt></ruby>の<ruby>労働者<rt>ろうどうしゃ</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>と<ruby>健康<rt>けんこう</rt></ruby>を<ruby>確保<rt>かくほ</rt></ruby>し、<ruby>快適<rt>かいてき</rt></ruby>な<ruby>職場環境<rt>しょくばかんきょう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るための<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みとして、**<ruby>適切<rt>てきせつ</rt></ruby>でないもの**はどれですか。",
-      q_id: "Manakah yang bukan merupakan kegiatan yang tepat untuk memastikan keselamatan dan kesehatan pekerja di tempat kerja serta menciptakan lingkungan tempat kerja yang nyaman?",
-      q_ne: "कार्यस्थलमा कामदारहरूको सुरक्षा र स्वास्थ्य सुनिश्चित गर्न तथा राम्रो वातावरण बनाउन कुन कार्य उपयुक्त होइन?",
-      cat: "第1章 安全衛生",
-      options: [
-        {
-          ja: "パワーハラスメント（<ruby>優越的<rt>ゆうえつてき</rt></ruby>な<ruby>立場<rt>たちば</rt></ruby>を<ruby>背景<rt>はいけい</rt></ruby>とした<ruby>嫌<rt>いや</rt></ruby>がらせ・<ruby>暴言<rt>ぼうげん</rt></ruby>）",
-          id: "Penyalahgunaan kekuasaan (Power harassment).",
-          ne: "आफ्नो पदको दुरुपयोग गरी गालीगलौज वा हेपाहा व्यवहार गर्नु (Power harassment)।"
-        },
-        {
-          ja: "リスクアセスメント（<ruby>危険性<rt>きけんせい</rt></ruby>・<ruby>有害性<rt>ゆうがいせい</rt></ruby>の<ruby>事前特定<rt>じぜんとくてい</rt></ruby>と<ruby>低減措置<rt>ていげんそち</rt></ruby>）",
-          id: "Penilaian risiko.",
-          ne: "जोखिम मूल्याङ्कन (Risk assessment)।"
-        },
-        {
-          ja: "KY<ruby>活動<rt>かつどう</rt></ruby>（<ruby>危険予知活動<rt>きけんよちかつどう</rt></ruby>による<ruby>安全先取<rt>あんぜんさきど</rt></ruby>り）",
-          id: "Kegiatan KY (Kiken Yochi).",
-          ne: "जोखिम अनुमान गतिविधि (KY activity)।"
-        },
-        {
-          ja: "ストレスチェック（<ruby>労働者<rt>ろうどうしゃ</rt></ruby>のメンタルヘルス<ruby>不調<rt>ふちょう</rt></ruby>の<ruby>未然防止<rt>みぜんぼうし</rt></ruby>）",
-          id: "Pemeriksaan stres.",
-          ne: "मानसिक तनाव जाँच (Stress check)।"
-        }
-      ],
-      answer: 0,
-      expJa: "パワーハラスメントは労働者の心身を傷つけ、安全衛生環境を著しく悪化させる不適切な行為です。",
-      expId: "Penyalahgunaan kekuasaan (power harassment) adalah tindakan yang merusak lingkungan kerja dan dilarang keras.",
-      expNe: "पदको दुरुपयोग गरेर दुर्व्यवहार गर्नु कार्यस्थलको वातावरण बिगार्ने गैरकानुनी काम हो।"
-    },
-    {
-      q: "<ruby>現場<rt>げんば</rt></ruby>で「リスクアセスメント」を<ruby>実施<rt>じっし</rt></ruby>することの**<ruby>効果<rt>こうか</rt></ruby>として<ruby>適切<rt>てきせつ</rt></ruby>でないもの**はどれですか。",
-      q_id: "Manakah jawaban yang tidak tepat mengenai efektivitas pelaksanaan penilaian risiko?",
-      q_ne: "जोखिम मूल्याङ्कन (Risk assessment) गर्नुको फाइदाको रूपमा कुन भनाइ गलत छ?",
-      cat: "第1章 安全管理",
-      options: [
-        {
-          ja: "<ruby>作業員<rt>さぎょういん</rt></ruby>が<ruby>安全<rt>あんぜん</rt></ruby>について<ruby>考<rt>かんが</rt></ruby>える<ruby>必要<rt>ひつよう</rt></ruby>がなくなり、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>だけに<ruby>集中<rt>しゅうちゅう</rt></ruby>できる。",
-          id: "Pekerja dapat berkonsentrasi pada pekerjaannya tanpa perlu memikirkan keselamatan.",
-          ne: "कामदारहरूले सुरक्षाको बारेमा सोच्नै पर्दैन र आफ्नो काममा मात्र ध्यान दिन सक्छन्।"
-        },
-        {
-          ja: "<ruby>現場全体<rt>げんばぜんたい</rt></ruby>で<ruby>危険<rt>きけん</rt></ruby>に<ruby>対<rt>たい</rt></ruby>する<ruby>共通<rt>きょうつう</rt></ruby>の<ruby>認識<rt>にんしき</rt></ruby>を<ruby>共有<rt>きょうゆう</rt></ruby>することができる。",
-          id: "Dapat berbagi kesadaran terhadap risiko.",
-          ne: "कार्यस्थलका सबैले सम्भावित जोखिमबारे साझा जानकारी पाउन सक्छन्।"
-        },
-        {
-          ja: "<ruby>安全対策<rt>あんぜんたいさく</rt></ruby>の<ruby>優先順位<rt>ゆうせんじゅんい</rt></ruby>を<ruby>合理的<rt>ごうりてき</rt></ruby>に<ruby>決<rt>き</rt></ruby>めることができる。",
-          id: "Dapat memprioritaskan langkah-langkah keselamatan secara rasional.",
-          ne: "सुरक्षाका उपायहरूलाई प्राथमिकता अनुसार व्यवस्थित गर्न सकिन्छ।"
-        },
-        {
-          ja: "<ruby>職場<rt>しょくば</rt></ruby>のすべての<ruby>人<rt>ひと</rt></ruby>の「<ruby>安全<rt>あんぜん</rt>への<ruby>感受性<rt>かんじゅせい</rt></ruby>」を<ruby>高<rt>たか</rt></ruby>めることができる。",
-          id: "Dapat meningkatkan kepekaan terhadap 'keselamatan' pada semua orang di tempat kerja.",
-          ne: "कार्यस्थलका सबै व्यक्तिहरूमा सुरक्षा सम्बन्धी चेतना बढाउन सकिन्छ।"
-        }
-      ],
-      answer: 0,
-      expJa: "リスクアセスメントは全員で危険を洗い出し、対策を立てる活動です。「安全を考えなくてよくなる」というのは誤りです。",
-      expId: "Penilaian risiko justru mengajak semua pekerja peduli keselamatan, bukan mengabaikannya.",
-      expNe: "जोखिम मूल्याङ्कनले सबैलाई सुरक्षाप्रति सचेत गराउँछ, सुरक्षाबारे सोच्नै पर्दैन भन्ने कुरा गलत हो।"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特定技能2号 学科対策テスト</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-sub: #64748b;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --trans-bg: #f8fafc;
+      --trans-border: #93c5fd;
     }
-  ]
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
+    .container { max-width: 740px; margin: 0 auto; position: relative; }
+    
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .btn-portal-back { font-size: 0.88rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .btn-portal-back:hover { text-decoration: underline; }
+
+    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
+    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .nav-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .nav-btn.answered { background: #e2e8f0; color: #475569; }
+    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #7dd3fc; }
+
+    .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
+    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
+    .q-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 2.2; }
+    
+    ruby { ruby-position: over; }
+    ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
+
+    /* 翻訳用トグルボタン */
+    .trans-actions { display: flex; gap: 8px; margin-bottom: 12px; }
+    .btn-mini-trans {
+      font-size: 0.78rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+      border: 1px solid #cbd5e1; background: #f1f5f9; cursor: pointer; color: #334155;
+      transition: all 0.2s;
+    }
+    .btn-mini-trans:hover { background: #e2e8f0; border-color: #94a3b8; }
+    .trans-text-box {
+      background: var(--trans-bg); border-left: 3px solid var(--primary);
+      padding: 8px 12px; font-size: 0.9rem; color: #334155; border-radius: 0 6px 6px 0;
+      margin-bottom: 16px; line-height: 1.6; display: none;
+    }
+
+    /* 選択肢 */
+    .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .option-card {
+      border: 1px solid var(--border); border-radius: 8px; background: #fff;
+      padding: 12px 14px; transition: all 0.2s;
+    }
+    .option-card:hover { border-color: #94a3b8; background: #f8fafc; }
+    .option-card.selected { border-color: var(--primary); background: #f0f9ff; outline: 1px solid var(--primary); }
+
+    .opt-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; cursor: pointer; }
+    .opt-title { font-size: 0.98rem; font-weight: 600; line-height: 1.9; flex: 1; }
+    .opt-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .opt-trans-box {
+      font-size: 0.86rem; color: #475569; margin-top: 6px; padding: 6px 8px;
+      background: #f1f5f9; border-radius: 4px; display: none; line-height: 1.5;
+    }
+
+    .btn-group { display: flex; gap: 10px; }
+    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    #result-view { display: none; }
+    .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
+    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+    .sync-status { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-top: 8px; }
+    
+    .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .review-item:last-child { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-ok { background: #dcfce7; color: var(--success); }
+    .badge-ng { background: #fee2e2; color: var(--danger); }
+    .review-ans { font-size: 0.95rem; margin-top: 6px; line-height: 1.9; }
+    .review-exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 0.9rem; line-height: 1.9; }
+    .review-multi-exp { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <a href="index.html" class="btn-portal-back">🏠 ポータル（目次）へ戻る</a>
+  </div>
+
+  <div id="quiz-view">
+    <header>
+      <h1 id="title-text">問題データを読み込み中...</h1>
+      <div class="status-bar">
+        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">--</span> <ruby>問<rt>もん</rt></ruby></span>
+        <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
+      </div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </header>
+
+    <div class="card">
+      <div class="q-meta" id="q-category"></div>
+      <div class="q-text" id="q-text"></div>
+
+      <!-- 問題文の翻訳ボタン -->
+      <div class="trans-actions">
+        <button class="btn-mini-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
+        <button class="btn-mini-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
+      </div>
+      <div class="trans-text-box" id="q-trans-id"></div>
+      <div class="trans-text-box" id="q-trans-ne"></div>
+
+      <!-- 選択肢 -->
+      <div class="options" id="options-box"></div>
+
+      <div class="btn-group">
+        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
+        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
+        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-view">
+    <div class="score-card">
+      <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
+      <div class="score-num" id="score-text"></div>
+      <p id="pass-msg"></p>
+      <div class="sync-status" id="sync-status">📡 成績を記録中...</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
+      <div id="review-box"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn-nav btn-primary" style="flex: 1;" onclick="location.reload()">もう一度解く</button>
+        <a href="index.html" class="btn-nav" style="flex: 1; text-decoration: none; line-height: 22px;">ポータルへ戻る</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyv6O8ol8CkqmqcL4FDhp8j025XMQq1Z02hdBStkZ2oUanfFRs_NUz7Olr6g_Tlhw_0/exec";
+
+const urlParams = new URLSearchParams(window.location.search);
+let dayParam = urlParams.get('day') || '1';
+let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
+
+const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}`;
+
+const script = document.createElement('script');
+script.src = finalScriptUrl;
+script.onload = () => { initQuiz(); };
+script.onerror = () => {
+  document.getElementById("title-text").innerHTML = 
+    `<span style="color:var(--danger)">⚠️ 読み込みに失敗しました</span><br>` +
+    `<span style="font-size:0.85rem; color:var(--text-sub)">探した場所: ${finalScriptUrl}</span>`;
 };
+document.head.appendChild(script);
+
+let currentIndex = 0;
+let userAnswers = [];
+let questions = [];
+
+function initQuiz() {
+  if (typeof CURRENT_QUIZ_DATA === 'undefined') {
+    document.getElementById("title-text").textContent = "データ形式が正しくありません。";
+    return;
+  }
+  
+  // 選択肢のシャッフル処理（旧形式の文字列でも、新形式のオブジェクトでも両対応）
+  questions = CURRENT_QUIZ_DATA.questions.map(q => {
+    let optsWithMeta = q.options.map((opt, idx) => {
+      let isObj = (typeof opt === 'object' && opt !== null);
+      return {
+        ja: isObj ? (opt.ja || '') : opt,
+        id: isObj ? (opt.id || '') : '',
+        ne: isObj ? (opt.ne || '') : '',
+        isCorrect: idx === q.answer
+      };
+    });
+
+    for (let i = optsWithMeta.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optsWithMeta[i], optsWithMeta[j]] = [optsWithMeta[j], optsWithMeta[i]];
+    }
+
+    return {
+      ...q,
+      options: optsWithMeta,
+      answer: optsWithMeta.findIndex(o => o.isCorrect)
+    };
+  });
+
+  userAnswers = new Array(questions.length).fill(null);
+  document.getElementById("title-text").innerHTML = CURRENT_QUIZ_DATA.title;
+  loadQuestion();
+}
+
+function renderNav() {
+  const grid = document.getElementById("nav-grid");
+  grid.innerHTML = "";
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
+    btn.textContent = i + 1;
+    btn.onclick = () => { currentIndex = i; loadQuestion(); };
+    grid.appendChild(btn);
+  });
+  document.getElementById("current-num").textContent = currentIndex + 1;
+  document.getElementById("total-num").textContent = questions.length;
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
+}
+
+function loadQuestion() {
+  renderNav();
+  const q = questions[currentIndex];
+  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
+  document.getElementById("q-text").innerHTML = q.q;
+
+  // 問題文の翻訳セット
+  const qTransId = document.getElementById("q-trans-id");
+  const qTransNe = document.getElementById("q-trans-ne");
+  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : "（翻訳がありません）";
+  qTransId.style.display = "none";
+  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : "（अनुवाद उपलब्ध छैन）";
+  qTransNe.style.display = "none";
+
+  // 選択肢の描画
+  const optBox = document.getElementById("options-box");
+  optBox.innerHTML = "";
+
+  q.options.forEach((opt, idx) => {
+    const card = document.createElement("div");
+    card.className = `option-card ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
+
+    card.innerHTML = `
+      <div class="opt-header" onclick="selectOption(${idx})">
+        <div class="opt-title"><strong>${idx + 1}.</strong> ${opt.ja}</div>
+        <div class="opt-actions" onclick="event.stopPropagation()">
+          ${opt.id ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'id')">🇮🇩</button>` : ''}
+          ${opt.ne ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'ne')">🇳🇵</button>` : ''}
+        </div>
+      </div>
+      <div class="opt-trans-box" id="opt-trans-id-${idx}">🇮🇩 ${opt.id}</div>
+      <div class="opt-trans-box" id="opt-trans-ne-${idx}">🇳🇵 ${opt.ne}</div>
+    `;
+
+    optBox.appendChild(card);
+  });
+
+  document.getElementById("btn-prev").disabled = currentIndex === 0;
+  const isLast = currentIndex === questions.length - 1;
+  document.getElementById("btn-next").textContent = isLast ? "採点する" : "次へ";
+}
+
+function selectOption(idx) {
+  userAnswers[currentIndex] = idx;
+  loadQuestion();
+}
+
+function toggleQTrans(lang) {
+  const el = document.getElementById(`q-trans-${lang}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function toggleOptTrans(idx, lang) {
+  const el = document.getElementById(`opt-trans-${lang}-${idx}`);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
+}
+
+function nextQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function skipQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    loadQuestion();
+  } else {
+    const firstUnanswered = userAnswers.findIndex(a => a === null);
+    if (firstUnanswered !== -1) {
+      currentIndex = firstUnanswered;
+      loadQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+}
+
+function finishQuiz() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
+      const firstUnanswered = userAnswers.findIndex(a => a === null);
+      if (firstUnanswered !== -1) {
+        currentIndex = firstUnanswered;
+        loadQuestion();
+      }
+      return;
+    }
+  }
+
+  document.getElementById("quiz-view").display = "none";
+  document.getElementById("quiz-view").style.display = "none";
+  document.getElementById("result-view").style.display = "block";
+
+  let score = 0;
+  const reviewBox = document.getElementById("review-box");
+  reviewBox.innerHTML = "";
+
+  questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.answer;
+    if (isCorrect) score++;
+
+    const item = document.createElement("div");
+    item.className = "review-item";
+    
+    const yourChoiceText = userAnswers[i] !== null 
+      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]].ja}` 
+      : "（未解答）";
+      
+    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer].ja}`;
+
+    item.innerHTML = `
+      <div style="margin-bottom: 8px;">
+        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
+        <strong style="margin-left: 8px;">問 ${i + 1}</strong>
+        <span style="font-size: 0.8rem; color: var(--text-sub); margin-left: 8px;">(${q.cat})</span>
+      </div>
+      <div style="font-size: 0.98rem; margin-bottom: 8px; line-height: 2.0;">${q.q}</div>
+      <div class="review-ans" style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+        あなたの解答: ${yourChoiceText}
+      </div>
+      ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
+      <div class="review-exp-box">
+        <div>💡 <strong>解説:</strong> ${q.expJa}</div>
+        <div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>
+        <div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>
+      </div>
+    `;
+    reviewBox.appendChild(item);
+  });
+
+  const finalScore = Math.round((score / questions.length) * 100);
+  localStorage.setItem(CURRENT_QUIZ_DATA.key, finalScore);
+
+  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
+  const passMsg = document.getElementById("pass-msg");
+  if (finalScore >= CURRENT_QUIZ_DATA.passScore) {
+    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準達成です！素晴らしい！</strong>";
+  } else {
+    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
+  }
+
+  sendResultToSpreadsheet(finalScore);
+}
+
+function sendResultToSpreadsheet(finalScore) {
+  const userName = localStorage.getItem("app_user_name") || "未登録";
+  const dayTitle = `Day ${dayParam}`;
+  const syncStatus = document.getElementById("sync-status");
+
+  const postUrl = `${GAS_ENDPOINT_URL}?name=${encodeURIComponent(userName)}&day=${encodeURIComponent(dayTitle)}&score=${encodeURIComponent(finalScore)}`;
+
+  fetch(postUrl, { method: "POST", mode: "no-cors" })
+    .then(() => {
+      syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
+      syncStatus.style.color = "var(--success)";
+    })
+    .catch(() => {
+      syncStatus.textContent = "※通信環境により記録をスキップしました";
+    });
+}
+</script>
+</body>
+</html>
