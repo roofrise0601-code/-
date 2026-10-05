@@ -57,6 +57,8 @@
     #result-view { display: none; }
     .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
     .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+    .sync-status { font-size: 0.82rem; color: var(--text-sub); margin-top: 8px; }
+    
     .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
     .review-item:last-child { border-bottom: none; }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
@@ -110,6 +112,7 @@
       <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
       <div class="score-num" id="score-text"></div>
       <p id="pass-msg"></p>
+      <div class="sync-status" id="sync-status">📡 成績を記録中...</div>
     </div>
     <div class="card">
       <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
@@ -123,21 +126,16 @@
 </div>
 
 <script>
-// URLパラメータ解析
+// 発行されたGASウェブアプリURL
+const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyv6O8ol8CkqmqcL4FDhp8j025XMQq1Z02hdBStkZ2oUanfFRs_NUz7Olr6g_Tlhw_0/exec";
+
+// URLパラメータから出題日を取得
 const urlParams = new URLSearchParams(window.location.search);
-let dayParam = urlParams.get('day') || 'shokucho';
+let dayParam = urlParams.get('day') || '1';
 
-// day=1 なら day1.js、day=shokucho なら shokucho.js
-let targetFileName = "";
-if (dayParam === "shokucho") {
-  targetFileName = "shokucho.js";
-} else if (dayParam.startsWith("day")) {
-  targetFileName = `${dayParam}.js`;
-} else {
-  targetFileName = `day${dayParam}.js`;
-}
+let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
 
-// 現在のページの基準URLを取得して、確実に同階層の data/ から読み込む
+// 相対パスを解決してJSをロード
 const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}`;
 
@@ -314,6 +312,34 @@ function finishQuiz() {
   } else {
     passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
+
+  // ★ Googleスプレッドシートへ自動送信
+  sendResultToSpreadsheet(finalScore);
+}
+
+function sendResultToSpreadsheet(finalScore) {
+  const userName = localStorage.getItem("app_user_name") || "未登録";
+  const dayTitle = `Day ${dayParam}`;
+  const syncStatus = document.getElementById("sync-status");
+
+  fetch(GAS_ENDPOINT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: userName,
+      day: dayTitle,
+      score: finalScore
+    })
+  })
+  .then(() => {
+    syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
+    syncStatus.style.color = "var(--success)";
+  })
+  .catch((err) => {
+    console.error(err);
+    syncStatus.textContent = "※通信環境により記録をスキップしました（結果は端末に保存されています）";
+  });
 }
 </script>
 </body>
