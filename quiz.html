@@ -15,8 +15,7 @@
       --border: #cbd5e1;
       --success: #15803d;
       --danger: #b91c1c;
-      --trans-bg: #f8fafc;
-      --trans-border: #93c5fd;
+      --trans-bg: #f1f5f9;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
@@ -41,35 +40,49 @@
     ruby { ruby-position: over; }
     ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
 
-    /* 翻訳用トグルボタン */
+    /* 問題文の翻訳ボタングループ */
     .trans-actions { display: flex; gap: 8px; margin-bottom: 12px; }
-    .btn-mini-trans {
-      font-size: 0.78rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;
-      border: 1px solid #cbd5e1; background: #f1f5f9; cursor: pointer; color: #334155;
-      transition: all 0.2s;
+    .btn-q-trans {
+      font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 6px;
+      border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #334155;
+      display: inline-flex; align-items: center; gap: 4px;
     }
-    .btn-mini-trans:hover { background: #e2e8f0; border-color: #94a3b8; }
-    .trans-text-box {
+    .btn-q-trans:hover { background: #f8fafc; border-color: var(--primary); }
+    .q-trans-box {
       background: var(--trans-bg); border-left: 3px solid var(--primary);
-      padding: 8px 12px; font-size: 0.9rem; color: #334155; border-radius: 0 6px 6px 0;
+      padding: 10px 14px; font-size: 0.92rem; color: #334155; border-radius: 0 6px 6px 0;
       margin-bottom: 16px; line-height: 1.6; display: none;
     }
 
-    /* 選択肢 */
+    /* 選択肢カード */
     .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .option-card {
       border: 1px solid var(--border); border-radius: 8px; background: #fff;
       padding: 12px 14px; transition: all 0.2s;
     }
-    .option-card:hover { border-color: #94a3b8; background: #f8fafc; }
+    .option-card:hover { border-color: #94a3b8; background: #fbfcfe; }
     .option-card.selected { border-color: var(--primary); background: #f0f9ff; outline: 1px solid var(--primary); }
 
-    .opt-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; cursor: pointer; }
-    .opt-title { font-size: 0.98rem; font-weight: 600; line-height: 1.9; flex: 1; }
-    .opt-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .opt-main-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .opt-content-area {
+      flex: 1; cursor: pointer; font-size: 0.98rem; font-weight: 600; line-height: 1.9;
+    }
+    .opt-lang-buttons {
+      display: flex; gap: 6px; flex-shrink: 0;
+    }
+    .btn-opt-lang {
+      font-size: 0.78rem; font-weight: 700; padding: 4px 8px; border-radius: 5px;
+      border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; color: #475569;
+    }
+    .btn-opt-lang:hover { background: #e2e8f0; border-color: #64748b; color: #0f172a; }
+
+    /* 選択肢の下に開く翻訳ボックス */
     .opt-trans-box {
-      font-size: 0.86rem; color: #475569; margin-top: 6px; padding: 6px 8px;
-      background: #f1f5f9; border-radius: 4px; display: none; line-height: 1.5;
+      font-size: 0.88rem; color: #334155; margin-top: 8px; padding: 8px 12px;
+      background: var(--trans-bg); border-radius: 6px; display: none; line-height: 1.5;
+      border-left: 3px solid #64748b;
     }
 
     .btn-group { display: flex; gap: 10px; }
@@ -115,13 +128,13 @@
 
       <!-- 問題文の翻訳ボタン -->
       <div class="trans-actions">
-        <button class="btn-mini-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
-        <button class="btn-mini-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
+        <button class="btn-q-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
+        <button class="btn-q-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
       </div>
-      <div class="trans-text-box" id="q-trans-id"></div>
-      <div class="trans-text-box" id="q-trans-ne"></div>
+      <div class="q-trans-box" id="q-trans-id"></div>
+      <div class="q-trans-box" id="q-trans-ne"></div>
 
-      <!-- 選択肢 -->
+      <!-- 選択肢リスト -->
       <div class="options" id="options-box"></div>
 
       <div class="btn-group">
@@ -157,8 +170,10 @@ const urlParams = new URLSearchParams(window.location.search);
 let dayParam = urlParams.get('day') || '1';
 let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
 
+// キャッシュを強制回避して常に最新JSを取得
+const cacheBuster = new Date().getTime();
 const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}`;
+const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}?v=${cacheBuster}`;
 
 const script = document.createElement('script');
 script.src = finalScriptUrl;
@@ -180,14 +195,17 @@ function initQuiz() {
     return;
   }
   
-  // 選択肢のシャッフル処理（旧形式の文字列でも、新形式のオブジェクトでも両対応）
+  // 選択肢のシャッフル＆言語データの正規化
   questions = CURRENT_QUIZ_DATA.questions.map(q => {
     let optsWithMeta = q.options.map((opt, idx) => {
       let isObj = (typeof opt === 'object' && opt !== null);
+      let jaText = isObj ? (opt.ja || '') : String(opt);
+      let idText = isObj ? (opt.id || '') : (q.options_id && q.options_id[idx] ? q.options_id[idx] : '');
+      let neText = isObj ? (opt.ne || '') : (q.options_ne && q.options_ne[idx] ? q.options_ne[idx] : '');
       return {
-        ja: isObj ? (opt.ja || '') : opt,
-        id: isObj ? (opt.id || '') : '',
-        ne: isObj ? (opt.ne || '') : '',
+        ja: jaText,
+        id: idText,
+        ne: neText,
         isCorrect: idx === q.answer
       };
     });
@@ -231,15 +249,15 @@ function loadQuestion() {
   document.getElementById("q-category").textContent = `分野: ${q.cat}`;
   document.getElementById("q-text").innerHTML = q.q;
 
-  // 問題文の翻訳セット
+  // 問題文の翻訳ボックス
   const qTransId = document.getElementById("q-trans-id");
   const qTransNe = document.getElementById("q-trans-ne");
-  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : "（翻訳がありません）";
+  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : (q.hintId ? `🇮🇩 ${q.hintId}` : "（翻訳準備中）");
   qTransId.style.display = "none";
-  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : "（अनुवाद उपलब्ध छैन）";
+  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : (q.hintNe ? `🇳🇵 ${q.hintNe}` : "（अनुवाद तयारी हुँदैछ）");
   qTransNe.style.display = "none";
 
-  // 選択肢の描画
+  // 選択肢の描画（右側に [🇮🇩] [🇳🇵] ボタンを常時配置）
   const optBox = document.getElementById("options-box");
   optBox.innerHTML = "";
 
@@ -248,15 +266,17 @@ function loadQuestion() {
     card.className = `option-card ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
 
     card.innerHTML = `
-      <div class="opt-header" onclick="selectOption(${idx})">
-        <div class="opt-title"><strong>${idx + 1}.</strong> ${opt.ja}</div>
-        <div class="opt-actions" onclick="event.stopPropagation()">
-          ${opt.id ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'id')">🇮🇩</button>` : ''}
-          ${opt.ne ? `<button class="btn-mini-trans" onclick="toggleOptTrans(${idx}, 'ne')">🇳🇵</button>` : ''}
+      <div class="opt-main-row">
+        <div class="opt-content-area" onclick="selectOption(${idx})">
+          <strong>${idx + 1}.</strong> <span>${opt.ja}</span>
+        </div>
+        <div class="opt-lang-buttons">
+          <button type="button" class="btn-opt-lang" onclick="toggleOptTrans(${idx}, 'id')">🇮🇩</button>
+          <button type="button" class="btn-opt-lang" onclick="toggleOptTrans(${idx}, 'ne')">🇳🇵</button>
         </div>
       </div>
-      <div class="opt-trans-box" id="opt-trans-id-${idx}">🇮🇩 ${opt.id}</div>
-      <div class="opt-trans-box" id="opt-trans-ne-${idx}">🇳🇵 ${opt.ne}</div>
+      <div class="opt-trans-box" id="opt-trans-id-${idx}">🇮🇩 ${opt.id || "（Terjemahan sedang disiapkan）"}</div>
+      <div class="opt-trans-box" id="opt-trans-ne-${idx}">🇳🇵 ${opt.ne || "（अनुवाद तयारी हुँदैछ）"}</div>
     `;
 
     optBox.appendChild(card);
@@ -279,7 +299,9 @@ function toggleQTrans(lang) {
 
 function toggleOptTrans(idx, lang) {
   const el = document.getElementById(`opt-trans-${lang}-${idx}`);
-  el.style.display = el.style.display === "block" ? "none" : "block";
+  if (el) {
+    el.style.display = el.style.display === "block" ? "none" : "block";
+  }
 }
 
 function prevQuestion() {
@@ -323,7 +345,6 @@ function finishQuiz() {
     }
   }
 
-  document.getElementById("quiz-view").display = "none";
   document.getElementById("quiz-view").style.display = "none";
   document.getElementById("result-view").style.display = "block";
 
@@ -357,8 +378,8 @@ function finishQuiz() {
       ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
       <div class="review-exp-box">
         <div>💡 <strong>解説:</strong> ${q.expJa}</div>
-        <div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>
-        <div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>
+        ${q.expId ? `<div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>` : ''}
+        ${q.expNe ? `<div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>` : ''}
       </div>
     `;
     reviewBox.appendChild(item);
