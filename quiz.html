@@ -40,7 +40,6 @@
     ruby { ruby-position: over; }
     ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
 
-    /* 問題文の翻訳ボタングループ */
     .trans-actions { display: flex; gap: 8px; margin-bottom: 12px; }
     .btn-q-trans {
       font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 6px;
@@ -54,7 +53,6 @@
       margin-bottom: 16px; line-height: 1.6; display: none;
     }
 
-    /* 選択肢カード */
     .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .option-card {
       border: 1px solid var(--border); border-radius: 8px; background: #fff;
@@ -78,7 +76,6 @@
     }
     .btn-opt-lang:hover { background: #e2e8f0; border-color: #64748b; color: #0f172a; }
 
-    /* 選択肢の下に開く翻訳ボックス */
     .opt-trans-box {
       font-size: 0.88rem; color: #334155; margin-top: 8px; padding: 8px 12px;
       background: var(--trans-bg); border-radius: 6px; display: none; line-height: 1.5;
@@ -126,21 +123,19 @@
       <div class="q-meta" id="q-category"></div>
       <div class="q-text" id="q-text"></div>
 
-      <!-- 問題文の翻訳ボタン -->
       <div class="trans-actions">
-        <button class="btn-q-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
-        <button class="btn-q-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
+        <button type="button" class="btn-q-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
+        <button type="button" class="btn-q-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
       </div>
       <div class="q-trans-box" id="q-trans-id"></div>
       <div class="q-trans-box" id="q-trans-ne"></div>
 
-      <!-- 選択肢リスト -->
       <div class="options" id="options-box"></div>
 
       <div class="btn-group">
-        <button class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
-        <button class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
-        <button class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
+        <button type="button" class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
+        <button type="button" class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
+        <button type="button" class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
       </div>
     </div>
   </div>
@@ -156,7 +151,7 @@
       <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
       <div id="review-box"></div>
       <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button class="btn-nav btn-primary" style="flex: 1;" onclick="location.reload()">もう一度解く</button>
+        <button type="button" class="btn-nav btn-primary" style="flex: 1;" onclick="location.reload()">もう一度解く</button>
         <a href="index.html" class="btn-nav" style="flex: 1; text-decoration: none; line-height: 22px;">ポータルへ戻る</a>
       </div>
     </div>
@@ -164,13 +159,16 @@
 </div>
 
 <script>
-const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyv6O8ol8CkqmqcL4FDhp8j025XMQq1Z02hdBStkZ2oUanfFRs_NUz7Olr6g_Tlhw_0/exec";
+// ★Googleフォーム送信先設定
+const FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdyVU9kxyQZLTUAtQK12KRa8LT3dl69DQNR1C2cYePsO2QOXA/formResponse";
+const ENTRY_NAME = "entry.1684521148";  // 氏名
+const ENTRY_DAY  = "entry.662495890";   // 受講日
+const ENTRY_SCORE = "entry.1836459104"; // 得点
 
 const urlParams = new URLSearchParams(window.location.search);
 let dayParam = urlParams.get('day') || '1';
 let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
 
-// キャッシュを強制回避して常に最新JSを取得
 const cacheBuster = new Date().getTime();
 const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}?v=${cacheBuster}`;
@@ -195,7 +193,6 @@ function initQuiz() {
     return;
   }
   
-  // 選択肢のシャッフル＆言語データの正規化
   questions = CURRENT_QUIZ_DATA.questions.map(q => {
     let optsWithMeta = q.options.map((opt, idx) => {
       let isObj = (typeof opt === 'object' && opt !== null);
@@ -249,15 +246,13 @@ function loadQuestion() {
   document.getElementById("q-category").textContent = `分野: ${q.cat}`;
   document.getElementById("q-text").innerHTML = q.q;
 
-  // 問題文の翻訳ボックス
   const qTransId = document.getElementById("q-trans-id");
   const qTransNe = document.getElementById("q-trans-ne");
-  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : (q.hintId ? `🇮🇩 ${q.hintId}` : "（翻訳準備中）");
+  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : (q.hintId ? `🇮🇩 [Hint] ${q.hintId}` : "（Terjemahan sedang disiapkan）");
   qTransId.style.display = "none";
-  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : (q.hintNe ? `🇳🇵 ${q.hintNe}` : "（अनुवाद तयारी हुँदैछ）");
+  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : (q.hintNe ? `🇳🇵 [Hint] ${q.hintNe}` : "（अनुवाद तयारी हुँदैछ）");
   qTransNe.style.display = "none";
 
-  // 選択肢の描画（右側に [🇮🇩] [🇳🇵] ボタンを常時配置）
   const optBox = document.getElementById("options-box");
   optBox.innerHTML = "";
 
@@ -396,24 +391,37 @@ function finishQuiz() {
     passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
 
-  sendResultToSpreadsheet(finalScore);
+  // 画面上部にスムーズにスクロール
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Googleフォーム送信を実行
+  sendResultToForm(finalScore);
 }
 
-function sendResultToSpreadsheet(finalScore) {
+// Googleフォームの formResponse に直接データを送信
+function sendResultToForm(finalScore) {
   const userName = localStorage.getItem("app_user_name") || "未登録";
   const dayTitle = `Day ${dayParam}`;
   const syncStatus = document.getElementById("sync-status");
 
-  const postUrl = `${GAS_ENDPOINT_URL}?name=${encodeURIComponent(userName)}&day=${encodeURIComponent(dayTitle)}&score=${encodeURIComponent(finalScore)}`;
+  const formData = new FormData();
+  formData.append(ENTRY_NAME, userName);
+  formData.append(ENTRY_DAY, dayTitle);
+  formData.append(ENTRY_SCORE, String(finalScore));
 
-  fetch(postUrl, { method: "POST", mode: "no-cors" })
-    .then(() => {
-      syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
-      syncStatus.style.color = "var(--success)";
-    })
-    .catch(() => {
-      syncStatus.textContent = "※通信環境により記録をスキップしました";
-    });
+  fetch(FORM_ACTION_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  })
+  .then(() => {
+    syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
+    syncStatus.style.color = "var(--success)";
+  })
+  .catch((err) => {
+    console.error(err);
+    syncStatus.textContent = "※通信環境により記録をスキップしました";
+  });
 }
 </script>
 </body>
