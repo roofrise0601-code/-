@@ -1,177 +1,167 @@
 const CURRENT_QUIZ_DATA = {
-  title: "特定技能2号 学科：Day 5（第3章 3.2 主な専門工事の仕事）",
-  key: "score_gakka3_2",
+  title: "Day 5：<ruby>建築板金<rt>けんちくばんきん</rt></ruby>の<ruby>材料<rt>ざいりょう</rt></ruby>・<ruby>性質<rt>せいしつ</rt></ruby>・<ruby>屋根外壁基礎<rt>やねがいへききそ</rt></ruby>",
+  key: "score_gakka1_5",
   passScore: 70,
   questions: [
     {
-      id: 1,
-      cat: "3.2.1 土工事 (p.38)",
-      q: "<ruby>土工事<rt>どこうじ</rt></ruby>（<ruby>土工<rt>どこう</rt></ruby>）の **<ruby>用語<rt>ようご</rt></ruby>と<ruby>作業内容<rt>さぎょうないよう</rt></ruby>**について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+      cat: "第5章 板金材料",
+      q: "<ruby>建築板金<rt>けんちくばんきん</rt></ruby>で<ruby>広<rt>ひろ</rt></ruby>く<ruby>使<rt>つか</rt></ruby>われる「ガルバリウム<ruby>鋼板<rt>こうはん</rt></ruby>」のメッキ<ruby>成分<rt>せいぶん</rt></ruby>として、**<ruby>最<rt>もっと</rt></ruby>も<ruby>多<rt>おお</rt></ruby>い<ruby>割合<rt>わりあい</rt></ruby>（<ruby>約<rt>やく</rt></ruby>55%）を<ruby>占<rt>し</rt></ruby>める<ruby>金属<rt>きんぞく</rt></ruby>**はどれですか。",
+      q_id: "Logam apa yang memiliki proporsi terbesar (sekitar 55%) dalam lapisan pelapis 'baja galvalum' yang banyak digunakan dalam lembaran logam arsitektur?",
+      q_ne: "वास्तुकला पाता (आर्किटेक्चरल शिट मेटल) मा व्यापक रूपमा प्रयोग हुने 'गाल्भाल्युम स्टील' को कोटिंगमा सबैभन्दा बढी (लगभग ५५%) हुने धातु कुन हो?",
       options: [
-        "<ruby>建物<rt>たてもの</rt></ruby>の<ruby>基礎<rt>きそ</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めるために<ruby>地面<rt>じめん</rt></ruby>を<ruby>掘<rt>ほ</rt></ruby>ることを「<ruby>盛土<rt>もりど</rt></ruby>」といい、<ruby>斜面<rt>しゃめん</rt></ruby>に<ruby>土<rt>つち</rt></ruby>を<ruby>盛<rt>も</rt></ruby>ることを「<ruby>根切<rt>ねぎ</rt></ruby>り」という。",
-        "<ruby>地面<rt>じめん</rt></ruby>が<ruby>沈下<rt>ちんか</rt></ruby>しないように、ローラーなどで<ruby>叩<rt>たた</rt></ruby>いたり<ruby>振動<rt>しんどう</rt></ruby>を<ruby>加<rt>くわ</rt></ruby>えて<ruby>隙間<rt>すきま</rt></ruby>を<ruby>少<rt>すく</rt></ruby>なくする<ruby>作業<rt>さぎょう</rt></ruby>を「<ruby>締固<rt>しめかた</rt></ruby>め」という。",
-        "<ruby>基礎工事<rt>きそこうじ</rt></ruby>が<ruby>終<rt>お</rt></ruby>わった<ruby>後<rt>あと</rt></ruby>、<ruby>構造物<rt>こうぞうぶつ</rt></ruby>のまわりの<ruby>余分<rt>よぶん</rt></ruby>な<ruby>空間<rt>くうかん</rt></ruby>に<ruby>土<rt>つち</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めることを「<ruby>埋<rt>う</rt></ruby>め<ruby>戻<rt>もど</rt></ruby>し」という。",
-        "<ruby>斜面<rt>しゃめん</rt></ruby>の<ruby>崩壊<rt>ほうかい</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぐため、モルタルを<ruby>吹<rt>ふ</rt></ruby>き<ruby>付<rt>つ</rt></ruby>けたり<ruby>種子<rt>しゅし</rt></ruby>・マットを<ruby>張<rt>は</rt></ruby>る「<ruby>法面<rt>のりめん</rt></ruby>」の<ruby>保護作業<rt>ほごさぎょう</rt></ruby>がある。"
+        { ja: "アルミニウム", id: "Aluminium", ne: "एल्युमिनियम" },
+        { ja: "亜鉛（あえん）", id: "Seng (Zinc)", ne: "जस्ता (जिङ्क)" },
+        { ja: "銅（どう）", id: "Tembaga", ne: "तामा" },
+        { ja: "鉛（なまり）", id: "Timbal", ne: "सिसा (लिड)" }
       ],
       answer: 0,
-      hintId: "Terbalik! Menggali tanah untuk pondasi disebut 'Negiri', sedangkan menimbun tanah disebut 'Morido'.",
-      hintNe: "उल्टो भयो! जग हाल्न जमिन खन्ने कामलाई 'नेगिरी' र माटो थुपार्ने कामलाई 'मोरीदो' भनिन्छ।",
-      expJa: "基礎のために地面を掘ることは「根切り」、斜面や平坦でない土地に土を盛ることは「盛り土」です（テキストp.38）。",
-      expId: "Galian tanah untuk pondasi gedung disebut Negiri, dan pekerjaan menimbun tanah disebut Morido.",
-      expNe: "जग बनाउन जमिन खन्ने कामलाई 'नेगिरी' र माटो भरेर सम्याउने कामलाई 'मोरीदो' भनिन्छ।"
+      expJa: "ガルバリウム鋼板のメッキ組成は、アルミニウム55%、亜鉛43.4%、シリコン1.6%です。耐食性と加工性に大変優れています。",
+      expId: "Komposisi pelapis galvalum adalah 55% aluminium, 43,4% seng, dan 1,6% silikon, memberikan ketahanan korosi yang sangat baik.",
+      expNe: "गाल्भाल्युमको कोटिंगमा ५५% एल्युमिनियम, ४३.४% जस्ता र १.६% सिलिकन हुन्छ, जसले खिया लाग्नबाट जोगाउँछ।"
     },
     {
-      id: 2,
-      cat: "3.2.2〜3.2.5 推進・海洋・さく井・ウェルポイント (p.39-41)",
-      q: "<ruby>地下水<rt>ちかすい</rt></ruby>を <ruby>排水<rt>はいすい</rt></ruby>して **<ruby>水<rt>みず</rt></ruby>のない<ruby>状態<rt>じょうたい</rt></ruby>（ドライワーク）で<ruby>工事<rt>こうじ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>うための<ruby>工法<rt>こうほう</rt></ruby>**は どれですか。",
+      cat: "第5章 金属の性質",
+      q: "<ruby>異<rt>こと</rt></ruby>なる<ruby>種類<rt>しゅるい</rt></ruby>の<ruby>金属<rt>きんぞく</rt></ruby>（<ruby>例<rt>たと</rt></ruby>えば<ruby>銅<rt>どう</rt></ruby>と<ruby>鉄<rt>てつ</rt></ruby>）を<ruby>水<rt>みず</rt></ruby>のある<ruby>場所<rt>ばしょ</rt></ruby>で<ruby>接触<rt>せっしょく</rt></ruby>させると、<ruby>一方<rt>いっぽう</rt></ruby>の<ruby>金属<rt>きんぞく</rt></ruby>の<ruby>腐食<rt>ふしょく</rt></ruby>が<ruby>急速<rt>きゅうそく</rt></ruby>に<ruby>進<rt>すす</rt></ruby>む<ruby>現象<rt>げんしょう</rt></ruby>を<ruby>何<rt>なん</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>びますか。",
+      q_id: "Apa sebutan untuk fenomena di mana korosi pada salah satu logam terjadi sangat cepat saat dua logam berbeda bersentuhan di lingkungan basah?",
+      q_ne: "पानी भएको ठाउँमा दुई फरक धातुहरू (जस्तै तामा र फलाम) आपसमा जोडिँदा एउटा धातु छिटो खियािएर नष्ट हुने प्रक्रियालाई के भनिन्छ?",
       options: [
-        "ウェルポイント<ruby>工法<rt>こうほう</rt></ruby>（またはディープウェル<ruby>工法<rt>こうほう</rt></ruby>）",
-        "<ruby>浚渫<rt>しゅんせつ</rt></ruby><ruby>工法<rt>こうほう</rt></ruby>",
-        "<ruby>温泉井<rt>おんせんせい</rt></ruby><ruby>工法<rt>こうほう</rt></ruby>",
-        "<ruby>推進<rt>すいしん</rt></ruby>トンネル<ruby>工法<rt>こうほう</rt></ruby>"
+        { ja: "電食（でんしょく／異種金属接触腐食）", id: "Korosi galvanik (Denshoku)", ne: "ग्याल्भानिक खिया (डेन्शोकु)" },
+        { ja: "熱膨張（ねつぼうちょう）", id: "Pemuaian termal", ne: "तापीय विस्तार" },
+        { ja: "加工硬化（かこうこうか）", id: "Pengerasan kerja (Work hardening)", ne: "कार्य कठोरता" },
+        { ja: "経年劣化（けいねんれっか）", id: "Penuaan alami", ne: "समय अनुसारको क्षय" }
       ],
       answer: 0,
-      hintId: "Metode pemompaan air tanah agar area galian kering (dry work) hingga kedalaman 10m disebut metode Wellpoint.",
-      hintNe: "जमिनमुनिको पानी तानेर सुक्खा ठाउँमा काम गर्न सकिने (ड्राइ-वर्क) विधिलाई 'वेलपोइन्ट' विधि भनिन्छ।",
-      expJa: "ウェルポイント工法は、揚水管を打ち込み真空ポンプで地下水を汲み上げてドライワークを可能にする工法です（テキストp.41）。",
-      expId: "Metode Wellpoint menyedot air tanah dengan pipa hisap dan pompa vakum untuk memungkinkan pekerjaan kering (dry work).",
-      expNe: "जमिनमुनिको पानी तानेर खाल्डो सुक्खा बनाई सुरक्षित काम गर्न वेलपोइन्ट विधिको प्रयोग गरिन्छ।"
+      expJa: "異なる金属が接触して水分が付着すると電池の回路が形成され、イオン化傾向の高い金属が急速に錆びます（電食）。銅樋の吊り金具に鉄釘を直接使ってはならない理由です。",
+      expId: "Korosi galvanik (電食) terjadi bila dua logam berbeda bersentuhan dengan air. Jangan pasang paku besi langsung pada talang tembaga.",
+      expNe: "फरक धातुहरू पानीको सम्पर्कमा जोडिँदा विद्युतीय प्रतिक्रिया भएर खिया लाग्छ। तामाको पाइपमा फलामको काँटी सिधै ठोक्नु हुँदैन।"
     },
     {
-      id: 3,
-      cat: "3.2.6 舗装工事 (p.42)",
-      q: "<ruby>道路<rt>どうろ</rt></ruby>の **<ruby>舗装工事<rt>ほそうこうじ</rt></ruby>の<ruby>層<rt>そう</rt></ruby>（下から上への順番）**として、<ruby>正<rt>ただ</rt></ruby>しいものは どれですか。",
+      cat: "第5章 屋根の部位",
+      q: "<ruby>切妻屋根<rt>きりづまやね</rt></ruby>などで、<ruby>屋根<rt>やね</rt></ruby>の<ruby>一番高<rt>いちばんたか</rt></ruby>い<ruby>頂上部分<rt>ちょうじょうぶぶん</rt></ruby>にある<ruby>水平<rt>すいへい</rt></ruby>な<ruby>稜線<rt>りょうせん</rt></ruby>を<ruby>何<rt>なん</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>びますか。",
+      q_id: "Apa sebutan untuk garis punggung horizontal paling atas pada atap pelana (kirizuma)?",
+      q_ne: "छानाको सबैभन्दा माथिल्लो तेर्सो धुरी (शिखर) भागलाई के भनिन्छ?",
       options: [
-        "【<ruby>路床<rt>ろしょう</rt></ruby>】 ➔ 【<ruby>路盤<rt>ろばん</rt></ruby>】 ➔ 【<ruby>基層<rt>きそう</rt></ruby>】 ➔ 【<ruby>表層<rt>ひょうそう</rt></ruby>】",
-        "【<ruby>表層<rt>ひょうそう</rt></ruby>】 ➔ 【<ruby>基層<rt>きそう</rt></ruby>】 ➔ 【<ruby>路盤<rt>ろばん</rt></ruby>】 ➔ 【<ruby>路床<rt>ろしょう</rt></ruby>】",
-        "【<ruby>路盤<rt>ろばん</rt></ruby>】 ➔ 【<ruby>路床<rt>ろしょう</rt></ruby>】 ➔ 【<ruby>表層<rt>ひょうそう</rt></ruby>】 ➔ 【<ruby>基層<rt>きそう</rt></ruby>】",
-        "【<ruby>基層<rt>きそう</rt></ruby>】 ➔ 【<ruby>路床<rt>ろしょう</rt></ruby>】 ➔ 【<ruby>路盤<rt>ろばん</rt></ruby>】 ➔ 【<ruby>表層<rt>ひょうそう</rt></ruby>】"
+        { ja: "棟（むね）", id: "Bubungan (Mune)", ne: "धुरी (मुने)" },
+        { ja: "軒先（のきさき）", id: "Ujung atap / Titisan (Nokisaki)", ne: "छानाको छेउ (नोकिसाकी)" },
+        { ja: "ケラバ", id: "Tepi atap samping / Gable (Keraba)", ne: "छेउको किनारा (केराबा)" },
+        { ja: "谷（たに）", id: "Lembah atap (Tani)", ne: "छानाको खोँच (तानी)" }
       ],
       answer: 0,
-      hintId: "Lapisan jalan dari paling bawah: Roshou (dasar tanah) -> Roban (batu pecah) -> Kisou (aspal dasar) -> Hyousou (aspal permukaan).",
-      hintNe: "सडक कालोपत्रेको तह तलबाट माथि: रोसोउ (माटोको बेस) -> रोबान (गिटीको बेस) -> किसोउ (भित्री अस्फाल्ट) -> ह्योसोउ (सतहको अस्फाल्ट)।",
-      expJa: "舗装道路は一番下の「路床」、砕石を敷く「路盤」、その上の「基層」、最後に滑りにくい「表層」の順に作られます（テキストp.42）。",
-      expId: "Urutan struktur perkerasan jalan dari bawah: Lapisan Tanah Dasar (Roshou), Pondasi (Roban), Pengikat (Kisou), dan Permukaan (Hyousou).",
-      expNe: "सडक निर्माणमा सबैभन्दा मुनि रोसोउ, त्यसपछि रोबान, किसोउ र सबैभन्दा माथि ह्योसोउको तह हुन्छ।"
+      expJa: "屋根の最頂部を「棟（むね）」と呼びます。雨仕舞いにおいて最も重要な役物（棟包み・笠木板金など）を取り付ける場所です。",
+      expId: "Bagian puncak horizontal tertinggi disebut 'Mune' (bubungan). Penutup bubungan sangat penting untuk mencegah bocor.",
+      expNe: "छानाको सबैभन्दा माथिल्लो भागलाई 'मुने' (धुरी) भनिन्छ। पानी चुहिन नदिन यहाँ विशेष पाताहरू जोडिन्छ।"
     },
     {
-      id: 4,
-      cat: "3.2.8 杭工事 (p.43-44)",
-      q: "<ruby>現場<rt>げんば</rt></ruby>で <ruby>穴<rt>あな</rt></ruby>を<ruby>掘<rt>ほ</rt></ruby>り、**<ruby>鉄筋<rt>てっきん</rt></ruby>かごを<ruby>入<rt>い</rt></ruby>れて<ruby>生<rt>なま</rt></ruby>コンクリートを<ruby>流<rt>なが</rt></ruby>し<ruby>込<rt>こ</rt></ruby>んで<ruby>作<rt>つく</rt></ruby>る杭**の<ruby>工法<rt>こうほう</rt></ruby>は どれですか。",
+      cat: "第5章 屋根の部位",
+      q: "<ruby>雨水<rt>あまみず</rt></ruby>を<ruby>受<rt>う</rt></ruby>けて<ruby>集<rt>あつ</rt></ruby>めるため、<ruby>屋根<rt>やね</rt></ruby>の<ruby>面<rt>めん</rt></ruby>と<ruby>面<rt>めん</rt></ruby>がV<ruby>字型<rt>じがた</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わさる<ruby>窪<rt>くぼ</rt></ruby>んだ<ruby>部分<rt>ぶぶん</rt></ruby>を<ruby>何<rt>なん</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>びますか。",
+      q_id: "Apa sebutan untuk bagian lembah berbentuk V tempat bertemunya dua bidang atap yang mengalirkan banyak air hujan?",
+      q_ne: "दुई छानाहरू V आकारमा जोडिएर धेरै वर्षाको पानी बग्ने खोँच परेको भागलाई के भनिन्छ?",
       options: [
-        "<ruby>場所打<rt>ばしょう</rt></ruby>ちコンクリート<ruby>杭工法<rt>くいこうほう</rt></ruby>",
-        "<ruby>既成杭工法<rt>きせいくいこうほう</rt></ruby>",
-        "<ruby>木杭打<rt>きぐいう</rt></ruby>ち<ruby>工法<rt>こうほう</rt></ruby>",
-        "シートパイル<ruby>工法<rt>こうほう</rt></ruby>"
+        { ja: "谷（たに／谷樋）", id: "Lembah atap / Talang lembah (Tani)", ne: "खोँच / तानी (Tani)" },
+        { ja: "隅棟（すみむね）", id: "Bubungan miring (Sumimune)", ne: "कुनाको धुरी (सुमिमुने)" },
+        { ja: "水切り（みずきり）", id: "Flashing penahan air (Mizukiri)", ne: "पानी छेक्ने पाता (मिजुकिरी)" },
+        { ja: "鼻隠し（はなかくし）", id: "Fascia board (Hanakakushi)", ne: "फासिया बोर्ड (हानाकाकुशी)" }
       ],
       answer: 0,
-      hintId: "Membuat tiang pancang langsung di lapangan dengan merakit keranjang besi beton dan cor semen basah disebut 'Basho-uchi Concrete Kui'.",
-      hintNe: "कार्यस्थलमै खाल्डो खनेर रडको जाली हाली कंक्रिट ढलान गरेर बनाइने पिलरलाई 'बास्यो-उची कुइ' भनिन्छ।",
-      expJa: "現場で穴を掘り、鉄筋のかごを入れ生コンを流し込んで作る杭を「場所打ち杭工法」と言います（テキストp.44）。",
-      expId: "Metode pembuatan tiang cor di tempat (Bored Pile) disebut Basho-uchi Concrete Kui Kouhou.",
-      expNe: "फ्याक्ट्रीबाट ल्याउने (किसेइ-कुइ) नभई फिल्डमै खाल्डो खनेर रड र कंक्रिटले बनाइने पिलरलाई बास्यो-उची कुइ भनिन्छ।"
+      expJa: "「谷（たに）」は大量の雨水が集中して流れるため、雨漏りリスクが最も高い重要部位です。谷樋板金は重ね代を広く取り、防水紙を二重にするなどの確実な施工が必要です。",
+      expId: "'Tani' adalah lembah pertemuan atap. Tempat ini menampung banyak air sehingga paling rawan bocor jika tidak dipasang benar.",
+      expNe: "'तानी' छानाको खोँच भाग हो जहाँ धेरै पानी जम्मा भएर बग्छ। पानी चुहिने जोखिम बढी हुने भएकोले यहाँ बलियोसँग पाता लगाउनुपर्छ।"
     },
     {
-      id: 5,
-      cat: "3.2.9 とび工事 (p.44-45)",
-      q: "「とび<ruby>職<rt>しょく</rt></ruby>」の **<ruby>種類<rt>しゅるい</rt></ruby>と<ruby>仕事内容<rt>しごとないよう</rt></ruby>**について、**<ruby>誤<rt>あやま</rt></ruby>っているもの**は どれですか。",
+      cat: "第5章 下地・防水",
+      q: "<ruby>金属屋根<rt>きんぞくやね</rt></ruby>を<ruby>葺<rt>ふ</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>に、<ruby>野地板<rt>のじいた</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>敷<rt>し</rt></ruby>く「<ruby>防水<rt>ぼうすい</rt></ruby>シート（ルーフィング）」の<ruby>敷<rt>し</rt></ruby>き<ruby>方<rt>かた</rt></ruby>として<ruby>正<rt>ただ</rt></ruby>しいものはどれですか。",
+      q_id: "Manakah cara yang BENAR dalam memasang lembaran kedap air (roofing sheet) di atas papan atap sebelum memasang atap logam?",
+      q_ne: "धातुको छाना लगाउनुअघि काठको फल्याक (नोजिता) माथि वाटरप्रुफ शिट (रुफिङ) बिछ्याउने सही तरिका कुन हो?",
       options: [
-        "<ruby>数百<rt>すうひゃく</rt></ruby>トンの<ruby>大型機械<rt>おおがたきかい</rt></ruby>や<ruby>設備<rt>せつび</rt></ruby>を<ruby>運<rt>はこ</rt></ruby>んで<ruby>据付<rt>すえつ</rt></ruby>ける<ruby>仕事<rt>しごと</rt></ruby>を「<ruby>町場<rt>まちば</rt></ruby>とび」という。",
-        "<ruby>高所<rt>こうしょ</rt></ruby>で<ruby>塗装<rt>とそう</rt></ruby>や<ruby>作業<rt>さぎょう</rt></ruby>ができるように<ruby>足場<rt>あしば</rt></ruby>を<ruby>組<rt>く</rt></ruby>みたてる<ruby>仕事<rt>しごと</rt></ruby>を「<ruby>足場<rt>あしば</rt></ruby>とび」という。",
-        "<ruby>高層<rt>こうそう</rt></ruby>ビルなどの<ruby>骨組<rt>ほねぐ</rt></ruby>みとなる<ruby>鉄骨<rt>てっこつ</rt></ruby>をクレーンで<ruby>吊<rt>つ</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げてボルトで<ruby>締<rt>し</rt></ruby>める<ruby>仕事<rt>しごと</rt></ruby>を「<ruby>鉄骨<rt>てっこつ</rt></ruby>とび」という。",
-        "<ruby>鉄塔<rt>てっとう</rt></ruby>の<ruby>送電線<rt>そうでんせん</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>いたり<ruby>高所<rt>こうしょ</rt></ruby>の<ruby>電気保守<rt>でんきほしゅ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>う<ruby>仕事<rt>しごと</rt></ruby>を「<ruby>送電<rt>そうでん</rt></ruby>とび」という。"
+        { ja: "軒先（下側）から棟（上側）に向かって、下側の上に上側を重ねて敷く", id: "Dari bawah (nokisaki) ke atas (mune), menumpuk lembaran atas di atas lembaran bawah", ne: "तल्लो भाग (नोकिसाकी) बाट माथि (धुरी) तर्फ, तल्लो शिटमाथि माथिल्लो शिट खप्ट्याएर बिछ्याउने" },
+        { ja: "棟（上側）から軒先（下側）に向かって敷いていく", id: "Dari atas ke bawah", ne: "माथिल्लो भागबाट तल्लो भाग तर्फ बिछ्याउँदै जाने" },
+        { ja: "重ね幅は隙間なくぴったり合わせれば、重ね代は不要である", id: "Tidak perlu tumpang tindih jika posisinya pas", ne: "खप्ट्याउने भाग नराखी छेउमा छेउ मात्र जोडे पुग्छ" },
+        { ja: "雨水が浸透しないよう、テープだけで貼り付けて釘打ちは一切しない", id: "Hanya ditempel selotip tanpa dipaku sama sekali", ne: "काँटी नठोकी टेपले मात्र टाँस्ने" }
       ],
       answer: 0,
-      hintId: "Memindahkan dan memasang mesin berat berbobot ratusan ton adalah tugas 'Juuryou-tobi' (Tobi Berat), bukan Machiba-tobi.",
-      hintNe: "सयौं टनका भारी मेसिनहरू ओसारेर जडान गर्ने काम 'ज्युउर्यौ-तोबी' (हेभी तोबी) ले गर्छ, माचिबा-तोबीले होइन।",
-      expJa: "数百トンの機械設備を運搬・据付するのは「重量とび」です。「町場とび」は地域の住宅やマンションの足場を組む仕事です（テキストp.44-45）。",
-      expId: "Juuryou-tobi bertugas memasang mesin-mesin pabrik bermuatan ratusan ton. Machiba-tobi bertugas merakit perancah perumahan lokal.",
-      expNe: "ठूला उपकरण र मेसिन जडान गर्नेलाई ज्युउर्यौ-तोबी र घर-अपार्टमेन्टको खट बाँध्नेलाई माचिबा-तोबी भनिन्छ।"
+      expJa: "水は上から下に流れるため、ルーフィングは必ず「下（軒先）から上（棟）」へ向かって張り進め、上のシートを下側のシートの上に重ねます（重ね代100mm以上）。逆張りは雨漏りの原因になります。",
+      expId: "Roofing harus dipasang dari bawah ke atas agar air mengalir di atas sambungan. Tumpang tindih minimal 100mm.",
+      expNe: "पानी माथिबाट तल बग्ने भएकाले रुफिङ सधैं तलबाट माथितर्फ खप्ट्याएर (कम्तीमा १०० मिमि) बिछ्याउनुपर्छ।"
     },
     {
-      id: 6,
-      cat: "3.2.10 鉄骨工事 (p.45-46)",
-      q: "<ruby>鉄骨工事<rt>てっこつこうじ</rt></ruby>における **「<ruby>重量鉄骨<rt>じゅうりょうてっこつ</rt></ruby>」と「<ruby>軽量鉄骨<rt>けいりょうてっこつ</rt></ruby>」の <ruby>分<rt>わ</rt></ruby>け<ruby>目<rt>め</rt></ruby>（<ruby>厚<rt>あつ</rt></ruby>さ）**は どれですか。",
+      cat: "第5章 熱膨張",
+      q: "<ruby>金属<rt>きんぞく</rt></ruby>は<ruby>温度<rt>おんど</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がると<ruby>伸<rt>の</rt></ruby>び、<ruby>冷<rt>つめ</rt></ruby>たくなると<ruby>縮<rt>ちぢ</rt></ruby>む<ruby>性質<rt>せいしつ</rt></ruby>（<ruby>熱膨張<rt>ねつぼうちょう</rt></ruby>）があります。<ruby>長尺<rt>ちょうじゃく</rt></ruby>の<ruby>金属屋根<rt>きんぞくやね</rt></ruby>を<ruby>施工<rt>せこう</rt></ruby>する<ruby>際<rt>さい</rt></ruby>に**この<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>逃<rt>に</rt></ruby>がすための<ruby>工夫<rt>くふう</rt></ruby>**として<ruby>適切<rt>てきせつ</rt></ruby>なものはどれですか。",
+      q_id: "Logam memuai saat panas dan menyusut saat dingin. Apa tindakan yang tepat untuk mengatasi pemuaian ini pada atap logam panjang?",
+      q_ne: "तातो हुँदा धातु फैलिने र चिसो हुँदा खुम्चिने गर्दछ। लामो धातुको छाना लगाउँदा यो समस्या समाधान गर्न के गरिन्छ?",
       options: [
-        "<ruby>厚<rt>あつ</rt></ruby>さ **6mm**（6mm<ruby>未満<rt>みまん</rt></ruby>が<ruby>軽量<rt>けいりょう</rt></ruby>、6mm<ruby>以上<rt>いじょう</rt></ruby>が<ruby>重量<rt>じゅうりょう</rt></ruby>）",
-        "<ruby>厚<rt>あつ</rt></ruby>さ **2mm**（2mm<ruby>未満<rt>みまん</rt></ruby>が<ruby>軽量<rt>けいりょう</rt></ruby>、2mm<ruby>以上<rt>いじょう</rt></ruby>が<ruby>重量<rt>じゅうりょう</rt></ruby>）",
-        "<ruby>厚<rt>あつ</rt></ruby>さ **15mm**（15mm<ruby>未満<rt>みまん</rt></ruby>が<ruby>軽量<rt>けいりょう</rt></ruby>、15mm<ruby>以上<rt>いじょう</rt></ruby>が<ruby>重量<rt>じゅうりょう</rt></ruby>）",
-        "<ruby>厚<rt>あつ</rt></ruby>さ **30mm**（30mm<ruby>未満<rt>みまん</rt></ruby>が<ruby>軽量<rt>けいりょう</rt></ruby>、30mm<ruby>以上<rt>いじょう</rt></ruby>が<ruby>重量<rt>じゅうりょう</rt></ruby>）"
+        { ja: "吊子（つりこ）を用いて固定し、伸縮できる遊び（クリアランス）を設ける", id: "Menggunakan tsuriko (cleat) dan memberi celah ekspansi", ne: "चुरिको (क्लिप) प्रयोग गरी फैलिन र खुम्चिन सक्ने ठाउँ (क्लियरेन्स) राख्ने" },
+        { ja: "絶対に動かないよう、鉄板の中央にもビスを大量に打ち込んで固める", id: "Menyekrup bagian tengah rapat-rapat agar tidak bergerak sama sekali", ne: "हल्लिन नदिन पाताको बीचमा पनि धेरै पेच (स्क्रु) कसेर कस्ने" },
+        { ja: "隙間ができないよう、すべての継ぎ手をボンドで隙間なく固着する", id: "Merekatkan semua sambungan dengan lem tanpa celah", ne: "सबै जोडाइहरूलाई गम लगाएर कडा बनाउने" },
+        { ja: "熱膨張は微小なので現場では何も考慮しなくてよい", id: "Tidak perlu dipikirkan karena perubahannya sangat kecil", ne: "धेरै फरक नपर्ने भएकाले केही ध्यान दिनु पर्दैन" }
       ],
       answer: 0,
-      hintId: "Batas pemisah baja ringan (Keiryou) dan baja berat (Juuryou) adalah ketebalan 6 mm.",
-      hintNe: "हलुका स्टिल (केइर्यौ) र भारी स्टिल (ज्युउर्यौ) छुट्याउने मोटाइ ६ मिमी हो।",
-      expJa: "鉄材の厚さが6mm未満を「軽量鉄骨」、6mm以上を「重量鉄骨」と分類します（テキストp.45）。",
-      expId: "Baja dengan ketebalan di bawah 6mm diklasifikasikan sebagai baja ringan, dan 6mm ke atas adalah baja berat.",
-      expNe: "६ मिमीभन्दा पातलो स्टिललाई केइर्यौ र ६ मिमी वा सोभन्दा बाक्लो स्टिललाई ज्युउर्यौ तेक्कोचु भनिन्छ।"
+      expJa: "金属屋根（立平葺きなど）は太陽熱で数ミリ〜十数ミリ伸縮します。板金同士を緊結しすぎず、「吊子（つりこ）」を使ってスライドできるように逃げを作ることが波打ちや破断を防ぐ基本です。",
+      expId: "Atap logam memuai oleh panas. Penggunaan tsuriko memungkinkan logam bergerak bebas tanpa melengkung atau robek.",
+      expNe: "घामको तातोले पाता फैलिन्छ। पाता खुम्चिन र बाङ्गिन नदिन 'चुरिको' प्रयोग गरी सामान्य हल्लिने ठाउँ राखिन्छ।"
     },
     {
-      id: 7,
-      cat: "3.2.12 鉄筋継手工事 (p.47)",
-      q: "<ruby>鉄筋<rt>てっきん</rt></ruby>をつなぐ「<ruby>継手<rt>つぎて</rt></ruby>」のなかで、**<ruby>酸素<rt>さんそ</rt></ruby>とアセチレンガスなどの<ruby>炎<rt>ほのお</rt></ruby>で<ruby>加熱<rt>かねつ</rt></ruby>し、<ruby>軸方向<rt>じくほうこう</rt></ruby>に<ruby>圧力<rt>あつりょく</rt></ruby>をかけて<ruby>接合<rt>せつごう</rt></ruby>する<ruby>最<rt>もっと</rt></ruby>も<ruby>一般的<rt>いっぱんてき</rt></ruby>な<ruby>工法<rt>こうほう</rt></ruby>**は どれですか。",
+      cat: "第5章 雨樋",
+      q: "<ruby>雨樋<rt>あまどい</rt></ruby>（軒樋）の<ruby>勾配<rt>こうばい</rt></ruby>（<ruby>傾<rt>かたむ</rt></ruby>き）について、**<ruby>適切<rt>てきせつ</rt></ruby>な<ruby>説明<rt>せつめい</rt></ruby>**はどれですか。",
+      q_id: "Manakah pernyataan yang TEPAT mengenai kemiringan talang atap (nokidoi)?",
+      q_ne: "छानाको पानी बग्ने पाइप/नाला (अमादोई) को भिरालोपन (स्लोप) बारे कुन भनाइ सही छ?",
       options: [
-        "ガス<ruby>圧接継手<rt>あっせつつぎて</rt></ruby>",
-        "<ruby>機械式継手<rt>きかいしきつぎて</rt></ruby>（カプラー）",
-        "<ruby>溶接継手<rt>ようせつつぎて</rt></ruby>（アーク<ruby>溶接<rt>ようせつ</rt></ruby>）",
-        "<ruby>接着剤継手<rt>せっちゃくざいつぎて</rt></ruby>"
+        { ja: "集水器（落とし口）に向かって適切な水下がり勾配をつける", id: "Membuat kemiringan menurun ke arah corong pembuangan air", ne: "पानी खस्ने पाइप (कलेक्टर) तर्फ पानी बग्ने गरी भिरालो बनाउने" },
+        { ja: "見た目を綺麗にするため、完全に水平（水勾配ゼロ）にする", id: "Dibuat datar sempurna agar terlihat rapi", ne: "राम्रो देखाउन पूर्ण रूपमा तेर्सो (स्लोप नराखी) बनाउने" },
+        { ja: "集水器から一番遠い場所を一番低くする", id: "Membuat titik terendah paling jauh dari corong pembuangan", ne: "पानी खस्ने ठाउँभन्दा टाढाको भागलाई सबैभन्दा होचो बनाउने" },
+        { ja: "勾配は雨風で自然につくので調整して取り付ける必要はない", id: "Kemiringan tidak perlu diatur karena akan miring sendiri", ne: "स्लोप मिलाउनु पर्दैन, पानीको भारले आफैं मिल्छ" }
       ],
       answer: 0,
-      hintId: "Metode menyambung besi beton dengan memanaskan ujungnya pakai gas asetilen lalu ditekan kuat secara aksial disebut Gas Assetsu.",
-      hintNe: "अक्सिजन-एसिटिलिन ग्यासको आगोले रडको मुख तताएर दुवैतिरबाट च्यापेर जोड्ने विधिलाई 'ग्यास आस्सेचु' भनिन्छ।",
-      expJa: "鉄筋の端部を加熱しながら軸方向に圧力をかけて接合する工法を「ガス圧接継手」と言い、現場で最も多用されます（テキストp.47）。",
-      expId: "Gas Assetsu Tsugite adalah metode penyambungan besi beton terpopuler dengan pemanasan api gas dan tekanan aksial hidrolik.",
-      expNe: "रडलाई तातो बनाएर प्रेसर दिई जोड्ने विधिलाई ग्यास आस्सेचु भनिन्छ र यो जापानमा सबैभन्दा धेरै प्रयोग हुन्छ।"
+      expJa: "軒樋に勾配がないと雨水や泥が滞留し、樋の変形やオーバーフローの原因になります。集水器（落とし口）に向けて1/100〜1/200程度の水勾配を確保します。",
+      expId: "Talang harus memiliki kemiringan ke arah corong pembuangan (1/100-1/200) agar air tidak tergenang dan meluap.",
+      expNe: "पानी जमेर फोहोर थुप्रिन नदिन पानी खस्ने प्वालतर्फ १/१०० देखि १/२०० सम्मको भिरालो बनाउनुपर्छ।"
     },
     {
-      id: 8,
-      cat: "3.2.14 型枠工事 (p.49)",
-      q: "<ruby>型枠工事<rt>かたわくこうじ</rt></ruby>において、**コンクリートを<ruby>流<rt>なが</rt></ruby>し<ruby>込<rt>こ</rt></ruby>んだときの<ruby>内側<rt>うちがわ</rt></ruby>からの<ruby>大<rt>おお</rt></ruby>きな<ruby>圧力<rt>あつりょく</rt></ruby>で<ruby>型枠<rt>かたわく</rt></ruby>が<ruby>壊<rt>こわ</rt></ruby>れないようにする<ruby>補強<rt>ほきょう</rt></ruby>**を <ruby>何<rt>なん</rt></ruby>といいますか。",
+      cat: "第5章 板金加工",
+      q: "<ruby>薄鉄板<rt>うすてっぱん</rt></ruby>の<ruby>端部<rt>たんぶ</rt></ruby>を<ruby>折<rt>お</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>して<ruby>強度<rt>きょうど</rt></ruby>を<ruby>高<rt>たか</rt></ruby>めたり、<ruby>手<rt>て</rt></ruby>を切らないように<ruby>丸<rt>まる</rt></ruby>める<ruby>加工<rt>かこう</rt></ruby>を<ruby>何<rt>なん</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>びますか。",
+      q_id: "Apa sebutan untuk proses melipat atau menggulung tepi lembaran logam agar lebih kuat dan tidak melukai tangan?",
+      q_ne: "पातलो पाताको किनारालाई दोबारेर बलियो बनाउने र हात नकाटिने बनाउने कार्यलाई के भनिन्छ?",
       options: [
-        "<ruby>支保工<rt>しほこう</rt></ruby>（<ruby>型枠支保工<rt>かたわくしほこう</rt></ruby>）",
-        "<ruby>墨出<rt>すみだ</rt></ruby>し",
-        "<ruby>地中梁<rt>ちちゅうばり</rt></ruby>",
-        "<ruby>埋<rt>う</rt></ruby>め<ruby>戻<rt>もど</rt></ruby>し"
+        { ja: "へミング加工（つぶし折り／紐出し）", id: "Hemming (melipat pinggiran)", ne: "हेमिङ (किनारा दोबार्ने काम)" },
+        { ja: "シャーリング切断", id: "Pemotongan shearing", ne: "शियरिङ कटिङ" },
+        { ja: "アーク溶接", id: "Las busur (Arc welding)", ne: "आर्क वेल्डिङ" },
+        { ja: "リベット打ち", id: "Pemasangan keling (Rivet)", ne: "रिभेट ठोक्ने" }
       ],
       answer: 0,
-      hintId: "Memperkuat cetakan beton (katawaku) dari luar menggunakan pipa besi agar tidak jebol saat dicor disebut Shihokou.",
-      hintNe: "कंक्रिट हाल्दा फर्मा नफुटोस् भनेर बाहिरबाट फलामे पाइपले बलियो गरी अड्याउने संरचनालाई 'सिहोकोउ' भनिन्छ।",
-      expJa: "生コンの側圧に耐えるため、型枠の外側を鉄製パイプ等でしっかりと支えて補強することを「支保工」と言います（テキストp.49）。",
-      expId: "Shihokou adalah sistem perancah penyangga pipa baja untuk menahan tekanan lateral adukan beton cair agar cetakan tidak pecah.",
-      expNe: "ढलान गर्दा फर्मा बाहिर नधकेलियोस् भनी फलामे पाइपले थाम्ने कामलाई सिहोकोउ भनिन्छ।"
+      expJa: "板金の端を180度折り返す加工を「へミング（つぶし）」と呼びます。剛性を高め、切り口のバリでケガをするのを防ぎます。",
+      expId: "Hemming adalah proses melipat tepi logam 180 derajat untuk menambah kekuatan dan mencegah luka.",
+      expNe: "पाताको किनारालाई १८० डिग्री दोबार्ने कामलाई 'हेमिङ' भनिन्छ। यसले पातालाई दह्रो बनाउँछ र चोट लाग्न दिँदैन।"
     },
     {
-      id: 9,
-      cat: "3.2.15 コンクリート圧送工事 (p.50)",
-      q: "コンクリートを <ruby>打<rt>う</rt></ruby>ち<ruby>込<rt>こ</rt></ruby>むとき、**<ruby>強度<rt>きょうど</rt></ruby>の<ruby>低下<rt>ていか</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぎ、<ruby>中<rt>なか</rt></ruby>の<ruby>不要<rt>ふよう</rt></ruby>な<ruby>空気<rt>くうき</rt></ruby>の<ruby>泡<rt>あわ</rt></ruby>を<ruby>抜<rt>ぬ</rt></ruby>くために<ruby>使<rt>つか</rt></ruby>う<ruby>器具<rt>きぐ</rt></ruby>**は どれですか。",
+      cat: "第5章 安全・玉掛け",
+      q: "<ruby>現場<rt>げんば</rt></ruby>でクレーンを<ruby>使<rt>つか</rt></ruby>って<ruby>長尺<rt>ちょうじゃく</rt></ruby>の<ruby>屋根材<rt>やねざい</rt></ruby>を<ruby>揚重<rt>ようじゅう</rt></ruby>（<ruby>吊<rt>つ</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げ）する<ruby>際<rt>さい</rt></ruby>の<ruby>安全行動<rt>あんぜんこうどう</rt></ruby>として、**<ruby>誤<rt>あやま</rt></ruby>っているもの**はどれですか。",
+      q_id: "Manakah tindakan yang SALAH saat mengangkat lembaran atap panjang menggunakan crane di tempat kerja?",
+      q_ne: "क्रेनको सहायताले लामो पाताहरू माथि उठाउँदा कुन कार्य गलत हो?",
       options: [
-        "バイブレータ（<ruby>振動機<rt>しんどうき</rt></ruby>）",
-        "<ruby>扇風機<rt>せんぷうき</rt></ruby>",
-        "エアーコンプレッサ",
-        "<ruby>電気<rt>でんき</rt></ruby>ドリル"
+        { ja: "荷が揺れるのを抑えるため、吊り荷の下に潜り込んで手で直接支えた", id: "Berdiri tepat di bawah beban untuk memeganginya langsung", ne: "झुण्ड्याइएको सामान हल्लिन नदिन मुनि पसेर हातले सिधै समात्ने" },
+        { ja: "荷の振れ止めのため、介錯ロープ（かいしゃくロープ）を取り付けて誘導した", id: "Memasang tali pemandu (tali kendali) untuk menstabilkan muatan", ne: "सामान हल्लिन नदिन डोरी (गाइड डोरी) बाँधेर टाढैबाट नियन्त्रण गर्ने" },
+        { ja: "屋根材が折れ曲がらないよう、2点吊りまたは天秤棒（スプレッダー）を使用した", id: "Menggunakan pengangkat dua titik atau balok spreader", ne: "पाता नबाङ्गोस् भनेर दुई ठाउँमा बाँधेर वा ब्यालेन्स बार प्रयोग गरेर उठाउने" },
+        { ja: "玉掛けワイヤーの素線切れや傷を事前に点検した", id: "Memeriksa kabel sling dari kerusakan sebelum digunakan", ne: "सामान बाँध्ने तार च्यातिएको वा बिग्रिएको छ कि भनेर पहिले नै जाँच गर्ने" }
       ],
       answer: 0,
-      hintId: "Alat penggetar (Vibrator) digunakan saat pengecoran untuk memadatkan beton dan membuang gelembung udara.",
-      hintNe: "ढलान गर्दा कंक्रिटभित्र हावाको फोका रहन नदिन र राम्रोसँग भर्न 'भाइब्रेटर' प्रयोग गरिन्छ।",
-      expJa: "コンクリート打設時はバイブレータで振動を与え、気泡を除去して型枠の隅々まで行きわたらせます（テキストp.50）。",
-      expId: "Vibrator beton digunakan untuk memadatkan campuran beton segar dan menghilangkan rongga udara agar mutu beton maksimal.",
-      expNe: "कंक्रिट खाँद्न र भित्रका हावाका फोका हटाएर बलियो बनाउन भाइब्रेटरको प्रयोग अनिवार्य हुन्छ।"
+      expJa: "【吊り荷の直下には絶対に立ち入ってはならない】がクレーン作業の最重要原則です。荷の制御は必ず離れた位置から「介錯ロープ」を使って行います。",
+      expId: "JANGAN PERNAH berdiri di bawah beban yang tergantung! Gunakan tali pemandu dari jarak aman.",
+      expNe: "झुण्ड्याइएको सामानको मुनि कहिल्यै पनि जानु हुँदैन! सुरक्षित दूरीबाट गाइड डोरी प्रयोग गर्नुपर्छ।"
     },
     {
-      id: 10,
-      cat: "3.2.21 建築板金工事 (p.55)",
-      q: "「<ruby>建築板金工事<rt>けんちくばんきんこうじ</rt></ruby>」の **<ruby>主<rt>おも</rt></ruby>な<ruby>仕事内容<rt>しごとないよう</rt></ruby>**として、**<ruby>正<rt>ただ</rt></ruby>しいもの**は どれですか。",
+      cat: "第5章 建築法規・防火",
+      q: "<ruby>防火地域<rt>ぼうかちいき</rt></ruby>や<ruby>準防火地域<rt>じゅんぼうかちいき</rt></ruby>の<ruby>建築物<rt>けんちくぶつ</rt></ruby>において、<ruby>屋根<rt>やね</rt></ruby>に<ruby>求<rt>もと</rt></ruby>められる<ruby>性能<rt>せいのう</rt></ruby>として**<ruby>建築基準法<rt>けんちくきじゅんほう</rt></ruby>で<ruby>定<rt>さだ</rt></ruby>められているもの**はどれですか。",
+      q_id: "Kinerja apa yang diwajibkan oleh Standar Bangunan Jepang untuk atap di kawasan pencegahan kebakaran?",
+      q_ne: "जापानको भवन निर्माण ऐन अनुसार आगलागी नियन्त्रण क्षेत्रमा छानाको लागि कस्तो गुण अनिवार्य गरिएको छ?",
       options: [
-        "<ruby>薄<rt>うす</rt></ruby>い<ruby>金属板<rt>きんぞくばん</rt></ruby>を<ruby>切断<rt>せつだん</rt></ruby>・<ruby>折<rt>お</rt></ruby>り<ruby>曲<rt>ま</rt></ruby>げ<ruby>加工<rt>かこう</rt></ruby>して、<ruby>金属製屋根<rt>きんぞくせいやね</rt></ruby>や<ruby>外壁<rt>がいへき</rt></ruby>、<ruby>雨水<rt>あまみず</rt></ruby>を<ruby>流<rt>なが</rt></ruby>す「<ruby>雨仕舞<rt>あまじまい</rt></ruby>」の<ruby>金物<rt>かなもの</rt></ruby>、<ruby>空気<rt>くうき</rt></ruby>を<ruby>送<rt>おく</rt></ruby>る「ダクト」などを<ruby>作<rt>つく</rt></ruby>り<ruby>取<rt>と</rt></ruby>り<ruby>付<rt>つ</rt></ruby>ける。",
-        "<ruby>木<rt>き</rt></ruby>をカンナで<ruby>削<rt>けず</rt></ruby>って、<ruby>和室<rt>わしつ</rt></ruby>の<ruby>障子<rt>しょうじ</rt></ruby>やフスマの<ruby>木製建具<rt>もくせいたてぐ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>る。",
-        "<ruby>壁<rt>かべ</rt></ruby>に「こて」を<ruby>使<rt>つか</rt></ruby>って<ruby>漆喰<rt>しっくい</rt></ruby>やモルタルを<ruby>塗<rt>ぬ</rt></ruby>り<ruby>重<rt>かさ</rt></ruby>ねる。",
-        "<ruby>世界<rt>せかい</rt></ruby><ruby>各地<rt>かくち</rt></ruby>から<ruby>集<rt>あつ</rt></ruby>めた<ruby>大理石<rt>だいりせき</rt></ruby>などの<ruby>天然石<rt>てんねんせき</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いて<ruby>床<rt>ゆか</rt></ruby>に<ruby>並<rt>なら</rt></ruby>べる。"
+        { ja: "不燃材料または飛び火防止性能（防火構造）", id: "Bahan tidak mudah terbakar atau tahan percikan api", ne: "आगो नलाग्ने सामग्री वा आगोको झिल्का छेक्ने क्षमता" },
+        { ja: "完全な防音性能（音を100%通さないこと）", id: "Insulasi suara 100% kedap", ne: "पूर्ण ध्वनिरोधक क्षमता" },
+        { ja: "透明で太陽光を全反射する性能", id: "Transparan dan memantulkan sinar matahari penuh", ne: "पारदर्शी र घाम पूर्ण परावर्तन गर्ने क्षमता" },
+        { ja: "重量が1平方メートルあたり100kg以上あること", id: "Berat lebih dari 100kg per meter persegi", ne: "तौल प्रति वर्ग मिटर १०० केजी भन्दा बढी हुनुपर्ने" }
       ],
       answer: 0,
-      hintId: "Kenchiku Bankin memproses plat logam tipis (pemotongan & penekukan) untuk atap logam, talang/flashing (amajimai), dan pipa saluran udara (ducting).",
-      hintNe: "केन्चिकु बान्किनले पातलो पातालाई काटेर, दोबारेर धातुको छाना, पानी तर्काउने सामान (अमाजिमाइ) र डक्ट बनाउँछ।",
-      expJa: "建築板金は薄い金属板を加工し、金属屋根、雨水を処理する雨仕舞金物、換気や排煙のためのダクト等の製作取付を行います（テキストp.55）。",
-      expId: "Pekerjaan plat logam arsitektural (Kenchiku Bankin) mencakup fabrikasi dan pemasangan atap metal, flashing anti-bocor (amajimai), dan saluran udara (ducting).",
-      expNe: "पाताको छाना हाल्ने, पानी चुहिन नदिने धातुका सामान बनाउने र हावाको डक्ट जडान गर्ने काम बान्किनको हो।"
+      expJa: "市街地での火災延焼を防ぐため、建築基準法第22条区域等では屋根に不燃材料（ガルバリウム鋼板等）や飛び火による発火を防ぐ性能が義務付けられています。",
+      expId: "Di area perkotaan, atap harus menggunakan bahan tidak mudah terbakar (seperti galvalum) untuk mencegah penyebaran api.",
+      expNe: "सहरमा आगलागी फैलिन नदिन छानामा नबल्ने धातुका पाता (गाल्भाल्युम आदि) प्रयोग गर्नुपर्ने कानुनी नियम छ।"
     }
   ]
 };
