@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 学科対策テスト</title>
+  <title>特定技能2号 建設 学科対策ポータル</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -12,423 +12,250 @@
       --card-bg: #ffffff;
       --text: #1e293b;
       --text-sub: #64748b;
-      --border: #cbd5e1;
+      --border: #e2e8f0;
       --success: #15803d;
-      --danger: #b91c1c;
-      --trans-bg: #f1f5f9;
+      --success-bg: #dcfce7;
+      --tag-week: #0284c7;
+      --page-tag-bg: #f1f5f9;
+      --page-tag-color: #475569;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
-    .container { max-width: 740px; margin: 0 auto; position: relative; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px 16px; line-height: 1.6; }
+    .container { max-width: 680px; margin: 0 auto; }
     
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .btn-portal-back { font-size: 0.88rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
-    .btn-portal-back:hover { text-decoration: underline; }
-
-    header { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid var(--border); }
-    h1 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
-    .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-sub); }
-    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .nav-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-    .nav-btn.answered { background: #e2e8f0; color: #475569; }
-    .nav-btn.current { border-color: var(--primary); color: var(--primary); outline: 2px solid #7dd3fc; }
-
-    .card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 16px; }
-    .q-meta { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
-    .q-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 2.2; }
-    
+    header { text-align: center; margin-bottom: 24px; padding-top: 8px; }
+    .sub-head { font-size: 0.75rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    h1 { font-size: 1.35rem; color: var(--text); margin-top: 4px; margin-bottom: 6px; }
+    .lead { font-size: 0.85rem; color: var(--text-sub); }
     ruby { ruby-position: over; }
-    ruby rt { font-size: 0.65em; color: #475569; font-weight: normal; }
+    ruby rt { font-size: 0.6em; color: #475569; font-weight: normal; }
 
-    /* 問題文の翻訳ボタングループ */
-    .trans-actions { display: flex; gap: 8px; margin-bottom: 12px; }
-    .btn-q-trans {
-      font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 6px;
-      border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #334155;
-      display: inline-flex; align-items: center; gap: 4px;
+    /* ピックアップカード */
+    .hero-card {
+      background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px;
+      padding: 16px 18px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
     }
-    .btn-q-trans:hover { background: #f8fafc; border-color: var(--primary); }
-    .q-trans-box {
-      background: var(--trans-bg); border-left: 3px solid var(--primary);
-      padding: 10px 14px; font-size: 0.92rem; color: #334155; border-radius: 0 6px 6px 0;
-      margin-bottom: 16px; line-height: 1.6; display: none;
+    .hero-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; font-weight: 700; color: #1d4ed8; margin-bottom: 4px; }
+    .hero-title { font-size: 1.05rem; font-weight: 700; color: #1e3a8a; }
+    .hero-desc { font-size: 0.8rem; color: #3b82f6; margin-top: 2px; }
+    .btn-hero {
+      background: var(--primary); color: #fff; text-decoration: none; padding: 10px 16px;
+      border-radius: 8px; font-size: 0.9rem; font-weight: 700; white-space: nowrap; transition: 0.2s;
     }
+    .btn-hero:hover { background: var(--primary-hover); }
 
-    /* 選択肢カード */
-    .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .option-card {
-      border: 1px solid var(--border); border-radius: 8px; background: #fff;
-      padding: 12px 14px; transition: all 0.2s;
-    }
-    .option-card:hover { border-color: #94a3b8; background: #fbfcfe; }
-    .option-card.selected { border-color: var(--primary); background: #f0f9ff; outline: 1px solid var(--primary); }
-
-    .opt-main-row {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    }
-    .opt-content-area {
-      flex: 1; cursor: pointer; font-size: 0.98rem; font-weight: 600; line-height: 1.9;
-    }
-    .opt-lang-buttons {
-      display: flex; gap: 6px; flex-shrink: 0;
-    }
-    .btn-opt-lang {
-      font-size: 0.78rem; font-weight: 700; padding: 4px 8px; border-radius: 5px;
-      border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; color: #475569;
-    }
-    .btn-opt-lang:hover { background: #e2e8f0; border-color: #64748b; color: #0f172a; }
-
-    /* 選択肢の下に開く翻訳ボックス */
-    .opt-trans-box {
-      font-size: 0.88rem; color: #334155; margin-top: 8px; padding: 8px 12px;
-      background: var(--trans-bg); border-radius: 6px; display: none; line-height: 1.5;
-      border-left: 3px solid #64748b;
+    /* 週見出し */
+    .week-header {
+      display: inline-block; background: var(--tag-week); color: #fff;
+      font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px;
     }
 
-    .btn-group { display: flex; gap: 10px; }
-    .btn-nav { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; text-align: center; }
-    .btn-primary { background: var(--primary); color: #fff; border: none; }
-    .btn-primary:hover { background: var(--primary-hover); }
-
-    #result-view { display: none; }
-    .score-card { text-align: center; padding: 24px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 20px; }
-    .score-num { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
-    .sync-status { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-top: 8px; }
+    /* リスト */
+    .day-list { display: flex; flex-direction: column; gap: 10px; }
+    .day-item {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 16px; text-decoration: none; color: inherit; display: flex;
+      justify-content: space-between; align-items: center; transition: all 0.2s;
+    }
+    .day-item:hover { border-color: #94a3b8; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
     
-    .review-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
-    .review-item:last-child { border-bottom: none; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-    .badge-ok { background: #dcfce7; color: var(--success); }
-    .badge-ng { background: #fee2e2; color: var(--danger); }
-    .review-ans { font-size: 0.95rem; margin-top: 6px; line-height: 1.9; }
-    .review-exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 0.9rem; line-height: 1.9; }
-    .review-multi-exp { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+    .day-info { display: flex; flex-direction: column; gap: 4px; }
+    .day-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .day-title { font-size: 0.96rem; font-weight: 700; }
+    
+    .page-badge {
+      font-size: 0.72rem; font-weight: 700; color: var(--page-tag-color);
+      background: var(--page-tag-bg); border: 1px solid #cbd5e1;
+      padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+    }
+
+    .day-desc { font-size: 0.78rem; color: var(--text-sub); }
+    
+    .status-badge {
+      font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;
+      background: #f1f5f9; color: #64748b; white-space: nowrap;
+    }
+    .status-badge.passed { background: var(--success-bg); color: var(--success); }
+
+    /* ユーザー名入力 */
+    .user-box {
+      background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;
+    }
+    .user-box input {
+      padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; width: 140px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="top-bar">
-    <a href="index.html" class="btn-portal-back">🏠 ポータル（目次）へ戻る</a>
-  </div>
+  <header>
+    <div class="sub-head">SPECIFIED SKILLED WORKER (ii)</div>
+    <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>ポータル</h1>
+    <p class="lead">1<ruby>日<rt>にち</rt></ruby>4〜10<ruby>問<rt>もん</rt></ruby>！コツコツ<ruby>学<rt>まな</rt></ruby>んで<ruby>合格<rt>ごうかく</rt></ruby>を<ruby>目指<rt>めざ</rt></ruby>しましょう</p>
+  </header>
 
-  <div id="quiz-view">
-    <header>
-      <h1 id="title-text">問題データを読み込み中...</h1>
-      <div class="status-bar">
-        <span><ruby>進捗<rt>しんちょく</rt></ruby>: <strong id="current-num">1</strong> / <span id="total-num">--</span> <ruby>問<rt>もん</rt></ruby></span>
-        <span id="answered-count"><ruby>解答済<rt>かいとうずみ</rt></ruby>: 0 <ruby>問<rt>もん</rt></ruby></span>
-      </div>
-      <div class="nav-grid" id="nav-grid"></div>
-    </header>
-
-    <div class="card">
-      <div class="q-meta" id="q-category"></div>
-      <div class="q-text" id="q-text"></div>
-
-      <!-- 問題文の翻訳ボタン -->
-      <div class="trans-actions">
-        <button type="button" class="btn-q-trans" onclick="toggleQTrans('id')">🇮🇩 インドネシア語</button>
-        <button type="button" class="btn-q-trans" onclick="toggleQTrans('ne')">🇳🇵 ネパール語</button>
-      </div>
-      <div class="q-trans-box" id="q-trans-id"></div>
-      <div class="q-trans-box" id="q-trans-ne"></div>
-
-      <!-- 選択肢リスト -->
-      <div class="options" id="options-box"></div>
-
-      <div class="btn-group">
-        <button type="button" class="btn-nav" onclick="prevQuestion()" id="btn-prev">前へ</button>
-        <button type="button" class="btn-nav" onclick="skipQuestion()">あとで解く（スキップ）</button>
-        <button type="button" class="btn-nav btn-primary" onclick="nextQuestion()" id="btn-next">次へ</button>
-      </div>
+  <!-- 受講者名設定 -->
+  <div class="user-box">
+    <span>👤 <strong>受講者氏名:</strong></span>
+    <div>
+      <input type="text" id="user-name-input" placeholder="名前を入力" onchange="saveUserName()">
     </div>
   </div>
 
-  <div id="result-view">
-    <div class="score-card">
-      <h2><ruby>採点<rt>さいてん</rt></ruby><ruby>結果<rt>けっか</rt></ruby></h2>
-      <div class="score-num" id="score-text"></div>
-      <p id="pass-msg"></p>
-      <div class="sync-status" id="sync-status">📡 成績を記録中...</div>
+  <!-- 今日の学習（最新挑戦中のDay） -->
+  <div class="hero-card" id="hero-card">
+    <div>
+      <div class="hero-badge">⚡ おすすめの学習</div>
+      <div class="hero-title" id="hero-title">Day 1 を開始する</div>
+      <div class="hero-desc" id="hero-desc">まずは施工体制の基本からスタート！</div>
     </div>
-    <div class="card">
-      <h3 style="margin-bottom: 16px;"><ruby>正否<rt>せいひ</rt></ruby>・<ruby>解説<rt>かいせつ</rt></ruby><ruby>一覧<rt>いちらん</rt></ruby></h3>
-      <div id="review-box"></div>
-      <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button type="button" class="btn-nav btn-primary" style="flex: 1;" onclick="location.reload()">もう一度解く</button>
-        <a href="index.html" class="btn-nav" style="flex: 1; text-decoration: none; line-height: 22px;">ポータルへ戻る</a>
+    <a href="quiz.html?day=1" class="btn-hero" id="hero-btn">挑戦する →</a>
+  </div>
+
+  <!-- 第1週（共通基礎・関係法令・マネジメント） -->
+  <div class="week-header">第1週 (Week 1)：現場管理・安全・施工の基本</div>
+  
+  <div class="day-list">
+    <!-- Day 1 -->
+    <a href="quiz.html?day=1" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📗 Day 1：施工体制・職長の役割・安全管理</span>
+          <span class="page-badge">📖 テキスト P.1〜15</span>
+        </div>
+        <div class="day-desc">専門工事業者・職長の役割・ハラスメント防止・リスクアセスメント</div>
       </div>
-    </div>
+      <div class="status-badge" id="badge-day1">未挑戦</div>
+    </a>
+
+    <!-- Day 2 -->
+    <a href="quiz.html?day=2" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📗 Day 2：労働安全衛生法・工程管理・エラー防止</span>
+          <span class="page-badge">📖 テキスト P.16〜32</span>
+        </div>
+        <div class="day-desc">総括安全衛生管理者・リスク本質対策・ヒューマンエラー・バックワード法</div>
+      </div>
+      <div class="status-badge" id="badge-day2">未挑戦</div>
+    </a>
+
+    <!-- Day 3 -->
+    <a href="quiz.html?day=3" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📗 Day 3：建設業法・品質管理・作業手順書</span>
+          <span class="page-badge">📖 テキスト P.33〜48</span>
+        </div>
+        <div class="day-desc">主任/監理技術者・段取り八分・品質管理の基本・わかりやすい作業手順書</div>
+      </div>
+      <div class="status-badge" id="badge-day3">未挑戦</div>
+    </a>
+
+    <!-- Day 4 -->
+    <a href="quiz.html?day=4" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📗 Day 4：原価管理・安全基本・国家資格</span>
+          <span class="page-badge">📖 テキスト P.49〜65</span>
+        </div>
+        <div class="day-desc">工事原価（労務費）・技能士検定制度・現場の安全服装・リスク察知能力</div>
+      </div>
+      <div class="status-badge" id="badge-day4">未挑戦</div>
+    </a>
+
+    <!-- Day 5 -->
+    <a href="quiz.html?day=5" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📕 Day 5：専門工事の種類・構造と基礎工法</span>
+          <span class="page-badge">📖 テキスト P.66〜82</span>
+        </div>
+        <div class="day-desc">土工・基礎杭・免震制震・鉄筋圧接接合・コンクリート</div>
+      </div>
+      <div class="status-badge" id="badge-day5">未挑戦</div>
+    </a>
+
+    <!-- Day 6 -->
+    <a href="quiz.html?day=6" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📕 Day 6：設備工事・特別教育・現場の合図</span>
+          <span class="page-badge">📖 テキスト P.83〜98</span>
+        </div>
+        <div class="day-desc">電気/空調/給排水設備・玉掛け特別教育・安全の挨拶・航空法（ドローン）</div>
+      </div>
+      <div class="status-badge" id="badge-day6">未挑戦</div>
+    </a>
+
+    <!-- Day 7 -->
+    <a href="quiz.html?day=7" class="day-item">
+      <div class="day-info">
+        <div class="day-title-row">
+          <span class="day-title">📘 Day 7：第1週 総復習模擬試験</span>
+          <span class="page-badge">📖 Week 1 総まとめ</span>
+        </div>
+        <div class="day-desc">Week 1（Day 1〜6）の総まとめテスト（実戦判定）</div>
+      </div>
+      <div class="status-badge" id="badge-day7">未挑戦</div>
+    </a>
   </div>
 </div>
 
 <script>
-// ★Apps ScriptでデプロイしたWebアプリURLをここに設定します
-const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyv6O8ol8CkqmqcL4FDhp8j025XMQq1Z02hdBStkZ2oUanfFRs_NUz7Olr6g_Tlhw_0/exec";
-
-const urlParams = new URLSearchParams(window.location.search);
-let dayParam = urlParams.get('day') || '1';
-let targetFileName = dayParam.startsWith("day") ? `${dayParam}.js` : `day${dayParam}.js`;
-
-// ブラウザキャッシュを破棄して常に最新データを取得
-const cacheBuster = new Date().getTime();
-const baseUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-const finalScriptUrl = `${window.location.origin}${baseUrl}data/${targetFileName}?v=${cacheBuster}`;
-
-const script = document.createElement('script');
-script.src = finalScriptUrl;
-script.onload = () => { initQuiz(); };
-script.onerror = () => {
-  document.getElementById("title-text").innerHTML = 
-    `<span style="color:var(--danger)">⚠️ 読み込みに失敗しました</span><br>` +
-    `<span style="font-size:0.85rem; color:var(--text-sub)">探した場所: ${finalScriptUrl}</span>`;
-};
-document.head.appendChild(script);
-
-let currentIndex = 0;
-let userAnswers = [];
-let questions = [];
-
-function initQuiz() {
-  if (typeof CURRENT_QUIZ_DATA === 'undefined') {
-    document.getElementById("title-text").textContent = "データ形式が正しくありません。";
-    return;
-  }
-  
-  // 選択肢のシャッフル＆言語データの正規化（オブジェクト・配列両形式に対応）
-  questions = CURRENT_QUIZ_DATA.questions.map(q => {
-    let optsWithMeta = q.options.map((opt, idx) => {
-      let isObj = (typeof opt === 'object' && opt !== null);
-      let jaText = isObj ? (opt.ja || '') : String(opt);
-      let idText = isObj ? (opt.id || '') : (q.options_id && q.options_id[idx] ? q.options_id[idx] : '');
-      let neText = isObj ? (opt.ne || '') : (q.options_ne && q.options_ne[idx] ? q.options_ne[idx] : '');
-      return {
-        ja: jaText,
-        id: idText,
-        ne: neText,
-        isCorrect: idx === q.answer
-      };
-    });
-
-    for (let i = optsWithMeta.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [optsWithMeta[i], optsWithMeta[j]] = [optsWithMeta[j], optsWithMeta[i]];
-    }
-
-    return {
-      ...q,
-      options: optsWithMeta,
-      answer: optsWithMeta.findIndex(o => o.isCorrect)
-    };
-  });
-
-  userAnswers = new Array(questions.length).fill(null);
-  document.getElementById("title-text").innerHTML = CURRENT_QUIZ_DATA.title;
-  loadQuestion();
+function initUser() {
+  const savedName = localStorage.getItem("app_user_name") || "";
+  document.getElementById("user-name-input").value = savedName;
+}
+function saveUserName() {
+  const name = document.getElementById("user-name-input").value.trim();
+  localStorage.setItem("app_user_name", name);
 }
 
-function renderNav() {
-  const grid = document.getElementById("nav-grid");
-  grid.innerHTML = "";
-  questions.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.className = `nav-btn ${i === currentIndex ? "current" : ""} ${userAnswers[i] !== null ? "answered" : ""}`;
-    btn.textContent = i + 1;
-    btn.onclick = () => { currentIndex = i; loadQuestion(); };
-    grid.appendChild(btn);
-  });
-  document.getElementById("current-num").textContent = currentIndex + 1;
-  document.getElementById("total-num").textContent = questions.length;
-  const answered = userAnswers.filter(a => a !== null).length;
-  document.getElementById("answered-count").textContent = `解答済: ${answered} 問`;
-}
+function updateBadges() {
+  const days = [
+    { id: "1", key: "score_gakka1", title: "Day 1：施工体制・職長の役割" },
+    { id: "2", key: "score_gakka1_2", title: "Day 2：労働安全衛生法・工程管理" },
+    { id: "3", key: "score_gakka1_3", title: "Day 3：建設業法・品質管理" },
+    { id: "4", key: "score_gakka1_4", title: "Day 4：原価管理・安全基本" },
+    { id: "5", key: "score_gakka1_5", title: "Day 5：専門工事の種類・基礎工法" },
+    { id: "6", key: "score_gakka1_6", title: "Day 6：設備工事・特別教育" },
+    { id: "7", key: "score_gakka1_7", title: "Day 7：第1週 総復習テスト" }
+  ];
 
-function loadQuestion() {
-  renderNav();
-  const q = questions[currentIndex];
-  document.getElementById("q-category").textContent = `分野: ${q.cat}`;
-  document.getElementById("q-text").innerHTML = q.q;
+  let nextDayToStudy = null;
 
-  // 問題文の翻訳テキスト
-  const qTransId = document.getElementById("q-trans-id");
-  const qTransNe = document.getElementById("q-trans-ne");
-  qTransId.textContent = q.q_id ? `🇮🇩 ${q.q_id}` : (q.hintId ? `🇮🇩 [Hint] ${q.hintId}` : "（Terjemahan sedang disiapkan）");
-  qTransId.style.display = "none";
-  qTransNe.textContent = q.q_ne ? `🇳🇵 ${q.q_ne}` : (q.hintNe ? `🇳🇵 [Hint] ${q.hintNe}` : "（अनुवाद तयारी हुँदैछ）");
-  qTransNe.style.display = "none";
-
-  // 選択肢の描画（右側に [🇮🇩] [🇳🇵] ボタンを常時配置）
-  const optBox = document.getElementById("options-box");
-  optBox.innerHTML = "";
-
-  q.options.forEach((opt, idx) => {
-    const card = document.createElement("div");
-    card.className = `option-card ${userAnswers[currentIndex] === idx ? "selected" : ""}`;
-
-    card.innerHTML = `
-      <div class="opt-main-row">
-        <div class="opt-content-area" onclick="selectOption(${idx})">
-          <strong>${idx + 1}.</strong> <span>${opt.ja}</span>
-        </div>
-        <div class="opt-lang-buttons">
-          <button type="button" class="btn-opt-lang" onclick="toggleOptTrans(${idx}, 'id')">🇮🇩</button>
-          <button type="button" class="btn-opt-lang" onclick="toggleOptTrans(${idx}, 'ne')">🇳🇵</button>
-        </div>
-      </div>
-      <div class="opt-trans-box" id="opt-trans-id-${idx}">🇮🇩 ${opt.id || "（Terjemahan sedang disiapkan）"}</div>
-      <div class="opt-trans-box" id="opt-trans-ne-${idx}">🇳🇵 ${opt.ne || "（अनुवाद तयारी हुँदैछ）"}</div>
-    `;
-
-    optBox.appendChild(card);
-  });
-
-  document.getElementById("btn-prev").disabled = currentIndex === 0;
-  const isLast = currentIndex === questions.length - 1;
-  document.getElementById("btn-next").textContent = isLast ? "採点する" : "次へ";
-}
-
-function selectOption(idx) {
-  userAnswers[currentIndex] = idx;
-  loadQuestion();
-}
-
-function toggleQTrans(lang) {
-  const el = document.getElementById(`q-trans-${lang}`);
-  el.style.display = el.style.display === "block" ? "none" : "block";
-}
-
-function toggleOptTrans(idx, lang) {
-  const el = document.getElementById(`opt-trans-${lang}-${idx}`);
-  if (el) {
-    el.style.display = el.style.display === "block" ? "none" : "block";
-  }
-}
-
-function prevQuestion() {
-  if (currentIndex > 0) { currentIndex--; loadQuestion(); }
-}
-
-function nextQuestion() {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    loadQuestion();
-  } else {
-    finishQuiz();
-  }
-}
-
-function skipQuestion() {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    loadQuestion();
-  } else {
-    const firstUnanswered = userAnswers.findIndex(a => a === null);
-    if (firstUnanswered !== -1) {
-      currentIndex = firstUnanswered;
-      loadQuestion();
-    } else {
-      finishQuiz();
-    }
-  }
-}
-
-function finishQuiz() {
-  const unanswered = userAnswers.filter(a => a === null).length;
-  if (unanswered > 0) {
-    if (!confirm(`まだ解いていない問題が ${unanswered} 問あります。採点してよろしいですか？`)) {
-      const firstUnanswered = userAnswers.findIndex(a => a === null);
-      if (firstUnanswered !== -1) {
-        currentIndex = firstUnanswered;
-        loadQuestion();
+  days.forEach(d => {
+    const score = localStorage.getItem(d.key);
+    const badge = document.getElementById(`badge-day${d.id}`);
+    if (badge) {
+      if (score !== null) {
+        badge.textContent = `✓ ${score}点`;
+        badge.classList.add("passed");
+      } else {
+        if (!nextDayToStudy) {
+          nextDayToStudy = d;
+        }
       }
-      return;
     }
-  }
-
-  document.getElementById("quiz-view").style.display = "none";
-  document.getElementById("result-view").style.display = "block";
-
-  let score = 0;
-  const reviewBox = document.getElementById("review-box");
-  reviewBox.innerHTML = "";
-
-  questions.forEach((q, i) => {
-    const isCorrect = userAnswers[i] === q.answer;
-    if (isCorrect) score++;
-
-    const item = document.createElement("div");
-    item.className = "review-item";
-    
-    const yourChoiceText = userAnswers[i] !== null 
-      ? `<strong>${userAnswers[i] + 1}.</strong> ${q.options[userAnswers[i]].ja}` 
-      : "（未解答）";
-      
-    const correctChoiceText = `<strong>${q.answer + 1}.</strong> ${q.options[q.answer].ja}`;
-
-    item.innerHTML = `
-      <div style="margin-bottom: 8px;">
-        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-ng'}">${isCorrect ? '正解 ◎' : '不正解 ✕'}</span>
-        <strong style="margin-left: 8px;">問 ${i + 1}</strong>
-        <span style="font-size: 0.8rem; color: var(--text-sub); margin-left: 8px;">(${q.cat})</span>
-      </div>
-      <div style="font-size: 0.98rem; margin-bottom: 8px; line-height: 2.0;">${q.q}</div>
-      <div class="review-ans" style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
-        あなたの解答: ${yourChoiceText}
-      </div>
-      ${!isCorrect ? `<div class="review-ans" style="color: var(--success); font-weight: 600;">正解: ${correctChoiceText}</div>` : ''}
-      <div class="review-exp-box">
-        <div>💡 <strong>解説:</strong> ${q.expJa}</div>
-        ${q.expId ? `<div class="review-multi-exp">🇮🇩 <strong>ID:</strong> ${q.expId}</div>` : ''}
-        ${q.expNe ? `<div class="review-multi-exp">🇳🇵 <strong>NE:</strong> ${q.expNe}</div>` : ''}
-      </div>
-    `;
-    reviewBox.appendChild(item);
   });
 
-  const finalScore = Math.round((score / questions.length) * 100);
-  localStorage.setItem(CURRENT_QUIZ_DATA.key, finalScore);
-
-  document.getElementById("score-text").textContent = `${finalScore} 点 / 100点 (${score} / ${questions.length} 問正解)`;
-  const passMsg = document.getElementById("pass-msg");
-  if (finalScore >= CURRENT_QUIZ_DATA.passScore) {
-    passMsg.innerHTML = "<strong style='color: var(--success);'>合格基準達成です！素晴らしい！</strong>";
+  if (nextDayToStudy) {
+    document.getElementById("hero-title").textContent = `${nextDayToStudy.title} に挑戦`;
+    document.getElementById("hero-desc").textContent = "今日の学習目標を進めましょう！";
+    document.getElementById("hero-btn").href = `quiz.html?day=${nextDayToStudy.id}`;
   } else {
-    passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
+    document.getElementById("hero-title").textContent = "🎉 第1週をすべてクリア！";
+    document.getElementById("hero-desc").textContent = "素晴らしいペースです。総復習で満点を目指しましょう。";
+    document.getElementById("hero-btn").href = "quiz.html?day=7";
+    document.getElementById("hero-btn").textContent = "総復習へ →";
   }
-
-  sendResultToSpreadsheet(finalScore);
 }
 
-// GASの doPost(e) { var data = JSON.parse(e.postData.contents); } に合わせた送信処理
-function sendResultToSpreadsheet(finalScore) {
-  const userName = localStorage.getItem("app_user_name") || "未登録";
-  const dayTitle = `Day ${dayParam}`;
-  const syncStatus = document.getElementById("sync-status");
-
-  const payload = {
-    name: userName,
-    day: dayTitle,
-    score: finalScore
-  };
-
-  fetch(GAS_ENDPOINT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
-    syncStatus.style.color = "var(--success)";
-  })
-  .catch((err) => {
-    console.error(err);
-    syncStatus.textContent = "※通信環境により記録をスキップしました";
-  });
-}
+initUser();
+updateBadges();
 </script>
 </body>
 </html>
