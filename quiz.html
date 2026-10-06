@@ -158,12 +158,16 @@
   </div>
 </div>
 
+<!-- ★確実送信用の隠しiframeと送信フォーム -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted){onFormSubmitted();}"></iframe>
+<form id="google-form-target" action="https://docs.google.com/forms/d/e/1FAIpQLSdyVU9kxyQZLTUAtQK12KRa8LT3dl69DQNR1C2cYePsO2QOXA/formResponse" method="POST" target="hidden_iframe" style="display:none;">
+  <input type="hidden" name="entry.1684521148" id="field_name">
+  <input type="hidden" name="entry.662495890" id="field_day">
+  <input type="hidden" name="entry.1836459104" id="field_score">
+</form>
+
 <script>
-// ★Googleフォーム送信先設定
-const FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdyVU9kxyQZLTUAtQK12KRa8LT3dl69DQNR1C2cYePsO2QOXA/formResponse";
-const ENTRY_NAME = "entry.1684521148";  // 氏名
-const ENTRY_DAY  = "entry.662495890";   // 受講日
-const ENTRY_SCORE = "entry.1836459104"; // 得点
+let submitted = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 let dayParam = urlParams.get('day') || '1';
@@ -391,37 +395,30 @@ function finishQuiz() {
     passMsg.innerHTML = "<strong style='color: var(--danger);'>不合格ラインです。もう一度復習しましょう！</strong>";
   }
 
-  // 画面上部にスムーズにスクロール
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Googleフォーム送信を実行
-  sendResultToForm(finalScore);
+  // 隠しHTMLフォーム経由で確実に送信
+  submitToGoogleForm(finalScore);
 }
 
-// Googleフォームの formResponse に直接データを送信
-function sendResultToForm(finalScore) {
+function submitToGoogleForm(finalScore) {
   const userName = localStorage.getItem("app_user_name") || "未登録";
   const dayTitle = `Day ${dayParam}`;
+
+  document.getElementById("field_name").value = userName;
+  document.getElementById("field_day").value = dayTitle;
+  document.getElementById("field_score").value = String(finalScore);
+
+  submitted = true;
+  document.getElementById("google-form-target").submit();
+}
+
+function onFormSubmitted() {
   const syncStatus = document.getElementById("sync-status");
-
-  const formData = new FormData();
-  formData.append(ENTRY_NAME, userName);
-  formData.append(ENTRY_DAY, dayTitle);
-  formData.append(ENTRY_SCORE, String(finalScore));
-
-  fetch(FORM_ACTION_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  })
-  .then(() => {
+  if (syncStatus) {
     syncStatus.textContent = "✔ 管理シートに学習記録を保存しました";
     syncStatus.style.color = "var(--success)";
-  })
-  .catch((err) => {
-    console.error(err);
-    syncStatus.textContent = "※通信環境により記録をスキップしました";
-  });
+  }
 }
 </script>
 </body>
