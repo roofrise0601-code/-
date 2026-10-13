@@ -8,82 +8,251 @@
     :root {
       --primary: #0284c7;
       --primary-hover: #0369a1;
-      --bg: #f8fafc;
+      --bg-color: #f8fafc;
       --card-bg: #ffffff;
-      --text: #1e293b;
+      --text-main: #1e293b;
       --text-sub: #64748b;
-      --border: #e2e8f0;
-      --success: #15803d;
-      --success-bg: #dcfce7;
-      --tag-week: #0284c7;
-      --page-tag-bg: #f1f5f9;
-      --page-tag-color: #475569;
+      --border-color: #e2e8f0;
+      --success: #16a34a;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px 16px; line-height: 1.6; }
-    .container { max-width: 680px; margin: 0 auto; }
-    
-    header { text-align: center; margin-bottom: 24px; padding-top: 8px; }
-    .sub-head { font-size: 0.75rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
-    h1 { font-size: 1.35rem; color: var(--text); margin-top: 4px; margin-bottom: 6px; }
-    .lead { font-size: 0.85rem; color: var(--text-sub); }
-    ruby { ruby-position: over; }
-    ruby rt { font-size: 0.6em; color: #475569; font-weight: normal; }
 
-    /* ピックアップカード */
-    .hero-card {
-      background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px;
-      padding: 16px 18px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .hero-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; font-weight: 700; color: #1d4ed8; margin-bottom: 4px; }
-    .hero-title { font-size: 1.05rem; font-weight: 700; color: #1e3a8a; }
-    .hero-desc { font-size: 0.8rem; color: #3b82f6; margin-top: 2px; }
-    .btn-hero {
-      background: var(--primary); color: #fff; text-decoration: none; padding: 10px 16px;
-      border-radius: 8px; font-size: 0.9rem; font-weight: 700; white-space: nowrap; transition: 0.2s;
-    }
-    .btn-hero:hover { background: var(--primary-hover); }
 
-    /* 週見出し */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ヘッダー */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      color: #0f172a;
+      letter-spacing: 0.02em;
+    }
+
+    ruby rt {
+      font-size: 0.6em;
+      color: #64748b;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* 氏名入力カード */
+    .user-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .user-card label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .user-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .user-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* おすすめカード */
+    .recommend-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .recommend-info .rec-tag {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #d97706;
+      margin-bottom: 2px;
+    }
+
+    .recommend-info .rec-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #0369a1;
+    }
+
+    .recommend-info .rec-sub {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .btn-recommend {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-recommend:hover {
+      background: var(--primary-hover);
+    }
+
+    /* 週切り替えタブ */
+    .tab-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #f1f5f9;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
+    }
+
+    /* リストヘッダー */
     .week-header {
-      display: inline-block; background: var(--tag-week); color: #fff;
-      font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px;
+      display: inline-block;
+      background: #0284c7;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
     }
 
-    /* リスト */
-    .day-list { display: flex; flex-direction: column; gap: 10px; }
-    .day-item {
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
-      padding: 14px 16px; text-decoration: none; color: inherit; display: flex;
-      justify-content: space-between; align-items: center; transition: all 0.2s;
-    }
-    .day-item:hover { border-color: #94a3b8; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-    
-    .day-info { display: flex; flex-direction: column; gap: 4px; }
-    .day-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .day-title { font-size: 0.96rem; font-weight: 700; }
-    
-    .page-badge {
-      font-size: 0.72rem; font-weight: 700; color: var(--page-tag-color);
-      background: var(--page-tag-bg); border: 1px solid #cbd5e1;
-      padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+    /* Dayカード */
+    .day-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.2s, box-shadow 0.2s;
     }
 
-    .day-desc { font-size: 0.78rem; color: var(--text-sub); }
-    
-    .status-badge {
-      font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;
-      background: #f1f5f9; color: #64748b; white-space: nowrap;
+    .day-card:hover {
+      border-color: #93c5fd;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
-    .status-badge.passed { background: var(--success-bg); color: var(--success); }
 
-    /* ユーザー名入力 */
-    .user-box {
-      background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px;
-      padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;
+    .day-card strong {
+      font-size: 0.92rem;
+      color: #0f172a;
+      display: inline-block;
+      margin-bottom: 2px;
     }
-    .user-box input {
-      padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; width: 140px;
+
+    .badge-text {
+      font-size: 0.72rem;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #dbeafe;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      font-weight: normal;
+      vertical-align: middle;
+    }
+
+    .day-card-sub {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+
+    /* ステータスバッジ */
+    .status-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .status-pill.unattempted {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-color: #e2e8f0;
+    }
+
+    .status-pill.passed {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+
+    .status-pill.failed {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
     }
   </style>
 </head>
@@ -91,171 +260,300 @@
 
 <div class="container">
   <header>
-    <div class="sub-head">SPECIFIED SKILLED WORKER (ii)</div>
-    <h1><ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策<rt>がっかたいさく</rt></ruby>ポータル</h1>
-    <p class="lead">1<ruby>日<rt>にち</rt></ruby>4〜10<ruby>問<rt>もん</rt></ruby>！コツコツ<ruby>学<rt>まな</rt></ruby>んで<ruby>合格<rt>ごうかく</rt></ruby>を<ruby>目指<rt>めざ</rt></ruby>しましょう</p>
+    <h1><ruby>特定技能2号<rt>とくていぎのう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策ポータル<rt>がっかたいさく</rt></ruby></h1>
+    <div class="subtitle">1日4〜10問！ コツコツ学んで合格を目指しましょう</div>
   </header>
 
-  <!-- 受講者名設定 -->
-  <div class="user-box">
-    <span>👤 <strong>受講者氏名:</strong></span>
-    <div>
-      <input type="text" id="user-name-input" placeholder="名前を入力" onchange="saveUserName()">
+  <!-- 受講者氏名 -->
+  <div class="user-card">
+    <label for="userName">👤 受講者氏名:</label>
+    <input type="text" id="userName" class="user-input" placeholder="名前を入力してください" autocomplete="name">
+  </div>
+
+  <!-- おすすめの学習 -->
+  <div class="recommend-box">
+    <div class="recommend-info">
+      <div class="rec-tag">⚡ おすすめの学習</div>
+      <div class="rec-title" id="rec-title">本日の学習に挑戦</div>
+      <div class="rec-sub">今日の学習目標を進めましょう！</div>
+    </div>
+    <button class="btn-recommend" id="btn-recommend" onclick="startRecommended()">挑戦する →</button>
+  </div>
+
+  <!-- 週切り替えタブ -->
+  <div class="tab-container">
+    <button id="tab-btn-w1" class="tab-btn active" onclick="switchWeek(1)">第1週 (Week 1)</button>
+    <button id="tab-btn-w2" class="tab-btn" onclick="switchWeek(2)">第2週 (Week 2)</button>
+  </div>
+
+  <!-- ==================== 第1週 (Week 1) ==================== -->
+  <div id="week1-container">
+    <div class="week-header">第1週 (Week 1)：現場管理・安全・施工の基本</div>
+
+    <div class="day-card" onclick="startQuiz(1)">
+      <div>
+        <strong>📗 Day 1：施工体制・職長の役割・安全管理</strong>
+        <span class="badge-text">テキスト P.1〜15</span>
+        <div class="day-card-sub">専門工事業者・職長の役割・ハラスメント防止・リスクアセスメント</div>
+      </div>
+      <span id="badge-day1" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(2)">
+      <div>
+        <strong>📗 Day 2：労働安全衛生法・工程管理・エラー防止</strong>
+        <span class="badge-text">テキスト P.16〜32</span>
+        <div class="day-card-sub">総括安全衛生管理者・リスク本質対策・ヒューマンエラー・バックワード法</div>
+      </div>
+      <span id="badge-day2" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(3)">
+      <div>
+        <strong>📗 Day 3：建設業法・品質管理・作業手順書</strong>
+        <span class="badge-text">テキスト P.33〜48</span>
+        <div class="day-card-sub">主任/監理技術者・段取り八分・品質管理の基本・わかりやすい作業手順書</div>
+      </div>
+      <span id="badge-day3" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(4)">
+      <div>
+        <strong>📗 Day 4：原価管理・安全基本・国家資格</strong>
+        <span class="badge-text">テキスト P.49〜65</span>
+        <div class="day-card-sub">工事原価（労務費）・技能士検定制度・現場の安全服装・リスク察知能力</div>
+      </div>
+      <span id="badge-day4" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(5)">
+      <div>
+        <strong>📕 Day 5：専門工事の種類・構造と基礎工法</strong>
+        <span class="badge-text">テキスト P.66〜82</span>
+        <div class="day-card-sub">土工・基礎杭・免震制震・鉄筋圧接接合・コンクリート</div>
+      </div>
+      <span id="badge-day5" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(6)">
+      <div>
+        <strong>📕 Day 6：設備工事・特別教育・現場の合図</strong>
+        <span class="badge-text">テキスト P.83〜98</span>
+        <div class="day-card-sub">電気/空調/給排水設備・玉掛け特別教育・安全の挨拶・航空法（ドローン）</div>
+      </div>
+      <span id="badge-day6" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card" onclick="startQuiz(7)">
+      <div>
+        <strong>📘 Day 7：第1週 総復習模擬試験</strong>
+        <span class="badge-text">Week 1 総まとめ</span>
+        <div class="day-card-sub">Week 1（Day 1〜6）の総まとめテスト（実戦判定）</div>
+      </div>
+      <span id="badge-day7" class="status-pill unattempted">未挑戦</span>
     </div>
   </div>
 
-  <!-- 今日の学習（最新挑戦中のDay） -->
-  <div class="hero-card" id="hero-card">
-    <div>
-      <div class="hero-badge">⚡ おすすめの学習</div>
-      <div class="hero-title" id="hero-title">Day 1 を開始する</div>
-      <div class="hero-desc" id="hero-desc">まずは施工体制の基本からスタート！</div>
+  <!-- ==================== 第2週 (Week 2) ==================== -->
+  <div id="week2-container" style="display: none;">
+    <div class="week-header" style="background:#0284c7;">第2週 (Week 2)：現場実務用語・あいさつ・共同生活マナー</div>
+
+    <div class="day-card" onclick="startQuiz(8)">
+      <div>
+        <strong>📙 Day 8：現場のあいさつ・緊急時・墨出しと遣り方</strong>
+        <span class="badge-text">テキスト P.78〜82</span>
+        <div class="day-card-sub">ご安全に・失礼します・逃げ墨・陸墨・地縄・水糸</div>
+      </div>
+      <span id="badge-day8" class="status-pill unattempted">未挑戦</span>
     </div>
-    <a href="quiz.html?day=1" class="btn-hero" id="hero-btn">挑戦する →</a>
-  </div>
 
-  <!-- 第1週（共通基礎・関係法令・マネジメント） -->
-  <div class="week-header">第1週 (Week 1)：現場管理・安全・施工の基本</div>
-  
-  <div class="day-list">
-    <!-- Day 1 -->
-    <a href="quiz.html?day=1" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📗 Day 1：施工体制・職長の役割・安全管理</span>
-          <span class="page-badge">📖 テキスト P.1〜15</span>
-        </div>
-        <div class="day-desc">専門工事業者・職長の役割・ハラスメント防止・リスクアセスメント</div>
+    <div class="day-card" onclick="startQuiz(9)">
+      <div>
+        <strong>📙 Day 9：土工事・地業・足場仮設の現場用語</strong>
+        <span class="badge-text">テキスト P.82〜86</span>
+        <div class="day-card-sub">床付け・捨てコン・単管パイプ・クランプ・巾木・壁つなぎ</div>
       </div>
-      <div class="status-badge" id="badge-day1">未挑戦</div>
-    </a>
+      <span id="badge-day9" class="status-pill unattempted">未挑戦</span>
+    </div>
 
-    <!-- Day 2 -->
-    <a href="quiz.html?day=2" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📗 Day 2：労働安全衛生法・工程管理・エラー防止</span>
-          <span class="page-badge">📖 テキスト P.16〜32</span>
-        </div>
-        <div class="day-desc">総括安全衛生管理者・リスク本質対策・ヒューマンエラー・バックワード法</div>
+    <div class="day-card" onclick="startQuiz(10)">
+      <div>
+        <strong>📙 Day 10：鉄筋・型枠・コンクリート打設用語</strong>
+        <span class="badge-text">テキスト P.86〜88</span>
+        <div class="day-card-sub">かぶり厚さ・結束線・セパレーター・スランプ・コールドジョイント</div>
       </div>
-      <div class="status-badge" id="badge-day2">未挑戦</div>
-    </a>
+      <span id="badge-day10" class="status-pill unattempted">未挑戦</span>
+    </div>
 
-    <!-- Day 3 -->
-    <a href="quiz.html?day=3" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📗 Day 3：建設業法・品質管理・作業手順書</span>
-          <span class="page-badge">📖 テキスト P.33〜48</span>
-        </div>
-        <div class="day-desc">主任/監理技術者・段取り八分・品質管理の基本・わかりやすい作業手順書</div>
+    <div class="day-card" onclick="startQuiz(11)">
+      <div>
+        <strong>📙 Day 11：納まり状態・寸法・構造用語</strong>
+        <span class="badge-text">テキスト P.88〜91</span>
+        <div class="day-card-sub">チリ・面取り・かね・尺貫法・ラーメン構造・ブレース構造</div>
       </div>
-      <div class="status-badge" id="badge-day3">未挑戦</div>
-    </a>
+      <span id="badge-day11" class="status-pill unattempted">未挑戦</span>
+    </div>
 
-    <!-- Day 4 -->
-    <a href="quiz.html?day=4" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📗 Day 4：原価管理・安全基本・国家資格</span>
-          <span class="page-badge">📖 テキスト P.49〜65</span>
-        </div>
-        <div class="day-desc">工事原価（労務費）・技能士検定制度・現場の安全服装・リスク察知能力</div>
+    <div class="day-card" onclick="startQuiz(12)">
+      <div>
+        <strong>📙 Day 12：電気・通信・ライフライン設備用語</strong>
+        <span class="badge-text">テキスト P.91〜94</span>
+        <div class="day-card-sub">ブレーカー・VVFケーブル・トラップ・冷媒配管・スリーブ</div>
       </div>
-      <div class="status-badge" id="badge-day4">未挑戦</div>
-    </a>
+      <span id="badge-day12" class="status-pill unattempted">未挑戦</span>
+    </div>
 
-    <!-- Day 5 -->
-    <a href="quiz.html?day=5" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📕 Day 5：専門工事の種類・構造と基礎工法</span>
-          <span class="page-badge">📖 テキスト P.66〜82</span>
-        </div>
-        <div class="day-desc">土工・基礎杭・免震制震・鉄筋圧接接合・コンクリート</div>
+    <div class="day-card" onclick="startQuiz(13)">
+      <div>
+        <strong>📙 Day 13：5S活動・詰所・服装・現場マナー</strong>
+        <span class="badge-text">テキスト P.95〜99</span>
+        <div class="day-card-sub">整理整頓・詰所のマナー・ヘルメット・言葉づかい・分別回収</div>
       </div>
-      <div class="status-badge" id="badge-day5">未挑戦</div>
-    </a>
+      <span id="badge-day13" class="status-pill unattempted">未挑戦</span>
+    </div>
 
-    <!-- Day 6 -->
-    <a href="quiz.html?day=6" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📕 Day 6：設備工事・特別教育・現場の合図</span>
-          <span class="page-badge">📖 テキスト P.83〜98</span>
-        </div>
-        <div class="day-desc">電気/空調/給排水設備・玉掛け特別教育・安全の挨拶・航空法（ドローン）</div>
+    <div class="day-card" onclick="startQuiz(14)">
+      <div>
+        <strong>📘 Day 14：第2週 総復習模擬試験</strong>
+        <span class="badge-text">Week 2 総まとめ</span>
+        <div class="day-card-sub">Week 2（Day 8〜13）の実務用語・マナー総まとめ判定テスト</div>
       </div>
-      <div class="status-badge" id="badge-day6">未挑戦</div>
-    </a>
-
-    <!-- Day 7 -->
-    <a href="quiz.html?day=7" class="day-item">
-      <div class="day-info">
-        <div class="day-title-row">
-          <span class="day-title">📘 Day 7：第1週 総復習模擬試験</span>
-          <span class="page-badge">📖 Week 1 総まとめ</span>
-        </div>
-        <div class="day-desc">Week 1（Day 1〜6）の総まとめテスト（実戦判定）</div>
-      </div>
-      <div class="status-badge" id="badge-day7">未挑戦</div>
-    </a>
+      <span id="badge-day14" class="status-pill unattempted">未挑戦</span>
+    </div>
   </div>
 </div>
 
 <script>
-function initUser() {
-  const savedName = localStorage.getItem("app_user_name") || "";
-  document.getElementById("user-name-input").value = savedName;
-}
-function saveUserName() {
-  const name = document.getElementById("user-name-input").value.trim();
-  localStorage.setItem("app_user_name", name);
-}
+  // 各Dayのスコア保存キー
+  const DAY_KEYS = {
+    1: 'score_gakka1_1',
+    2: 'score_gakka1_2',
+    3: 'score_gakka1_3',
+    4: 'score_gakka1_4',
+    5: 'score_gakka1_5',
+    6: 'score_gakka1_6',
+    7: 'score_gakka1_7',
+    8: 'score_gakka2_8',
+    9: 'score_gakka2_9',
+    10: 'score_gakka2_10',
+    11: 'score_gakka2_11',
+    12: 'score_gakka2_12',
+    13: 'score_gakka2_13',
+    14: 'score_gakka2_14'
+  };
 
-function updateBadges() {
-  const days = [
-    { id: "1", key: "score_gakka1", title: "Day 1：施工体制・職長の役割" },
-    { id: "2", key: "score_gakka1_2", title: "Day 2：労働安全衛生法・工程管理" },
-    { id: "3", key: "score_gakka1_3", title: "Day 3：建設業法・品質管理" },
-    { id: "4", key: "score_gakka1_4", title: "Day 4：原価管理・安全基本" },
-    { id: "5", key: "score_gakka1_5", title: "Day 5：専門工事の種類・基礎工法" },
-    { id: "6", key: "score_gakka1_6", title: "Day 6：設備工事・特別教育" },
-    { id: "7", key: "score_gakka1_7", title: "Day 7：第1週 総復習テスト" }
-  ];
+  const DAY_TITLES = {
+    1: "Day 1：施工体制・職長の役割",
+    2: "Day 2：労働安全衛生法・工程管理",
+    3: "Day 3：建設業法・品質管理",
+    4: "Day 4：原価管理・安全基本",
+    5: "Day 5：専門工事の種類・構造と基礎工法",
+    6: "Day 6：設備工事・特別教育・合図",
+    7: "Day 7：第1週 総復習模擬試験",
+    8: "Day 8：現場のあいさつ・墨出しと遣り方",
+    9: "Day 9：土工事・地業・足場仮設用語",
+    10: "Day 10：鉄筋・型枠・コンクリート用語",
+    11: "Day 11：納まり状態・寸法・構造用語",
+    12: "Day 12：電気・通信・設備用語",
+    13: "Day 13：5S活動・詰所・現場マナー",
+    14: "Day 14：第2週 総復習模擬試験"
+  };
 
-  let nextDayToStudy = null;
+  let recommendedDay = 1;
 
-  days.forEach(d => {
-    const score = localStorage.getItem(d.key);
-    const badge = document.getElementById(`badge-day${d.id}`);
-    if (badge) {
-      if (score !== null) {
-        badge.textContent = `✓ ${score}点`;
-        badge.classList.add("passed");
+  // 初期読み込み
+  window.addEventListener('DOMContentLoaded', () => {
+    // 氏名の復元と保存イベント
+    const savedName = localStorage.getItem('userName') || '';
+    const nameInput = document.getElementById('userName');
+    nameInput.value = savedName;
+    nameInput.addEventListener('input', (e) => {
+      localStorage.setItem('userName', e.target.value.trim());
+    });
+
+    updateScores();
+  });
+
+  // スコアの読み込みとバッジ更新・おすすめDayの決定
+  function updateScores() {
+    let foundFirstUnfinished = false;
+
+    for (let day = 1; day <= 14; day++) {
+      const key = DAY_KEYS[day];
+      const badge = document.getElementById(`badge-day${day}`);
+      if (!badge) continue;
+
+      const score = localStorage.getItem(key);
+
+      if (score !== null && score !== '') {
+        const numScore = parseInt(score, 10);
+        if (numScore >= 70) {
+          badge.textContent = `✔ ${numScore}点`;
+          badge.className = 'status-pill passed';
+        } else {
+          badge.textContent = `${numScore}点`;
+          badge.className = 'status-pill failed';
+        }
       } else {
-        if (!nextDayToStudy) {
-          nextDayToStudy = d;
+        badge.textContent = '未挑戦';
+        badge.className = 'status-pill unattempted';
+
+        if (!foundFirstUnfinished) {
+          recommendedDay = day;
+          foundFirstUnfinished = true;
         }
       }
     }
-  });
 
-  if (nextDayToStudy) {
-    document.getElementById("hero-title").textContent = `${nextDayToStudy.title} に挑戦`;
-    document.getElementById("hero-desc").textContent = "今日の学習目標を進めましょう！";
-    document.getElementById("hero-btn").href = `quiz.html?day=${nextDayToStudy.id}`;
-  } else {
-    document.getElementById("hero-title").textContent = "🎉 第1週をすべてクリア！";
-    document.getElementById("hero-desc").textContent = "素晴らしいペースです。総復習で満点を目指しましょう。";
-    document.getElementById("hero-btn").href = "quiz.html?day=7";
-    document.getElementById("hero-btn").textContent = "総復習へ →";
+    if (!foundFirstUnfinished) {
+      recommendedDay = 14; // 全て完了している場合は最新テスト
+    }
+
+    // おすすめエリアの更新
+    document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
+
+    // おすすめのDayに合わせて初期タブを選択
+    if (recommendedDay >= 8) {
+      switchWeek(2);
+    } else {
+      switchWeek(1);
+    }
   }
-}
 
-initUser();
-updateBadges();
+  // クイズ開始
+  function startQuiz(day) {
+    const name = document.getElementById('userName').value.trim();
+    if (name) {
+      localStorage.setItem('userName', name);
+    }
+    location.href = `quiz.html?day=${day}`;
+  }
+
+  // おすすめボタン
+  function startRecommended() {
+    startQuiz(recommendedDay);
+  }
+
+  // タブ切り替え
+  function switchWeek(weekNum) {
+    const w1 = document.getElementById('week1-container');
+    const w2 = document.getElementById('week2-container');
+    const btn1 = document.getElementById('tab-btn-w1');
+    const btn2 = document.getElementById('tab-btn-w2');
+
+    if (weekNum === 1) {
+      w1.style.display = 'block';
+      w2.style.display = 'none';
+      btn1.classList.add('active');
+      btn2.classList.remove('active');
+    } else {
+      w1.style.display = 'none';
+      w2.style.display = 'block';
+      btn2.classList.add('active');
+      btn1.classList.remove('active');
+    }
+  }
 </script>
+
 </body>
 </html>
