@@ -14,6 +14,7 @@
       --text-sub: #64748b;
       --border-color: #e2e8f0;
       --success: #16a34a;
+      --danger: #ef4444;
     }
 
     * {
@@ -35,7 +36,6 @@
       margin: 0 auto;
     }
 
-    /* ヘッダー */
     header {
       text-align: center;
       margin-bottom: 20px;
@@ -61,37 +61,53 @@
     /* 氏名入力カード */
     .user-card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       padding: 14px 16px;
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 6px;
       margin-bottom: 16px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .user-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .user-card label {
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: 0.92rem;
       white-space: nowrap;
       display: flex;
       align-items: center;
       gap: 6px;
+      color: #0f172a;
     }
 
     .user-input {
       flex: 1;
-      padding: 8px 12px;
-      border: 1px solid var(--border-color);
+      padding: 9px 12px;
+      border: 1.5px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.2s;
     }
 
     .user-input:focus {
       border-color: var(--primary);
+    }
+
+    .user-error-msg {
+      font-size: 0.78rem;
+      color: var(--danger);
+      font-weight: 700;
+      display: none;
+      margin-left: 2px;
     }
 
     /* おすすめカード */
@@ -143,7 +159,7 @@
       background: var(--primary-hover);
     }
 
-    /* 週切り替えタブ（4週スクロール・グリッド対応） */
+    /* 週切り替えタブ */
     .tab-container {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -266,10 +282,13 @@
     <div class="subtitle">1日10問！ 基礎から職長マネジメントまで完全マスター</div>
   </header>
 
-  <!-- 受講者氏名 -->
-  <div class="user-card">
-    <label for="userName">👤 受講者氏名:</label>
-    <input type="text" id="userName" class="user-input" placeholder="名前を入力してください" autocomplete="name">
+  <!-- 受講者氏名（必須判定エリア） -->
+  <div class="user-card" id="userCard">
+    <div class="user-card-inner">
+      <label for="userName">👤 受講者氏名:</label>
+      <input type="text" id="userName" class="user-input" placeholder="名前を入力してください（必須）" autocomplete="name">
+    </div>
+    <div id="userErrorMsg" class="user-error-msg">⚠️ 先に名前を入力してください / Silakan isi nama / कृपया नाम लेख्नुहोस्</div>
   </div>
 
   <!-- おすすめの学習 -->
@@ -282,7 +301,7 @@
     <button class="btn-recommend" id="btn-recommend" onclick="startRecommended()">挑戦する →</button>
   </div>
 
-  <!-- 週切り替えタブ（4週） -->
+  <!-- 週切り替えタブ -->
   <div class="tab-container">
     <button id="tab-btn-w1" class="tab-btn active" onclick="switchWeek(1)">第1週</button>
     <button id="tab-btn-w2" class="tab-btn" onclick="switchWeek(2)">第2週</button>
@@ -428,7 +447,7 @@
 
   <!-- ==================== 第3週 (Week 3) ==================== -->
   <div id="week3-container" style="display: none;">
-    <div class="week-header" style="background:#0284c7;">第3週：2号公式テキスト【職長の職務・現場管理編】</div>
+    <div class="week-header">第3週：2号公式テキスト【職長の職務・現場管理編】</div>
 
     <div class="day-card" onclick="startQuiz(15)">
       <div>
@@ -496,7 +515,7 @@
 
   <!-- ==================== 第4週 (Week 4) ==================== -->
   <div id="week4-container" style="display: none;">
-    <div class="week-header" style="background:#0284c7;">第4週：安全衛生・リスクアセスメント・図面・建設業法</div>
+    <div class="week-header">第4週：安全衛生・リスクアセスメント・図面・建設業法</div>
 
     <div class="day-card" onclick="startQuiz(22)">
       <div>
@@ -564,7 +583,6 @@
 </div>
 
 <script>
-  // 各Dayのスコア保存キー（Day 1〜28）
   const DAY_KEYS = {};
   for (let i = 1; i <= 7; i++) DAY_KEYS[i] = `score_gakka1_${i}`;
   for (let i = 8; i <= 14; i++) DAY_KEYS[i] = `score_gakka2_${i}`;
@@ -604,20 +622,48 @@
 
   let recommendedDay = 1;
 
-  // 初期読み込み
   window.addEventListener('DOMContentLoaded', () => {
-    // 氏名の復元と保存イベント
     const savedName = localStorage.getItem('userName') || '';
     const nameInput = document.getElementById('userName');
     nameInput.value = savedName;
+
     nameInput.addEventListener('input', (e) => {
-      localStorage.setItem('userName', e.target.value.trim());
+      const val = e.target.value.trim();
+      localStorage.setItem('userName', val);
+      if (val) {
+        clearNameError();
+      }
     });
 
     updateScores();
   });
 
-  // スコアの読み込みとバッジ更新・おすすめDayの決定
+  function clearNameError() {
+    const userCard = document.getElementById('userCard');
+    const nameInput = document.getElementById('userName');
+    const errorMsg = document.getElementById('userErrorMsg');
+    userCard.style.borderColor = 'var(--border-color)';
+    userCard.style.boxShadow = 'none';
+    nameInput.style.borderColor = 'var(--border-color)';
+    nameInput.style.backgroundColor = '#fff';
+    errorMsg.style.display = 'none';
+  }
+
+  function showNameError() {
+    const userCard = document.getElementById('userCard');
+    const nameInput = document.getElementById('userName');
+    const errorMsg = document.getElementById('userErrorMsg');
+
+    userCard.style.borderColor = 'var(--danger)';
+    userCard.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.15)';
+    nameInput.style.borderColor = 'var(--danger)';
+    nameInput.style.backgroundColor = '#fef2f2';
+    errorMsg.style.display = 'block';
+
+    nameInput.focus();
+    userCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   function updateScores() {
     let foundFirstUnfinished = false;
 
@@ -649,13 +695,11 @@
     }
 
     if (!foundFirstUnfinished) {
-      recommendedDay = 28; // 全て完了している場合はファイナルテスト
+      recommendedDay = 28;
     }
 
-    // おすすめエリアの更新
     document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
 
-    // おすすめのDayに合わせて初期タブを選択
     if (recommendedDay >= 22) {
       switchWeek(4);
     } else if (recommendedDay >= 15) {
@@ -667,21 +711,24 @@
     }
   }
 
-  // クイズ開始
+  // クイズ開始（名前の必須入力チェック）
   function startQuiz(day) {
-    const name = document.getElementById('userName').value.trim();
-    if (name) {
-      localStorage.setItem('userName', name);
+    const nameInput = document.getElementById('userName');
+    const name = nameInput.value.trim();
+
+    if (!name) {
+      showNameError();
+      return;
     }
+
+    localStorage.setItem('userName', name);
     location.href = `quiz.html?day=${day}`;
   }
 
-  // おすすめボタン
   function startRecommended() {
     startQuiz(recommendedDay);
   }
 
-  // 週切り替え（1〜4）
   function switchWeek(weekNum) {
     for (let w = 1; w <= 4; w++) {
       const container = document.getElementById(`week${w}-container`);
