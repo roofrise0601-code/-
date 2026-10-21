@@ -15,6 +15,9 @@
       --border-color: #e2e8f0;
       --success: #16a34a;
       --danger: #ef4444;
+      --special: #b45309;
+      --special-bg: #fffbeb;
+      --special-border: #fde68a;
     }
 
     * {
@@ -221,6 +224,11 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
+    .day-card.card-special {
+      border-color: var(--special-border);
+      background: #fffdf5;
+    }
+
     .day-card strong {
       font-size: 0.92rem;
       color: #0f172a;
@@ -238,6 +246,13 @@
       margin-left: 6px;
       font-weight: normal;
       vertical-align: middle;
+    }
+
+    .badge-special {
+      background: var(--special-bg);
+      color: var(--special);
+      border-color: var(--special-border);
+      font-weight: 700;
     }
 
     .day-card-sub {
@@ -278,8 +293,8 @@
 
 <div class="container">
   <header>
-    <h1><ruby>特定技能2号<rt>とくていぎのう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策ポータル<rt>がっかたいさく</rt></ruby></h1>
-    <div class="subtitle">1日10問！ 基礎から職長マネジメントまで完全マスター</div>
+    <h1><ruby>特定技能2号<rt>とくていぎのうにごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策ポータル<rt>がっかたいさく</rt></ruby></h1>
+    <div class="subtitle">全30日完成！ 基礎用語から本番実戦模試まで完全網羅</div>
   </header>
 
   <!-- 受講者氏名（必須判定エリア） -->
@@ -515,7 +530,7 @@
 
   <!-- ==================== 第4週 (Week 4) ==================== -->
   <div id="week4-container" style="display: none;">
-    <div class="week-header">第4週：安全衛生・リスクアセスメント・図面・建設業法</div>
+    <div class="week-header">第4週：安全衛生・リスクアセスメント・法令・本番実戦模試</div>
 
     <div class="day-card" onclick="startQuiz(22)">
       <div>
@@ -574,10 +589,29 @@
     <div class="day-card" onclick="startQuiz(28)">
       <div>
         <strong>🏆 Day 28：2号学科試験 ファイナル本番模擬試験</strong>
-        <span class="badge-text">2号全範囲 総仕上げ</span>
-        <div class="day-card-sub">特定技能2号 学科試験の全範囲から本番同様に出題（合否判定）</div>
+        <span class="badge-text">2号全範囲 10問</span>
+        <div class="day-card-sub">特定技能2号 学科試験の全範囲から本番同様に出題（総合合否判定）</div>
       </div>
       <span id="badge-day28" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <!-- 本番実戦模擬試験（20問×2日間） -->
+    <div class="day-card card-special" onclick="startQuiz(29)">
+      <div>
+        <strong>🎯 Day 29：本番実戦模擬試験 第1弾</strong>
+        <span class="badge-text badge-special">本番形式 20問</span>
+        <div class="day-card-sub">職長職務・QCDSE・工程計画・原価・品質・3管理・熱中症</div>
+      </div>
+      <span id="badge-day29" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card card-special" onclick="startQuiz(30)">
+      <div>
+        <strong>🎯 Day 30：本番実戦模擬試験 第2弾</strong>
+        <span class="badge-text badge-special">本番形式 20問</span>
+        <div class="day-card-sub">安衛法・リスクアセスメント・KYT・ヒューマンエラー・図面・建設業法</div>
+      </div>
+      <span id="badge-day30" class="status-pill unattempted">未挑戦</span>
     </div>
   </div>
 </div>
@@ -587,7 +621,7 @@
   for (let i = 1; i <= 7; i++) DAY_KEYS[i] = `score_gakka1_${i}`;
   for (let i = 8; i <= 14; i++) DAY_KEYS[i] = `score_gakka2_${i}`;
   for (let i = 15; i <= 21; i++) DAY_KEYS[i] = `score_gakka3_${i}`;
-  for (let i = 22; i <= 28; i++) DAY_KEYS[i] = `score_gakka4_${i}`;
+  for (let i = 22; i <= 30; i++) DAY_KEYS[i] = `score_gakka4_${i}`;
 
   const DAY_TITLES = {
     1: "Day 1：施工体制・職長の役割",
@@ -617,7 +651,9 @@
     25: "Day 25：ヒヤリハット・ヒューマンエラー防止",
     26: "Day 26：職長としての図面・施工図のとらえ方",
     27: "Day 27：建設業の役割・課題と建設業法",
-    28: "Day 28：2号学科 ファイナル本番模擬試験"
+    28: "Day 28：2号学科 ファイナル本番模擬試験",
+    29: "Day 29：本番実戦模擬試験 第1弾（20問）",
+    30: "Day 30：本番実戦模擬試験 第2弾（20問）"
   };
 
   let recommendedDay = 1;
@@ -667,7 +703,7 @@
   function updateScores() {
     let foundFirstUnfinished = false;
 
-    for (let day = 1; day <= 28; day++) {
+    for (let day = 1; day <= 30; day++) {
       const key = DAY_KEYS[day];
       const badge = document.getElementById(`badge-day${day}`);
       if (!badge) continue;
@@ -695,7 +731,7 @@
     }
 
     if (!foundFirstUnfinished) {
-      recommendedDay = 28;
+      recommendedDay = 30;
     }
 
     document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
@@ -711,7 +747,7 @@
     }
   }
 
-  // クイズ開始（名前の必須入力チェック）
+  // クイズ開始（受講者名の必須チェック）
   function startQuiz(day) {
     const nameInput = document.getElementById('userName');
     const name = nameInput.value.trim();
