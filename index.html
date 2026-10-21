@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定技能2号 建設 学科対策ポータル</title>
+  <title>特定技能2号 建設 学科・実技対策ポータル</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -18,6 +18,9 @@
       --special: #b45309;
       --special-bg: #fffbeb;
       --special-border: #fde68a;
+      --jitsugi: #7c3aed;
+      --jitsugi-bg: #f5f3ff;
+      --jitsugi-border: #ddd6fe;
     }
 
     * {
@@ -162,18 +165,18 @@
       background: var(--primary-hover);
     }
 
-    /* 週切り替えタブ */
+    /* タブ切り替え */
     .tab-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
       margin-bottom: 16px;
     }
 
     .tab-btn {
-      padding: 9px 4px;
+      padding: 9px 2px;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       background: #f1f5f9;
@@ -191,6 +194,12 @@
       box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
     }
 
+    .tab-btn.tab-jitsugi.active {
+      background: var(--jitsugi);
+      border-color: var(--jitsugi);
+      box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
+    }
+
     /* リストヘッダー */
     .week-header {
       display: inline-block;
@@ -201,6 +210,10 @@
       padding: 4px 10px;
       border-radius: 6px;
       margin-bottom: 12px;
+    }
+
+    .week-header.header-jitsugi {
+      background: var(--jitsugi);
     }
 
     /* Dayカード */
@@ -229,6 +242,11 @@
       background: #fffdf5;
     }
 
+    .day-card.card-jitsugi {
+      border-color: var(--jitsugi-border);
+      background: #faf5ff;
+    }
+
     .day-card strong {
       font-size: 0.92rem;
       color: #0f172a;
@@ -252,6 +270,13 @@
       background: var(--special-bg);
       color: var(--special);
       border-color: var(--special-border);
+      font-weight: 700;
+    }
+
+    .badge-jitsugi {
+      background: var(--jitsugi-bg);
+      color: var(--jitsugi);
+      border-color: var(--jitsugi-border);
       font-weight: 700;
     }
 
@@ -293,11 +318,11 @@
 
 <div class="container">
   <header>
-    <h1><ruby>特定技能2号<rt>とくていぎのうにごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>学科対策ポータル<rt>がっかたいさく</rt></ruby></h1>
-    <div class="subtitle">全30日完成！ 基礎用語から本番実戦模試まで完全網羅</div>
+    <h1><ruby>特定技能2号<rt>とくていぎのうにごう</rt></ruby> <ruby>建設<rt>けんせつ</rt></ruby> <ruby>総合対策ポータル<rt>そうごうたいさく</rt></ruby></h1>
+    <div class="subtitle">学科（全30日完成）＋ 実技（判断等・計画立案・指示）</div>
   </header>
 
-  <!-- 受講者氏名（必須判定エリア） -->
+  <!-- 受講者氏名エリア -->
   <div class="user-card" id="userCard">
     <div class="user-card-inner">
       <label for="userName">👤 受講者氏名:</label>
@@ -311,17 +336,18 @@
     <div class="recommend-info">
       <div class="rec-tag">⚡ おすすめの学習</div>
       <div class="rec-title" id="rec-title">本日の学習に挑戦</div>
-      <div class="rec-sub">今日の学習目標を進めましょう！</div>
+      <div class="rec-sub">目標に向かってカリキュラムを進めましょう！</div>
     </div>
     <button class="btn-recommend" id="btn-recommend" onclick="startRecommended()">挑戦する →</button>
   </div>
 
-  <!-- 週切り替えタブ -->
+  <!-- タブ切り替え（第1週〜第4週＋実技） -->
   <div class="tab-container">
-    <button id="tab-btn-w1" class="tab-btn active" onclick="switchWeek(1)">第1週</button>
-    <button id="tab-btn-w2" class="tab-btn" onclick="switchWeek(2)">第2週</button>
-    <button id="tab-btn-w3" class="tab-btn" onclick="switchWeek(3)">第3週</button>
-    <button id="tab-btn-w4" class="tab-btn" onclick="switchWeek(4)">第4週</button>
+    <button id="tab-btn-w1" class="tab-btn active" onclick="switchTab(1)">第1週</button>
+    <button id="tab-btn-w2" class="tab-btn" onclick="switchTab(2)">第2週</button>
+    <button id="tab-btn-w3" class="tab-btn" onclick="switchTab(3)">第3週</button>
+    <button id="tab-btn-w4" class="tab-btn" onclick="switchTab(4)">第4週</button>
+    <button id="tab-btn-jitsugi" class="tab-btn tab-jitsugi" onclick="switchTab('jitsugi')">🛠️ 実技</button>
   </div>
 
   <!-- ==================== 第1週 (Week 1) ==================== -->
@@ -614,14 +640,30 @@
       <span id="badge-day30" class="status-pill unattempted">未挑戦</span>
     </div>
   </div>
+
+  <!-- ==================== 実技試験対策 (Jitsugi) ==================== -->
+  <div id="jitsugi-container" style="display: none;">
+    <div class="week-header header-jitsugi">実技試験：判断等試験・計画立案・指示ロールプレイ</div>
+
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_1')">
+      <div>
+        <strong>🛠️ 実技①：工具・機械・材料・計測器の知識</strong>
+        <span class="badge-text badge-jitsugi">判断等試験 10問</span>
+        <div class="day-card-sub">実技テキスト第5章（P.100〜144）準拠：躯体・内外装・安全器具の判断</div>
+      </div>
+      <span id="badge-jitsugi_1" class="status-pill unattempted">未挑戦</span>
+    </div>
+  </div>
 </div>
 
 <script>
+  // 学科・実技のキーマッピング
   const DAY_KEYS = {};
   for (let i = 1; i <= 7; i++) DAY_KEYS[i] = `score_gakka1_${i}`;
   for (let i = 8; i <= 14; i++) DAY_KEYS[i] = `score_gakka2_${i}`;
   for (let i = 15; i <= 21; i++) DAY_KEYS[i] = `score_gakka3_${i}`;
   for (let i = 22; i <= 30; i++) DAY_KEYS[i] = `score_gakka4_${i}`;
+  DAY_KEYS['jitsugi_1'] = 'score_jitsugi_1';
 
   const DAY_TITLES = {
     1: "Day 1：施工体制・職長の役割",
@@ -653,7 +695,8 @@
     27: "Day 27：建設業の役割・課題と建設業法",
     28: "Day 28：2号学科 ファイナル本番模擬試験",
     29: "Day 29：本番実戦模擬試験 第1弾（20問）",
-    30: "Day 30：本番実戦模擬試験 第2弾（20問）"
+    30: "Day 30：本番実戦模擬試験 第2弾（20問）",
+    'jitsugi_1': "実技①：工具・機械・材料・計測器の知識"
   };
 
   let recommendedDay = 1;
@@ -700,50 +743,62 @@
     userCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  function renderBadge(key, badgeId) {
+    const badge = document.getElementById(badgeId);
+    if (!badge) return false;
+    const score = localStorage.getItem(key);
+    if (score !== null && score !== '') {
+      const numScore = parseInt(score, 10);
+      if (numScore >= 70) {
+        badge.textContent = `✔ ${numScore}点`;
+        badge.className = 'status-pill passed';
+      } else {
+        badge.textContent = `${numScore}点`;
+        badge.className = 'status-pill failed';
+      }
+      return true;
+    } else {
+      badge.textContent = '未挑戦';
+      badge.className = 'status-pill unattempted';
+      return false;
+    }
+  }
+
   function updateScores() {
     let foundFirstUnfinished = false;
 
+    // 学科 Day 1〜30
     for (let day = 1; day <= 30; day++) {
-      const key = DAY_KEYS[day];
-      const badge = document.getElementById(`badge-day${day}`);
-      if (!badge) continue;
-
-      const score = localStorage.getItem(key);
-
-      if (score !== null && score !== '') {
-        const numScore = parseInt(score, 10);
-        if (numScore >= 70) {
-          badge.textContent = `✔ ${numScore}点`;
-          badge.className = 'status-pill passed';
-        } else {
-          badge.textContent = `${numScore}点`;
-          badge.className = 'status-pill failed';
-        }
-      } else {
-        badge.textContent = '未挑戦';
-        badge.className = 'status-pill unattempted';
-
-        if (!foundFirstUnfinished) {
-          recommendedDay = day;
-          foundFirstUnfinished = true;
-        }
+      const hasDone = renderBadge(DAY_KEYS[day], `badge-day${day}`);
+      if (!hasDone && !foundFirstUnfinished) {
+        recommendedDay = day;
+        foundFirstUnfinished = true;
       }
     }
 
+    // 実技①
+    const hasJitsugiDone = renderBadge(DAY_KEYS['jitsugi_1'], 'badge-jitsugi_1');
+
     if (!foundFirstUnfinished) {
-      recommendedDay = 30;
+      if (!hasJitsugiDone) {
+        recommendedDay = 'jitsugi_1';
+      } else {
+        recommendedDay = 30;
+      }
     }
 
     document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
 
-    if (recommendedDay >= 22) {
-      switchWeek(4);
+    if (recommendedDay === 'jitsugi_1') {
+      switchTab('jitsugi');
+    } else if (recommendedDay >= 22) {
+      switchTab(4);
     } else if (recommendedDay >= 15) {
-      switchWeek(3);
+      switchTab(3);
     } else if (recommendedDay >= 8) {
-      switchWeek(2);
+      switchTab(2);
     } else {
-      switchWeek(1);
+      switchTab(1);
     }
   }
 
@@ -765,20 +820,36 @@
     startQuiz(recommendedDay);
   }
 
-  function switchWeek(weekNum) {
-    for (let w = 1; w <= 4; w++) {
-      const container = document.getElementById(`week${w}-container`);
-      const btn = document.getElementById(`tab-btn-w${w}`);
-      if (container && btn) {
-        if (w === weekNum) {
-          container.style.display = 'block';
-          btn.classList.add('active');
+  function switchTab(tabId) {
+    const containers = {
+      1: document.getElementById('week1-container'),
+      2: document.getElementById('week2-container'),
+      3: document.getElementById('week3-container'),
+      4: document.getElementById('week4-container'),
+      'jitsugi': document.getElementById('jitsugi-container')
+    };
+
+    const buttons = {
+      1: document.getElementById('tab-btn-w1'),
+      2: document.getElementById('tab-btn-w2'),
+      3: document.getElementById('tab-btn-w3'),
+      4: document.getElementById('tab-btn-w4'),
+      'jitsugi': document.getElementById('tab-btn-jitsugi')
+    };
+
+    Object.keys(containers).forEach(key => {
+      const c = containers[key];
+      const b = buttons[key];
+      if (c && b) {
+        if (key == tabId) {
+          c.style.display = 'block';
+          b.classList.add('active');
         } else {
-          container.style.display = 'none';
-          btn.classList.remove('active');
+          c.style.display = 'none';
+          b.classList.remove('active');
         }
       }
-    }
+    });
   }
 </script>
 
