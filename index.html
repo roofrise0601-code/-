@@ -645,6 +645,7 @@
   <div id="jitsugi-container" style="display: none;">
     <div class="week-header header-jitsugi">実技試験：判断等試験・計画立案・指示ロールプレイ</div>
 
+    <!-- 実技① -->
     <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_1')">
       <div>
         <strong>🛠️ 実技①：工具・機械・材料・計測器の知識</strong>
@@ -653,17 +654,39 @@
       </div>
       <span id="badge-jitsugi_1" class="status-pill unattempted">未挑戦</span>
     </div>
+
+    <!-- 実技②（新規追加） -->
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_2')">
+      <div>
+        <strong>🛠️ 実技②：建設現場の施工知識・品質判断</strong>
+        <span class="badge-text badge-jitsugi">判断等試験 10問</span>
+        <div class="day-card-sub">実技テキスト第6章（P.145〜178）準拠：躯体・仕上げ各工法と品質管理</div>
+      </div>
+      <span id="badge-jitsugi_2" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <!-- 実技③（新規追加） -->
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_3')">
+      <div>
+        <strong>🛠️ 実技③：建設工事の安全・災害防止対策</strong>
+        <span class="badge-text badge-jitsugi">判断等試験 10問</span>
+        <div class="day-card-sub">実技テキスト第7章（P.179〜196）準拠：死亡災害の型・安全サイクル・教育</div>
+      </div>
+      <span id="badge-jitsugi_3" class="status-pill unattempted">未挑戦</span>
+    </div>
   </div>
 </div>
 
 <script>
-  // 学科・実技のキーマッピング
+  // 学科（Day 1〜30）＋ 実技（1〜3）の判定キー
   const DAY_KEYS = {};
   for (let i = 1; i <= 7; i++) DAY_KEYS[i] = `score_gakka1_${i}`;
   for (let i = 8; i <= 14; i++) DAY_KEYS[i] = `score_gakka2_${i}`;
   for (let i = 15; i <= 21; i++) DAY_KEYS[i] = `score_gakka3_${i}`;
   for (let i = 22; i <= 30; i++) DAY_KEYS[i] = `score_gakka4_${i}`;
   DAY_KEYS['jitsugi_1'] = 'score_jitsugi_1';
+  DAY_KEYS['jitsugi_2'] = 'score_jitsugi_2';
+  DAY_KEYS['jitsugi_3'] = 'score_jitsugi_3';
 
   const DAY_TITLES = {
     1: "Day 1：施工体制・職長の役割",
@@ -696,7 +719,9 @@
     28: "Day 28：2号学科 ファイナル本番模擬試験",
     29: "Day 29：本番実戦模擬試験 第1弾（20問）",
     30: "Day 30：本番実戦模擬試験 第2弾（20問）",
-    'jitsugi_1': "実技①：工具・機械・材料・計測器の知識"
+    'jitsugi_1': "実技①：工具・機械・材料・計測器の知識",
+    'jitsugi_2': "実技②：建設現場の施工知識・品質判断",
+    'jitsugi_3': "実技③：建設工事の安全・災害防止対策"
   };
 
   let recommendedDay = 1;
@@ -776,20 +801,23 @@
       }
     }
 
-    // 実技①
-    const hasJitsugiDone = renderBadge(DAY_KEYS['jitsugi_1'], 'badge-jitsugi_1');
+    // 実技 ①〜③
+    const jitsugiList = ['jitsugi_1', 'jitsugi_2', 'jitsugi_3'];
+    for (const jKey of jitsugiList) {
+      const hasJDone = renderBadge(DAY_KEYS[jKey], `badge-${jKey}`);
+      if (!foundFirstUnfinished && !hasJDone) {
+        recommendedDay = jKey;
+        foundFirstUnfinished = true;
+      }
+    }
 
     if (!foundFirstUnfinished) {
-      if (!hasJitsugiDone) {
-        recommendedDay = 'jitsugi_1';
-      } else {
-        recommendedDay = 30;
-      }
+      recommendedDay = 'jitsugi_1';
     }
 
     document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
 
-    if (recommendedDay === 'jitsugi_1') {
+    if (String(recommendedDay).startsWith('jitsugi')) {
       switchTab('jitsugi');
     } else if (recommendedDay >= 22) {
       switchTab(4);
@@ -802,7 +830,6 @@
     }
   }
 
-  // クイズ開始（受講者名の必須チェック）
   function startQuiz(day) {
     const nameInput = document.getElementById('userName');
     const name = nameInput.value.trim();
