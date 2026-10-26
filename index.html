@@ -64,7 +64,6 @@
       margin-top: 4px;
     }
 
-    /* 氏名入力カード */
     .user-card {
       background: var(--card-bg);
       border: 2px solid var(--border-color);
@@ -116,7 +115,6 @@
       margin-left: 2px;
     }
 
-    /* おすすめカード */
     .recommend-box {
       background: #f0f9ff;
       border: 1px solid #bae6fd;
@@ -165,7 +163,6 @@
       background: var(--primary-hover);
     }
 
-    /* タブ切り替え */
     .tab-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -200,7 +197,6 @@
       box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
     }
 
-    /* リストヘッダー */
     .week-header {
       display: inline-block;
       background: #0284c7;
@@ -216,7 +212,6 @@
       background: var(--jitsugi);
     }
 
-    /* Dayカード */
     .day-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -285,7 +280,6 @@
       color: var(--text-sub);
     }
 
-    /* ステータスバッジ */
     .status-pill {
       font-size: 0.75rem;
       font-weight: 700;
@@ -322,7 +316,6 @@
     <div class="subtitle">学科（全30日完成）＋ 実技（判断等・計画立案・指示）</div>
   </header>
 
-  <!-- 受講者氏名エリア -->
   <div class="user-card" id="userCard">
     <div class="user-card-inner">
       <label for="userName">👤 受講者氏名:</label>
@@ -331,7 +324,6 @@
     <div id="userErrorMsg" class="user-error-msg">⚠️ 先に名前を入力してください / Silakan isi nama / कृपया नाम लेख्नुहोस्</div>
   </div>
 
-  <!-- おすすめの学習 -->
   <div class="recommend-box">
     <div class="recommend-info">
       <div class="rec-tag">⚡ おすすめの学習</div>
@@ -341,7 +333,6 @@
     <button class="btn-recommend" id="btn-recommend" onclick="startRecommended()">挑戦する →</button>
   </div>
 
-  <!-- タブ切り替え（第1週〜第4週＋実技） -->
   <div class="tab-container">
     <button id="tab-btn-w1" class="tab-btn active" onclick="switchTab(1)">第1週</button>
     <button id="tab-btn-w2" class="tab-btn" onclick="switchTab(2)">第2週</button>
@@ -350,11 +341,10 @@
     <button id="tab-btn-jitsugi" class="tab-btn tab-jitsugi" onclick="switchTab('jitsugi')">🛠️ 実技</button>
   </div>
 
-  <!-- ==================== 第1週 (Week 1) ==================== -->
+  <!-- 第1週 -->
   <div id="week1-container">
     <div class="week-header">第1週：現場管理・安全・施工の基本（全体像）</div>
-
-    <div class="day-card" onclick="startQuiz(1)">
+    <div class="day-card" onclick="startQuiz('1')">
       <div>
         <strong>📗 Day 1：施工体制・職長の役割・安全管理</strong>
         <span class="badge-text">基礎 P.1〜15</span>
@@ -362,8 +352,7 @@
       </div>
       <span id="badge-day1" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(2)">
+    <div class="day-card" onclick="startQuiz('2')">
       <div>
         <strong>📗 Day 2：労働安全衛生法・工程管理・エラー防止</strong>
         <span class="badge-text">基礎 P.16〜32</span>
@@ -371,8 +360,7 @@
       </div>
       <span id="badge-day2" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(3)">
+    <div class="day-card" onclick="startQuiz('3')">
       <div>
         <strong>📗 Day 3：建設業法・品質管理・作業手順書</strong>
         <span class="badge-text">基礎 P.33〜48</span>
@@ -380,8 +368,7 @@
       </div>
       <span id="badge-day3" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(4)">
+    <div class="day-card" onclick="startQuiz('4')">
       <div>
         <strong>📗 Day 4：原価管理・安全基本・国家資格</strong>
         <span class="badge-text">基礎 P.49〜65</span>
@@ -389,8 +376,7 @@
       </div>
       <span id="badge-day4" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(5)">
+    <div class="day-card" onclick="startQuiz('5')">
       <div>
         <strong>📕 Day 5：専門工事の種類・構造と基礎工法</strong>
         <span class="badge-text">基礎 P.66〜82</span>
@@ -398,8 +384,7 @@
       </div>
       <span id="badge-day5" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(6)">
+    <div class="day-card" onclick="startQuiz('6')">
       <div>
         <strong>📕 Day 6：設備工事・特別教育・現場の合図</strong>
         <span class="badge-text">基礎 P.83〜98</span>
@@ -407,8 +392,7 @@
       </div>
       <span id="badge-day6" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(7)">
+    <div class="day-card" onclick="startQuiz('7')">
       <div>
         <strong>📘 Day 7：第1週 総復習模擬試験</strong>
         <span class="badge-text">Week 1 総まとめ</span>
@@ -418,11 +402,10 @@
     </div>
   </div>
 
-  <!-- ==================== 第2週 (Week 2) ==================== -->
+  <!-- 第2週 -->
   <div id="week2-container" style="display: none;">
     <div class="week-header">第2週：現場実務用語・指示理解・現場マナー</div>
-
-    <div class="day-card" onclick="startQuiz(8)">
+    <div class="day-card" onclick="startQuiz('8')">
       <div>
         <strong>📙 Day 8：現場のあいさつ・緊急時・墨出しと遣り方</strong>
         <span class="badge-text">基礎 P.78〜82</span>
@@ -430,8 +413,7 @@
       </div>
       <span id="badge-day8" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(9)">
+    <div class="day-card" onclick="startQuiz('9')">
       <div>
         <strong>📙 Day 9：土工事・地業・足場仮設の現場用語</strong>
         <span class="badge-text">基礎 P.82〜86</span>
@@ -439,8 +421,7 @@
       </div>
       <span id="badge-day9" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(10)">
+    <div class="day-card" onclick="startQuiz('10')">
       <div>
         <strong>📙 Day 10：鉄筋・型枠・コンクリート打設用語</strong>
         <span class="badge-text">基礎 P.86〜88</span>
@@ -448,8 +429,7 @@
       </div>
       <span id="badge-day10" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(11)">
+    <div class="day-card" onclick="startQuiz('11')">
       <div>
         <strong>📙 Day 11：納まり状態・寸法・構造用語</strong>
         <span class="badge-text">基礎 P.88〜91</span>
@@ -457,26 +437,23 @@
       </div>
       <span id="badge-day11" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(12)">
+    <div class="day-card" onclick="startQuiz('12')">
       <div>
-        <strong>📙 Day 12：電気・通信・ライフライン設備用語</strong>
+        <strong>📙 Day 12：電気・通信・設備用語</strong>
         <span class="badge-text">基礎 P.91〜94</span>
         <div class="day-card-sub">ブレーカー・VVFケーブル・トラップ・冷媒配管・スリーブ</div>
       </div>
       <span id="badge-day12" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(13)">
+    <div class="day-card" onclick="startQuiz('13')">
       <div>
-        <strong>📙 Day 13：5S活動・詰所・服装・現場マナー</strong>
+        <strong>📙 Day 13：5S活動・詰所・現場マナー</strong>
         <span class="badge-text">基礎 P.95〜99</span>
         <div class="day-card-sub">整理整頓・詰所のマナー・ヘルメット・言葉づかい・分別回収</div>
       </div>
       <span id="badge-day13" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(14)">
+    <div class="day-card" onclick="startQuiz('14')">
       <div>
         <strong>📘 Day 14：第2週 総復習模擬試験</strong>
         <span class="badge-text">Week 2 総まとめ</span>
@@ -486,11 +463,10 @@
     </div>
   </div>
 
-  <!-- ==================== 第3週 (Week 3) ==================== -->
+  <!-- 第3週 -->
   <div id="week3-container" style="display: none;">
     <div class="week-header">第3週：2号公式テキスト【職長の職務・現場管理編】</div>
-
-    <div class="day-card" onclick="startQuiz(15)">
+    <div class="day-card" onclick="startQuiz('15')">
       <div>
         <strong>👑 Day 15：職長の職務とリーダーシップ</strong>
         <span class="badge-text">2号公式 P.1〜23</span>
@@ -498,8 +474,7 @@
       </div>
       <span id="badge-day15" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(16)">
+    <div class="day-card" onclick="startQuiz('16')">
       <div>
         <strong>👑 Day 16：良い仕事の条件・段取りと作業管理</strong>
         <span class="badge-text">2号公式 P.24〜31</span>
@@ -507,8 +482,7 @@
       </div>
       <span id="badge-day16" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(17)">
+    <div class="day-card" onclick="startQuiz('17')">
       <div>
         <strong>👑 Day 17：QCDSE・PDCAサイクルとOODAループ</strong>
         <span class="badge-text">2号公式 P.31〜42</span>
@@ -516,8 +490,7 @@
       </div>
       <span id="badge-day17" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(18)">
+    <div class="day-card" onclick="startQuiz('18')">
       <div>
         <strong>👑 Day 18：工程計画・ネットワーク式工程表</strong>
         <span class="badge-text">2号公式 P.43〜47</span>
@@ -525,8 +498,7 @@
       </div>
       <span id="badge-day18" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(19)">
+    <div class="day-card" onclick="startQuiz('19')">
       <div>
         <strong>👑 Day 19：原価管理（4費目・日報）と品質管理</strong>
         <span class="badge-text">2号公式 P.48〜54</span>
@@ -534,8 +506,7 @@
       </div>
       <span id="badge-day19" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(20)">
+    <div class="day-card" onclick="startQuiz('20')">
       <div>
         <strong>👑 Day 20：環境管理と労働安全衛生の「3管理」</strong>
         <span class="badge-text">2号公式 P.55〜68</span>
@@ -543,8 +514,7 @@
       </div>
       <span id="badge-day20" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(21)">
+    <div class="day-card" onclick="startQuiz('21')">
       <div>
         <strong>📘 Day 21：第3週 総復習模擬試験</strong>
         <span class="badge-text">Week 3 総まとめ</span>
@@ -554,11 +524,10 @@
     </div>
   </div>
 
-  <!-- ==================== 第4週 (Week 4) ==================== -->
+  <!-- 第4週 -->
   <div id="week4-container" style="display: none;">
     <div class="week-header">第4週：安全衛生・リスクアセスメント・法令・本番実戦模試</div>
-
-    <div class="day-card" onclick="startQuiz(22)">
+    <div class="day-card" onclick="startQuiz('22')">
       <div>
         <strong>👑 Day 22：安衛法改正・災害発生基本モデル</strong>
         <span class="badge-text">2号公式 P.69〜78</span>
@@ -566,8 +535,7 @@
       </div>
       <span id="badge-day22" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(23)">
+    <div class="day-card" onclick="startQuiz('23')">
       <div>
         <strong>👑 Day 23：リスクアセスメントと低減措置</strong>
         <span class="badge-text">2号公式 P.79〜86</span>
@@ -575,8 +543,7 @@
       </div>
       <span id="badge-day23" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(24)">
+    <div class="day-card" onclick="startQuiz('24')">
       <div>
         <strong>👑 Day 24：5S活動・KY活動・KYT基礎4ラウンド法</strong>
         <span class="badge-text">2号公式 P.87〜93</span>
@@ -584,8 +551,7 @@
       </div>
       <span id="badge-day24" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(25)">
+    <div class="day-card" onclick="startQuiz('25')">
       <div>
         <strong>👑 Day 25：ヒヤリハットとヒューマンエラー防止</strong>
         <span class="badge-text">2号公式 P.94〜104</span>
@@ -593,17 +559,15 @@
       </div>
       <span id="badge-day25" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(26)">
+    <div class="day-card" onclick="startQuiz('26')">
       <div>
         <strong>👑 Day 26：職長としての図面・施工図のとらえ方</strong>
         <span class="badge-text">2号公式 P.105〜115</span>
         <div class="day-card-sub">設計図書の種類・施工計画書・施工図の役割・作業手順書との連携</div>
       </div>
-      <span id="badge-day26" class="status-pill unattempted">未挑戦</span>
+      <span id="badge-day27" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(27)">
+    <div class="day-card" onclick="startQuiz('27')">
       <div>
         <strong>👑 Day 27：建設業の社会的役割・課題と建設業法</strong>
         <span class="badge-text">2号公式 P.116〜124</span>
@@ -611,8 +575,7 @@
       </div>
       <span id="badge-day27" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card" onclick="startQuiz(28)">
+    <div class="day-card" onclick="startQuiz('28')">
       <div>
         <strong>🏆 Day 28：2号学科試験 ファイナル本番模擬試験</strong>
         <span class="badge-text">2号全範囲 10問</span>
@@ -620,9 +583,7 @@
       </div>
       <span id="badge-day28" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <!-- 本番実戦模擬試験（20問×2日間） -->
-    <div class="day-card card-special" onclick="startQuiz(29)">
+    <div class="day-card card-special" onclick="startQuiz('29')">
       <div>
         <strong>🎯 Day 29：本番実戦模擬試験 第1弾</strong>
         <span class="badge-text badge-special">本番形式 20問</span>
@@ -630,8 +591,7 @@
       </div>
       <span id="badge-day29" class="status-pill unattempted">未挑戦</span>
     </div>
-
-    <div class="day-card card-special" onclick="startQuiz(30)">
+    <div class="day-card card-special" onclick="startQuiz('30')">
       <div>
         <strong>🎯 Day 30：本番実戦模擬試験 第2弾</strong>
         <span class="badge-text badge-special">本番形式 20問</span>
@@ -641,90 +601,98 @@
     </div>
   </div>
 
-  <!-- ==================== 実技試験対策 (Jitsugi) ==================== -->
+  <!-- 実技試験対策タブ（実技①〜④） -->
   <div id="jitsugi-container" style="display: none;">
     <div class="week-header header-jitsugi">実技試験：判断等試験・計画立案・指示ロールプレイ</div>
 
-    <!-- 実技① -->
-    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_1')">
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_day1')">
       <div>
         <strong>🛠️ 実技①：工具・機械・材料・計測器の知識</strong>
         <span class="badge-text badge-jitsugi">判断等試験 10問</span>
         <div class="day-card-sub">実技テキスト第5章（P.100〜144）準拠：躯体・内外装・安全器具の判断</div>
       </div>
-      <span id="badge-jitsugi_1" class="status-pill unattempted">未挑戦</span>
+      <span id="badge-jitsugi_day1" class="status-pill unattempted">未挑戦</span>
     </div>
 
-    <!-- 実技②（新規追加） -->
-    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_2')">
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_day2')">
       <div>
         <strong>🛠️ 実技②：建設現場の施工知識・品質判断</strong>
         <span class="badge-text badge-jitsugi">判断等試験 10問</span>
         <div class="day-card-sub">実技テキスト第6章（P.145〜178）準拠：躯体・仕上げ各工法と品質管理</div>
       </div>
-      <span id="badge-jitsugi_2" class="status-pill unattempted">未挑戦</span>
+      <span id="badge-jitsugi_day2" class="status-pill unattempted">未挑戦</span>
     </div>
 
-    <!-- 実技③（新規追加） -->
-    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_3')">
+    <div class="day-card card-jitsugi" onclick="startQuiz('jitsugi_day3')">
       <div>
         <strong>🛠️ 実技③：建設工事の安全・災害防止対策</strong>
         <span class="badge-text badge-jitsugi">判断等試験 10問</span>
         <div class="day-card-sub">実技テキスト第7章（P.179〜196）準拠：死亡災害の型・安全サイクル・教育</div>
       </div>
-      <span id="badge-jitsugi_3" class="status-pill unattempted">未挑戦</span>
+      <span id="badge-jitsugi_day3" class="status-pill unattempted">未挑戦</span>
+    </div>
+
+    <div class="day-card card-special" onclick="startQuiz('jitsugi_day4')">
+      <div>
+        <strong>🏆 実技④：実技ファイナル本番模擬試験</strong>
+        <span class="badge-text badge-special">総合判断テスト 10問</span>
+        <div class="day-card-sub">実技テキスト全範囲（第5章〜第7章）からの本番レベル総合テスト</div>
+      </div>
+      <span id="badge-jitsugi_day4" class="status-pill unattempted">未挑戦</span>
     </div>
   </div>
 </div>
 
 <script>
-  // 学科（Day 1〜30）＋ 実技（1〜3）の判定キー
+  // 学科（1〜30）と実技（jitsugi_day1〜jitsugi_day4）のキー管理
   const DAY_KEYS = {};
-  for (let i = 1; i <= 7; i++) DAY_KEYS[i] = `score_gakka1_${i}`;
-  for (let i = 8; i <= 14; i++) DAY_KEYS[i] = `score_gakka2_${i}`;
-  for (let i = 15; i <= 21; i++) DAY_KEYS[i] = `score_gakka3_${i}`;
-  for (let i = 22; i <= 30; i++) DAY_KEYS[i] = `score_gakka4_${i}`;
-  DAY_KEYS['jitsugi_1'] = 'score_jitsugi_1';
-  DAY_KEYS['jitsugi_2'] = 'score_jitsugi_2';
-  DAY_KEYS['jitsugi_3'] = 'score_jitsugi_3';
+  for (let i = 1; i <= 7; i++) DAY_KEYS[String(i)] = `score_gakka1_${i}`;
+  for (let i = 8; i <= 14; i++) DAY_KEYS[String(i)] = `score_gakka2_${i}`;
+  for (let i = 15; i <= 21; i++) DAY_KEYS[String(i)] = `score_gakka3_${i}`;
+  for (let i = 22; i <= 30; i++) DAY_KEYS[String(i)] = `score_gakka4_${i}`;
+  DAY_KEYS['jitsugi_day1'] = 'score_jitsugi_1';
+  DAY_KEYS['jitsugi_day2'] = 'score_jitsugi_2';
+  DAY_KEYS['jitsugi_day3'] = 'score_jitsugi_3';
+  DAY_KEYS['jitsugi_day4'] = 'score_jitsugi_4';
 
   const DAY_TITLES = {
-    1: "Day 1：施工体制・職長の役割",
-    2: "Day 2：労働安全衛生法・工程管理",
-    3: "Day 3：建設業法・品質管理",
-    4: "Day 4：原価管理・安全基本",
-    5: "Day 5：専門工事の種類・構造と基礎工法",
-    6: "Day 6：設備工事・特別教育・合図",
-    7: "Day 7：第1週 総復習模擬試験",
-    8: "Day 8：現場のあいさつ・墨出しと遣り方",
-    9: "Day 9：土工事・地業・足場仮設用語",
-    10: "Day 10：鉄筋・型枠・コンクリート用語",
-    11: "Day 11：納まり状態・寸法・構造用語",
-    12: "Day 12：電気・通信・設備用語",
-    13: "Day 13：5S活動・詰所・現場マナー",
-    14: "Day 14：第2週 総復習模擬試験",
-    15: "Day 15：職長の職務とリーダーシップ",
-    16: "Day 16：良い仕事の条件・段取り管理",
-    17: "Day 17：QCDSE・PDCAとOODAループ",
-    18: "Day 18：工程計画・ネットワーク式工程表",
-    19: "Day 19：原価管理と品質管理",
-    20: "Day 20：環境管理と労働安全衛生の3管理",
-    21: "Day 21：第3週 総復習模擬試験",
-    22: "Day 22：安衛法改正・災害発生モデル",
-    23: "Day 23：リスクアセスメントと低減措置",
-    24: "Day 24：5S・KY活動・KYT4ラウンド法",
-    25: "Day 25：ヒヤリハット・ヒューマンエラー防止",
-    26: "Day 26：職長としての図面・施工図のとらえ方",
-    27: "Day 27：建設業の役割・課題と建設業法",
-    28: "Day 28：2号学科 ファイナル本番模擬試験",
-    29: "Day 29：本番実戦模擬試験 第1弾（20問）",
-    30: "Day 30：本番実戦模擬試験 第2弾（20問）",
-    'jitsugi_1': "実技①：工具・機械・材料・計測器の知識",
-    'jitsugi_2': "実技②：建設現場の施工知識・品質判断",
-    'jitsugi_3': "実技③：建設工事の安全・災害防止対策"
+    '1': "Day 1：施工体制・職長の役割",
+    '2': "Day 2：労働安全衛生法・工程管理",
+    '3': "Day 3：建設業法・品質管理",
+    '4': "Day 4：原価管理・安全基本",
+    '5': "Day 5：専門工事の種類・構造と基礎工法",
+    '6': "Day 6：設備工事・特別教育・合図",
+    '7': "Day 7：第1週 総復習模擬試験",
+    '8': "Day 8：現場のあいさつ・墨出しと遣り方",
+    '9': "Day 9：土工事・地業・足場仮設用語",
+    '10': "Day 10：鉄筋・型枠・コンクリート用語",
+    '11': "Day 11：納まり状態・寸法・構造用語",
+    '12': "Day 12：電気・通信・設備用語",
+    '13': "Day 13：5S活動・詰所・現場マナー",
+    '14': "Day 14：第2週 総復習模擬試験",
+    '15': "Day 15：職長の職務とリーダーシップ",
+    '16': "Day 16：良い仕事の条件・段取り管理",
+    '17': "Day 17：QCDSE・PDCAとOODAループ",
+    '18': "Day 18：工程計画・ネットワーク式工程表",
+    '19': "Day 19：原価管理と品質管理",
+    '20': "Day 20：環境管理と労働安全衛生の3管理",
+    '21': "Day 21：第3週 総復習模擬試験",
+    '22': "Day 22：安衛法改正・災害発生モデル",
+    '23': "Day 23：リスクアセスメントと低減措置",
+    '24': "Day 24：5S・KY活動・KYT4ラウンド法",
+    '25': "Day 25：ヒヤリハット・ヒューマンエラー防止",
+    '26': "Day 26：職長としての図面・施工図のとらえ方",
+    '27': "Day 27：建設業の役割・課題と建設業法",
+    '28': "Day 28：2号学科 ファイナル本番模擬試験",
+    '29': "Day 29：本番実戦模擬試験 第1弾（20問）",
+    '30': "Day 30：本番実戦模擬試験 第2弾（20問）",
+    'jitsugi_day1': "実技①：工具・機械・材料・計測器の知識",
+    'jitsugi_day2': "実技②：建設現場の施工知識・品質判断",
+    'jitsugi_day3': "実技③：建設工事の安全・災害防止対策",
+    'jitsugi_day4': "実技④：実技ファイナル本番模擬試験"
   };
 
-  let recommendedDay = 1;
+  let recommendedDay = '1';
 
   window.addEventListener('DOMContentLoaded', () => {
     const savedName = localStorage.getItem('userName') || '';
@@ -792,18 +760,19 @@
   function updateScores() {
     let foundFirstUnfinished = false;
 
-    // 学科 Day 1〜30
+    // 学科 1〜30
     for (let day = 1; day <= 30; day++) {
-      const hasDone = renderBadge(DAY_KEYS[day], `badge-day${day}`);
+      const dayStr = String(day);
+      const hasDone = renderBadge(DAY_KEYS[dayStr], `badge-day${dayStr}`);
       if (!hasDone && !foundFirstUnfinished) {
-        recommendedDay = day;
+        recommendedDay = dayStr;
         foundFirstUnfinished = true;
       }
     }
 
-    // 実技 ①〜③
-    const jitsugiList = ['jitsugi_1', 'jitsugi_2', 'jitsugi_3'];
-    for (const jKey of jitsugiList) {
+    // 実技 1〜4
+    const jitsugiKeys = ['jitsugi_day1', 'jitsugi_day2', 'jitsugi_day3', 'jitsugi_day4'];
+    for (const jKey of jitsugiKeys) {
       const hasJDone = renderBadge(DAY_KEYS[jKey], `badge-${jKey}`);
       if (!foundFirstUnfinished && !hasJDone) {
         recommendedDay = jKey;
@@ -812,21 +781,19 @@
     }
 
     if (!foundFirstUnfinished) {
-      recommendedDay = 'jitsugi_1';
+      recommendedDay = 'jitsugi_day1';
     }
 
     document.getElementById('rec-title').textContent = `${DAY_TITLES[recommendedDay]} に挑戦`;
 
-    if (String(recommendedDay).startsWith('jitsugi')) {
+    if (recommendedDay.startsWith('jitsugi')) {
       switchTab('jitsugi');
-    } else if (recommendedDay >= 22) {
-      switchTab(4);
-    } else if (recommendedDay >= 15) {
-      switchTab(3);
-    } else if (recommendedDay >= 8) {
-      switchTab(2);
     } else {
-      switchTab(1);
+      const num = parseInt(recommendedDay, 10);
+      if (num >= 22) switchTab(4);
+      else if (num >= 15) switchTab(3);
+      else if (num >= 8) switchTab(2);
+      else switchTab(1);
     }
   }
 
